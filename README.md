@@ -1,8 +1,8 @@
-# AuroraTimer(New!)
+# AuroraTimer_Next
 
-An Electron application with Vue
+Next Gen AuroraTimer,now work in progress!
 
-重构中的计时器
+新版极光工作室打开器! 现在正在开发中!
 
 ## Recommended IDE Setup
 
@@ -13,19 +13,19 @@ An Electron application with Vue
 
 Power by Yarn
 
-### Install
+### Install 初始化
 
 ```bash
 $ yarn install
 ```
 
-### Development
+### Development 开发调试
 
 ```bash
 $ yarn run dev
 ```
 
-### Build
+### Build 生产环境部署
 
 ```bash
 # For windows

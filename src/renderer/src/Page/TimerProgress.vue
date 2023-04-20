@@ -43,6 +43,12 @@
       </el-progress>
     </div>
   </div>
+  <div class="slider">
+    <div>
+      <span class="demonstration">进度条</span>
+      <el-slider :min="0" :max="300" :step="0.01" v-model="percent" style="width: 100%;"/>
+    </div>
+  </div>
 <div>
   <svg width="100%" height="100%">
     <defs>
@@ -68,6 +74,7 @@
       </linearGradient>
     </defs>
   </svg>
+
 </div>
 
 
@@ -75,20 +82,12 @@
 
 <script setup>
 
-const props = defineProps({
-  size: {
-    type: Number,
-    default: 100
-  },
-  percent: {
-    type: Number,
-    default: 0
-  },
-  barSize: {
-    type: Number,
-    default: 10
-  },
-})
+import {onMounted, ref} from "vue";
+import {TimerStore} from "../stores/Timer";
+
+
+const timerStore = TimerStore()
+
 const percentageStyle = {
   little:{
     track_color: "rgba(252,222,56,0.55)",
@@ -103,18 +102,17 @@ const percentageStyle = {
     bar_color: "#d23d5f",
   }
 }
-const curTime = () => {
-  let hour = props.percent / 1440
-  let min = props.percent % 1440
-}
+
+const percent = ref(0)
 
 const progress = () => {
   return {
-    big: props.percent,
-    middle: props.percent - 100 < 0 ? 0 : props.percent - 100,
-    little: props.percent - 200 < 0 ? 0 : props.percent - 200
+    big: percent.value,
+    middle: percent.value - 100 < 0 ? 0 : percent.value - 100,
+    little: percent.value - 200 < 0 ? 0 : percent.value - 200
   };
 }
+
 
 
 </script>

@@ -1,19 +1,40 @@
 <template>
-
   <div class="Retract-sidebar">
-
-    <a href="#" class="sidebar-item"><img src="/resources/icon.png" width="50px" height="50px" alt=""><span>list</span></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-house"><span>house</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-palette"><span>theme</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-wallet"><span>wallet</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-image"><span>picture</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-qrcode"><span>or-code</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-shield"><span>save</span></i></a>
-    <a href="#" class="sidebar-item"><i class="fa-solid fa-right-from-bracket"><span>leave</span></i></a>
+    <a  class="sidebar-item" @click="toTimer"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Timer</span></a>
+    <a  class="sidebar-item" @click="toMain"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Main</span></a>
+    <a  class="sidebar-item" @click="jumpTo('Rank')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>About</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>wallet</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>picture</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>or-code</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>save</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>leave</span></a>
   </div>
 </template>
 
 <script setup>
+
+import {getUrl} from "../utils/urlUtils";
+import {router} from "../utils/router";
+
+const toTimer = ()=>{
+  console.log('toTimer')
+  router.push({
+    path:'/'
+  })
+}
+
+const toMain = ()=>{
+  console.log('toMainr')
+  router.push({
+    path:'/main'
+  })
+}
+
+const jumpTo = (local)=>{
+  router.push({
+    name:local
+  })
+}
 
 </script>
 
