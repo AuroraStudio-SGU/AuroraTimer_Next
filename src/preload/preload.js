@@ -1,6 +1,8 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import {electronAPI} from '@electron-toolkit/preload'
 
+import {ipcRenderer, contextBridge} from 'electron'
+/*
+ //原始electron-vite 预加载js
 // Custom APIs for renderer
 const api = {}
 
@@ -18,3 +20,14 @@ if (process.contextIsolated) {
   window.electron = electronAPI
   window.api = api
 }
+ */
+
+/*
+  //electron文档的IPC处理
+ */
+contextBridge.exposeInMainWorld('electronAPI', {
+  handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
+  windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
+  loging: (callback) => ipcRenderer.send('loging', callback),
+})
+

@@ -7,7 +7,8 @@ export const GlobalStore = defineStore('main', {
   // other options...
   state:()=>{
     return{
-      count:ref(1000)
+      count:ref(1000),
+      backgroundImg:ref(null)
     }
   }
 })

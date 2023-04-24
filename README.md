@@ -37,3 +37,11 @@ $ yarn run build:mac
 # For Linux
 $ yarn run build:linux
 ```
+## OnProgress 进展
+- 计时器转圈
+- 基本路由
+- 打卡时间展示
+- 系统图标
+- 通知
+- 自义定 窗口功能
+- 通信测试

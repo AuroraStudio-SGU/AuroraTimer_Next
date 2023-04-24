@@ -1,11 +1,20 @@
-import { app, shell, BrowserWindow } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import {app, shell, BrowserWindow, Menu, ipcMain,Tray ,protocol } from 'electron'
+import {join} from 'path'
+
+import {electronApp, optimizer, is} from '@electron-toolkit/utils'
+
 import icon from '../../resources/icon.png?asset'
+import os from "node:os";
+import {loging, windowOperate} from "./function";
+
 
 
 const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
+
+
+
+
 
 function createWindow() {
   // Create the browser window.
@@ -13,21 +22,42 @@ function createWindow() {
     width: Windows_Main_Width,
     height: Windows_Main_Height,
     show: false,
-    autoHideMenuBar: true,
     icon: icon,
+    frame: true,
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
-      sandbox: false
-    }
+      sandbox: false,
+      nodeIntegrationInWorker: true,
+      // 设置内容安全策略
+      webSecurity:false,
+    },
+    // titleBarStyle:'hidden'
   })
+  const menu = Menu.buildFromTemplate([
+    {
+      label: 'abcd',
+      submenu: [
+        {
+          click: () => mainWindow.webContents.send('update-counter', 1),
+          label: 'Increment',
+        },
+        {
+          click: () => mainWindow.webContents.send('update-counter', -1),
+          label: 'Decrement',
+        }
+      ]
+    }
+  ])
+  Menu.setApplicationMenu(menu)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
 
+
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
-    return { action: 'deny' }
+    return {action: 'deny'}
   })
 
   // HMR for renderer base on electron-vite cli.
@@ -39,7 +69,8 @@ function createWindow() {
     //DEV setting
     mainWindow.webContents.openDevTools()
   }
-  mainWindow.setMinimumSize(700,550)
+  mainWindow.setMinimumSize(700, 550)
+
 
 }
 
@@ -48,7 +79,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  app.setAppUserModelId('新·极光工作室打卡器')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -57,13 +88,57 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  createWindow()
+  // 设置系统托盘
+  // const tray = new Tray('resources/icon.png')
+  // const contextMenu = Menu.buildFromTemplate([
+  //   { label: '退出', type: 'normal',click: ()=>{ app.quit() } },
+  //   { label: 'Item2', type: 'radio' },
+  //   { label: 'Item3', type: 'radio', checked: true },
+  //   { label: 'Item4', type: 'radio' }
+  // ])
+  // tray.setToolTip('极光工作室打卡器.')
+  // tray.setContextMenu(contextMenu)
+
+  // 注册file协议的处理程序
+  protocol.registerFileProtocol('custom', (request, callback) => {
+    const url = request.url.substr(7) // 剥离file://前缀
+    const filePath = path.normalize(decodeURI(url)) // 解码url并标准化路径
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        console.error(`Failed to read file ${filePath}: ${err}`)
+        return callback(-6) // 返回-6表示文件读取失败
+      }
+      const extension = path.extname(filePath).toLowerCase()
+      let mimeType = ''
+      if (extension === '.jpg' || extension === '.jpeg') {
+        mimeType = 'image/jpeg'
+      } else if (extension === '.png') {
+        mimeType = 'image/png'
+      } else if (extension === '.gif') {
+        mimeType = 'image/gif'
+      } else {
+        mimeType = 'application/octet-stream'
+      }
+      callback({
+        mimeType,
+        data
+      })
+    })
+  })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+  // 双向通信监听
+  ipcMain.on('counter-value', (_event, value) => {
+    console.log("你干嘛~~") // 将打印到 Node 控制台
+  })
+// 渲染层-主进程通信
+  ipcMain.on('window-operate', windowOperate)
+  ipcMain.on('loging', loging)
+  createWindow()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -74,6 +149,7 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+
 
 
 

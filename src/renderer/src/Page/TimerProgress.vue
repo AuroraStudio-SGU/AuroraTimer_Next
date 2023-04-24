@@ -166,13 +166,15 @@ const progress = () => {
   stroke: #ffffff;
 }
 
-.littleCircle /deep/ svg>path:nth-child(2) {
+:deep(.littleCircle) svg>path:nth-child(2){
   stroke: url(#little-w);
 }
-.mediumCircle /deep/ svg>path:nth-child(2) {
+
+:deep(.mediumCircle) svg>path:nth-child(2){
   stroke: url(#medium-w);
 }
-.bigCircle /deep/ svg>path:nth-child(2) {
+
+:deep(.bigCircle) svg>path:nth-child(2){
   stroke: url(#big-w);
 }
 
