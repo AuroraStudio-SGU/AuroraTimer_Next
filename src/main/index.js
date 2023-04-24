@@ -23,13 +23,15 @@ function createWindow() {
     height: Windows_Main_Height,
     show: false,
     icon: icon,
-    frame: true,
+    frame: false,
+    transparent:true,
+    resizable:true,
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
       nodeIntegrationInWorker: true,
       // 设置内容安全策略
-      webSecurity:false,
+      webSecurity:true,
     },
     // titleBarStyle:'hidden'
   })
@@ -70,7 +72,6 @@ function createWindow() {
     mainWindow.webContents.openDevTools()
   }
   mainWindow.setMinimumSize(700, 550)
-
 
 }
 
