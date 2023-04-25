@@ -1,87 +1,66 @@
 <template>
   <div class="Retract-sidebar">
-    <a class="sidebar-item" @click="jumpTo('Timer')"
-      ><img :src="getUrl('icon.png')" alt="" class="logo" /><span>Timer</span></a
-    >
-    <a class="sidebar-item" @click="jumpTo('Main')"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Main</span></a
-    >
-    <a class="sidebar-item" @click="jumpTo('Rank')"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Rank</span></a
-    >
-    <a class="sidebar-item" @click="jumpTo('Other')"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Other</span></a
-    >
-    <a class="sidebar-item" @click="jumpTo('About')"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>About</span></a
-    >
-    <a class="sidebar-item"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span
-        >or-code</span
-      ></a
-    >
-    <a class="sidebar-item"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span
-        >save</span
-      ></a
-    >
-    <a class="sidebar-item"
-      ><img :src="getUrl('icon.png')" class="logo" alt="" /><span
-        >leave</span
-      ></a
-    >
+    <a  class="sidebar-item" @click="jumpTo('Timer')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Timer</span></a>
+    <a  class="sidebar-item" @click="jumpTo('Main')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Main</span></a>
+    <a  class="sidebar-item" @click="jumpTo('Rank')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Rank</span></a>
+    <a  class="sidebar-item" @click="jumpTo('Other')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>Other</span></a>
+    <a  class="sidebar-item" @click="jumpTo('About')"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>About</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>or-code</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>save</span></a>
+    <a  class="sidebar-item"><img :src="getUrl('icon.png')" style="height: 50px;width: 50px" alt=""><span>leave</span></a>
   </div>
 </template>
 <script setup>
-import { getUrl } from '../utils/urlUtils'
-import { router } from '../utils/router'
 
-const jumpTo = (local) => {
+import {getUrl} from "../utils/urlUtils";
+import {router} from "../utils/router";
+
+
+const jumpTo = (local)=>{
   router.push({
-    name: local
+    name:local
   })
 }
+
 </script>
 
 <style scoped>
 .Retract-sidebar {
-  margin-top: 15px;
-  width: 80px;
-  height: 480px;
+  width: 100px;
+  height: 700px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(255, 255, 255);
-  transition: 0.3s;
+  background-color: rgb(17, 24, 39);
   border-radius: 10px;
+  transition: .3s;
   overflow: hidden;
   margin-right: 40px;
-  margin-left: 20px;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
 }
 .sidebar-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: block;
   height: 15%;
   width: 85%;
   margin: 9px;
   border-radius: 5px;
   position: relative;
-  transition: 0.3s;
+  transition: .3s;
   color: rgb(160, 160, 175);
 }
-.sidebar-item img {
-  margin-left: 10px;
+.sidebar-item i {
+  margin-left: 27px;
+  font-size: 30px;
   position: absolute;
+  margin-top: 10px;
 }
 .sidebar-item:nth-child(1)::before {
   content: '';
   display: block;
   width: 100%;
   height: 2px;
-  background-color: rgb(25, 99, 219);
+  background-color: rgb(55, 65, 81);
   position: absolute;
   bottom: -10px;
 }
@@ -90,7 +69,7 @@ const jumpTo = (local) => {
   display: block;
   width: 100%;
   height: 2px;
-  background-color: rgb(43, 93, 173);
+  background-color: rgb(55, 65, 81);
   position: absolute;
   bottom: -10px;
 }
@@ -106,8 +85,7 @@ const jumpTo = (local) => {
   width: 270px;
 }
 .sidebar-item:hover {
-  /* background-color: rgb(55, 65, 81); */
-  background-color: #c73b3b;
+  background-color: rgb(55, 65, 81);
   color: #fff;
 }
 .Retract-sidebar:hover span {
@@ -115,33 +93,13 @@ const jumpTo = (local) => {
 }
 
 .Retract-sidebar:nth-child(1) {
-  background-color: rgb(255, 255, 255);
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> 1f61426baca6d019f690911be87ac18fd82def56
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(49, 46, 129);
 }
 .Retract-sidebar:nth-child(1) .sidebar-item:hover {
-  background-color: rgb(227, 227, 227);
-<<<<<<< HEAD
-  padding: 5px 5px;
-  margin: 15px 15px;
-=======
-  /*padding: 5px 5px;*/
-  /*margin: 15px 15px;*/
-  transform: scale(1.2);
-  transition: all 0.5s;
->>>>>>> 1f61426baca6d019f690911be87ac18fd82def56
-  color: #0077ff;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgb(209, 213, 219);
+  color: rgb(67, 56, 202);
 }
 .Retract-sidebar:nth-child(1) .sidebar-item {
-  color: rgb(82, 82, 82);
-}
-.logo {
-  height: 36px;
-  width: 36px;
+  color: rgb(140, 120, 240);
 }
 </style>

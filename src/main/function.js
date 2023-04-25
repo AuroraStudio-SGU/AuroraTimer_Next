@@ -12,13 +12,9 @@ export function windowOperate( event ,op ) {
       console.log('最小化')
       break;
     case 'Max':
-      console.log(win.isMaximized())
-      if(!win.isMaximized()){
+      if(!win.isMaximized())
         win.maximize();
-      } else {
-        win.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
-        win.center(); // 窗口居中
-      }
+      console.log('最大化')
       break;
     case 'Close':
       win.close()
