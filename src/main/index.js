@@ -25,12 +25,16 @@ function createWindow() {
     icon: icon,
     frame: false,
     transparent:true,
+<<<<<<< HEAD
+=======
+    resizable:true,
+>>>>>>> 1f61426baca6d019f690911be87ac18fd82def56
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
       nodeIntegrationInWorker: true,
       // 设置内容安全策略
-      webSecurity:false,
+      webSecurity:true,
     },
     // titleBarStyle:'hidden'
   })
@@ -71,7 +75,6 @@ function createWindow() {
     mainWindow.webContents.openDevTools()
   }
   mainWindow.setMinimumSize(700, 550)
-
 
 }
 

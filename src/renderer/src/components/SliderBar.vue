@@ -116,13 +116,24 @@ const jumpTo = (local) => {
 
 .Retract-sidebar:nth-child(1) {
   background-color: rgb(255, 255, 255);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 1f61426baca6d019f690911be87ac18fd82def56
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .Retract-sidebar:nth-child(1) .sidebar-item:hover {
   background-color: rgb(227, 227, 227);
+<<<<<<< HEAD
   padding: 5px 5px;
   margin: 15px 15px;
+=======
+  /*padding: 5px 5px;*/
+  /*margin: 15px 15px;*/
+  transform: scale(1.2);
+  transition: all 0.5s;
+>>>>>>> 1f61426baca6d019f690911be87ac18fd82def56
   color: #0077ff;
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
