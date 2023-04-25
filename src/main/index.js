@@ -23,7 +23,8 @@ function createWindow() {
     height: Windows_Main_Height,
     show: false,
     icon: icon,
-    frame: true,
+    frame: false,
+    transparent:true,
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,

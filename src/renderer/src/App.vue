@@ -1,24 +1,17 @@
 <template>
-  <div class="main" :style="{ backgroundImage: `url(${img})` }">
+  <div class="main">
     <div>
       <!--    标题栏-->
     </div>
     <div class="top-bar">
-      <el-tooltip content="最小化" effect="customized">
         <el-button type="primary" :icon="Edit" circle @click="windowOperation('Min')"/>
-      </el-tooltip>
-      <el-tooltip content="最大化" effect="customized">
         <el-button type="primary" :icon="Edit" circle @click="windowOperation('Max')"/>
-      </el-tooltip>
-      <el-tooltip content="关闭窗口" effect="customized">
         <el-button type="primary" :icon="Edit" circle @click="windowOperation('Close')"/>
-      </el-tooltip>
-      <el-tooltip content="更改图片" effect="customized">
         <el-button type="primary" :icon="Edit" circle @click="debug"/>
-      </el-tooltip>
     </div>
     <div class="app-box">
       <SliderBar></SliderBar>
+      
       <router-view></router-view>
       <!--    <timer-progress :size="300" :bar-size="25"></timer-progress>-->
     </div>
@@ -54,28 +47,39 @@ let img = ref('')
 <style>
 * {
   margin: 0;
+  padding: 0;
+}
+.main {
+  margin: 5PX 5PX;
+  height: 95vh;
+  background-color: #eef2f5;
+  border-radius: 20px 20px;
+  box-shadow: 1px 2px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 .app-box {
-  justify-content: space-between;
+  
   display: flex;
+  border-radius: 20px;
 }
 
 .top-bar {
-  width: 100%;
-  height: 10%;
-  background-color: #ff0000;
-  /*-webkit-app-region: drag;*/
+  padding: 5px 5px;
+  background-color: #eef2f5;
+  /* -webkit-app-region: drag; */
+  border-radius: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 /* 自义定提示主题 */
 .el-popper.is-customized {
   /* Set padding to ensure the height is 32px */
   padding: 6px 12px;
-  background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
+  background: linear-gradient(90deg, rgb(201, 204, 201), rgb(213, 215, 209));
 }
 
 .el-popper.is-customized .el-popper__arrow::before {
-  background: linear-gradient(45deg, #b2e68d, #bce689);
+  background: linear-gradient(45deg, rgb(201, 204, 201), rgb(201, 204, 201));
   right: 0;
 }
 /* */
