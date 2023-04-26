@@ -12,7 +12,7 @@
             :width="115"
             :hidden="115"
             type="circle"
-            :percentage="progress().little"
+            :percentage="timerStore.getTimerProgress.little"
             :color="percentageStyle.little.bar_color"
             :stroke-width="40"
           >
@@ -26,7 +26,7 @@
             :width="195"
             :hidden="195"
             type="circle"
-            :percentage="progress().middle"
+            :percentage="timerStore.getTimerProgress.middle"
             :color="percentageStyle.middle.bar_color"
             :stroke-width="40"
           >
@@ -40,7 +40,7 @@
             :width="270"
             :hidden="270"
             type="circle"
-            :percentage="progress().big"
+            :percentage="timerStore.getTimerProgress.big"
             :color="percentageStyle.big.bar_color"
             :stroke-width="40"
           >
@@ -94,11 +94,20 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {TimerStore} from '../stores/Timer'
+import {Timer} from "../utils/Timer";
 
 const timerStore = TimerStore()
 
+const SwitchTimer = (flag)=>{
+  Timer(flag)
+}
+
+
+const clearTimer = ()=>{
+  timerStore.clearTime()
+}
 const percentageStyle = {
   little: {
     track_color: 'rgba(252,222,56,0.55)',
@@ -139,6 +148,9 @@ const progress = () => {
 
 .progress {
   margin-left: 5px;
+  position: relative;
+  left: 150px;
+  top: 100px;
 }
 
 .percentage-label {

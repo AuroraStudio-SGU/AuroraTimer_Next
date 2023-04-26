@@ -1,5 +1,6 @@
 <template>
-  <div class="main">
+  <router-view v-if="!loginPanel"></router-view>
+  <div class="main" v-if="loginPanel">
     <div>
       <!--    标题栏-->
     </div>
@@ -34,9 +35,18 @@ import * as url from "url";
 import {ref} from "vue";
 
 
-const globalStore = GlobalStore()
 
-const plex = ref(1)
+const loginPanel = ref(false)
+
+//主进程通知主窗口进行渲染
+try{
+  window.electronAPI.changeLoginPanel((_event, value) => {
+    console.log("状态修改")
+    loginPanel.value = true
+  })
+}catch (e) {
+  console.log(e)
+}
 
 
 const windowOperation = (op) => {
