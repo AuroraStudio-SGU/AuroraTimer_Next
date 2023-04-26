@@ -49,7 +49,7 @@
           </el-progress>
         </div>
       </div>
-      
+
       <div class="svg-box">
         <svg >
           <defs>
@@ -78,18 +78,19 @@
       </div>
       <div class="container">
         <div class="time">已打卡：</div>
-        <div class="time">{{percent}}</div>
+        <div class="time">{{ timerStore.getTimeStr }}</div>
       </div>
-     
+
     </div>
     <div class="slider">
         <div>
-          <span class="demonstration">进度条</span>
-          <el-slider :min="0" :max="300" :step="0.01" v-model="percent" style="width: 100%"/>
+          <el-button type="success" @click="SwitchTimer(true)">开始计时</el-button>
+          <el-button type="success" @click="SwitchTimer(false)">停止计时</el-button>
+          <el-button type="success" @click="clearTimer">清除计时</el-button>
         </div>
       </div>
     </div>
-    
+
   </div>
 </template>
 
@@ -160,7 +161,6 @@ const progress = () => {
 .little {
   width: 280px;
   height: 280px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,7 +170,6 @@ const progress = () => {
 .medium {
   width: 280px;
   height: 280px;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,12 +180,10 @@ const progress = () => {
 .big {
   width: 280px;
   height: 280px;
-
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  
 }
 
 /*v-bind('percentageStyle.middle.track_color');*/
@@ -195,7 +192,7 @@ const progress = () => {
 }
 
 :deep(.bigCircle path:first-child) {
-  
+
   stroke: #eef2f5;
 }
 
@@ -223,7 +220,7 @@ const progress = () => {
 
 .container {
   margin-left: 20px;
-  
+
 }
 .white-box {
   background-color: #fff;
