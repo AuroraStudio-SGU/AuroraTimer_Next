@@ -149,8 +149,6 @@ const progress = () => {
 .progress {
   margin-left: 5px;
   position: relative;
-  left: 150px;
-  top: 100px;
 }
 
 .percentage-label {

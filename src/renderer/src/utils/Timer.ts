@@ -11,7 +11,7 @@ export function Timer(flag: boolean) {
   if (flag == true) {//flag是一个标识，何时计时和何时停止
     if(started) return
     started = true;
-    timePromise = setInterval(() => { //回掉函数开始计时了
+    timePromise = setInterval(() => {
       timeStore.TimePlusPlus();
     }, 250);
   } else if (flag == false) {
