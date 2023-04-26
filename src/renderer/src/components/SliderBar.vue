@@ -45,20 +45,21 @@ const jumpTo = (local) => {
 
 <style scoped>
 .Retract-sidebar {
+
   margin-top: 15px;
-  width: 80px;
-  height: 480px;
+  width: 7%;
+  height: 86%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: rgb(255, 255, 255);
   transition: 0.3s;
-  border-radius: 10px;
+  border-radius: 25px;
   overflow: hidden;
   margin-right: 40px;
   margin-left: 20px;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 9px 2px rgba(90, 90, 90, 0.2);
 }
 .sidebar-item {
   display: flex;
@@ -67,13 +68,13 @@ const jumpTo = (local) => {
   height: 15%;
   width: 85%;
   margin: 9px;
-  border-radius: 5px;
+  border-radius: 25px;
   position: relative;
   transition: 0.3s;
   color: rgb(160, 160, 175);
 }
 .sidebar-item img {
-  margin-left: 10px;
+  
   position: absolute;
 }
 .sidebar-item:nth-child(1)::before {
@@ -96,19 +97,23 @@ const jumpTo = (local) => {
 }
 .sidebar-item span {
   position: relative;
-  left: 80px;
+  left: 100px;
   font-weight: 500;
   font-size: 15px;
   opacity: 0;
   transition: 0.1s;
 }
 .Retract-sidebar:hover {
-  width: 270px;
+  width: 210px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .sidebar-item:hover {
   /* background-color: rgb(55, 65, 81); */
   background-color: #c73b3b;
   color: #fff;
+ 
 }
 .Retract-sidebar:hover span {
   opacity: 1;
@@ -132,7 +137,8 @@ const jumpTo = (local) => {
   color: rgb(82, 82, 82);
 }
 .logo {
-  height: 36px;
-  width: 36px;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
 }
 </style>

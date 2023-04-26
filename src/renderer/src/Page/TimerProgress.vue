@@ -3,13 +3,14 @@
     <div class="title">
       <p>Aurora</p>
     </div>
-    <div class="between">
+    <div class="white-box">
+      <div class="between">
       <div class="progress">
         <div class="little">
           <el-progress
             class="littleCircle"
-            :width="185"
-            :hidden="185"
+            :width="115"
+            :hidden="115"
             type="circle"
             :percentage="progress().little"
             :color="percentageStyle.little.bar_color"
@@ -22,8 +23,8 @@
         <div class="medium">
           <el-progress
             class="mediumCircle"
-            :width="265"
-            :hidden="265"
+            :width="195"
+            :hidden="195"
             type="circle"
             :percentage="progress().middle"
             :color="percentageStyle.middle.bar_color"
@@ -36,8 +37,8 @@
         <div class="big">
           <el-progress
             class="bigCircle"
-            :width="340"
-            :hidden="340"
+            :width="270"
+            :hidden="270"
             type="circle"
             :percentage="progress().big"
             :color="percentageStyle.big.bar_color"
@@ -48,15 +49,9 @@
           </el-progress>
         </div>
       </div>
-      <div class="slider">
-        <div>
-          <span class="demonstration">进度条</span>
-          <el-slider :min="0" :max="300" :step="0.01" v-model="percent" style="width: 100%"/>
-        </div>
-      </div>
-      <div class="time">90小时</div>
+      
       <div class="svg-box">
-        <svg width="100%" height="100%">
+        <svg >
           <defs>
             <linearGradient id="little-w" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" style="stop-color: #fff1eb" stop-opacity="0.8"></stop>
@@ -64,7 +59,7 @@
             </linearGradient>
           </defs>
         </svg>
-        <svg width="100%" height="100%">
+        <svg >
           <defs>
             <linearGradient id="medium-w" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" style="stop-color: #a8edea" stop-opacity="0.8"></stop>
@@ -72,7 +67,7 @@
             </linearGradient>
           </defs>
         </svg>
-        <svg width="100%" height="100%">
+        <svg >
           <defs>
             <linearGradient id="big-w" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" style="stop-color: #a6c0fe" stop-opacity="0.8"></stop>
@@ -81,7 +76,20 @@
           </defs>
         </svg>
       </div>
+      <div class="container">
+        <div class="time">已打卡：</div>
+        <div class="time">{{percent}}</div>
+      </div>
+     
     </div>
+    <div class="slider">
+        <div>
+          <span class="demonstration">进度条</span>
+          <el-slider :min="0" :max="300" :step="0.01" v-model="percent" style="width: 100%"/>
+        </div>
+      </div>
+    </div>
+    
   </div>
 </template>
 
@@ -120,12 +128,13 @@ const progress = () => {
 
 .between {
   display: flex;
+  align-items: center;
 }
 
 .title {
   font-size: 60px;
   font-weight: 600;
-  margin-bottom: 15PX;
+  margin-bottom: 20PX;
 }
 
 .progress {
@@ -139,8 +148,8 @@ const progress = () => {
 }
 
 .little {
-  width: 350px;
-  height: 350px;
+  width: 280px;
+  height: 280px;
 
   display: flex;
   justify-content: center;
@@ -149,8 +158,8 @@ const progress = () => {
 }
 
 .medium {
-  width: 350px;
-  height: 350px;
+  width: 280px;
+  height: 280px;
 
   display: flex;
   justify-content: center;
@@ -160,23 +169,24 @@ const progress = () => {
 }
 
 .big {
-  width: 350px;
-  height: 350px;
+  width: 280px;
+  height: 280px;
 
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  position: absolute;
+  
 }
 
 /*v-bind('percentageStyle.middle.track_color');*/
 :deep(.el-progress path:first-child) {
-  stroke: #eef2f5;
+  stroke: #ffffff;
 }
 
 :deep(.bigCircle path:first-child) {
-  stroke: #ffffff;
+  
+  stroke: #eef2f5;
 }
 
 :deep(.littleCircle) svg > path:nth-child(2) {
@@ -192,8 +202,22 @@ const progress = () => {
 }
 
 .svg-box {
-  /*position: absolute;*/
-  /*top: 0;*/
-  /*left: 0;*/
+  position: absolute;
+}
+
+.time {
+  font-size: 60px;
+  font-weight: 600;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.container {
+  margin-left: 20px;
+  
+}
+.white-box {
+  background-color: #fff;
+  padding: 30px 100px 30px 50px;
+  border-radius: 35px;
 }
 </style>

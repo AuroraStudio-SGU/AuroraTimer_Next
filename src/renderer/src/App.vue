@@ -6,9 +6,12 @@
     <div class="top-bar">
       <div class="drag-bar"></div>
       <div class="window-bar">
-        <el-button type="primary" :icon="Edit" circle @click="windowOperation('Min')" style="transform: scale(0.8)"/>
+        <div class="circle-green" @click="windowOperation('Min')" style="width: 17px;height: 17px; background-color:#65bc60;border-radius: 50%;"></div>
+        <div class="circle-yellow" @click="windowOperation('Max')" style="width: 17px;height: 17px; background-color:#e7c168;border-radius: 50%;"></div>
+        <div class="circle-red" @click="windowOperation('Close')" style="width: 17px;height: 17px; background-color:#e36f6c;border-radius: 50%;"></div>
+        <!-- <el-button type="primary" :icon="Edit" circle @click="windowOperation('Min')" style="transform: scale(0.8)"/>
         <el-button type="primary" :icon="Edit" circle @click="windowOperation('Max')" style="transform: scale(0.8)"/>
-        <el-button type="primary" :icon="Edit" circle @click="windowOperation('Close')" style="transform: scale(0.8)"/>
+        <el-button type="primary" :icon="Edit" circle @click="windowOperation('Close')" style="transform: scale(0.8)"/> -->
       </div>
     </div>
     <div class="app-box">
@@ -29,6 +32,7 @@ import {Edit} from '@element-plus/icons-vue'
 import {GlobalStore} from "./stores/Global";
 import * as url from "url";
 import {ref} from "vue";
+
 
 const globalStore = GlobalStore()
 
@@ -55,40 +59,45 @@ let img = ref('')
   padding: 0;
 }
 .main {
-  margin: 5PX 5PX;
-  height: 99vh;
+  margin: 5px 5px ;
+  height: 97vh;
   background-color: #eef2f5;
   border-radius: 20px 20px;
-  box-shadow: 1px 2px 3px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.2);
   transform: scale(v-bind(plex));
 }
 
 .app-box {
   display: flex;
   border-radius: 20px;
+  height: 97vh;
+  
 }
 
 .drag-bar{
   border-radius: 20px;
   width: 86vw;
   height: 100%;
-  background-color: #9feaf9;
+  
   -webkit-app-region: drag;
 }
 
 .top-bar{
   border-radius: 20px;
-  height: 5vh;
+  height: 6vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: red;
+  
 }
 
 .window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   padding: 5px 5px;
   border-radius: 20px;
-  width: 14vw;
+  width: 11vw;
   /*display: flex;*/
   /*justify-content: flex-end;*/
 }
