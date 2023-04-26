@@ -11,7 +11,7 @@
             :width="185"
             :hidden="185"
             type="circle"
-            :percentage="progress().little"
+            :percentage="timerStore.getTimerProgress.little"
             :color="percentageStyle.little.bar_color"
             :stroke-width="40"
           >
@@ -25,7 +25,7 @@
             :width="265"
             :hidden="265"
             type="circle"
-            :percentage="progress().middle"
+            :percentage="timerStore.getTimerProgress.middle"
             :color="percentageStyle.middle.bar_color"
             :stroke-width="40"
           >
@@ -39,7 +39,7 @@
             :width="340"
             :hidden="340"
             type="circle"
-            :percentage="progress().big"
+            :percentage="timerStore.getTimerProgress.big"
             :color="percentageStyle.big.bar_color"
             :stroke-width="40"
           >
@@ -54,7 +54,12 @@
           <el-slider :min="0" :max="300" :step="0.01" v-model="percent" style="width: 100%"/>
         </div>
       </div>
-      <div class="time">90小时</div>
+      <div class="time">已打卡:{{ timerStore.getTimeStr }}</div>
+      <div class="debug">
+        <el-button type="success" @click="SwitchTimer(true)">开始计时</el-button><br>
+        <el-button  plain @click="SwitchTimer(false)"> 结束计时 </el-button><br>
+        <el-button  plain @click="clearTimer()"> 清除计时 </el-button><br>
+      </div>
       <div class="svg-box">
         <svg width="100%" height="100%">
           <defs>
@@ -86,11 +91,20 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {TimerStore} from '../stores/Timer'
+import {Timer} from "../utils/Timer";
 
 const timerStore = TimerStore()
 
+const SwitchTimer = (flag)=>{
+  Timer(flag)
+}
+
+
+const clearTimer = ()=>{
+  timerStore.clearTime()
+}
 const percentageStyle = {
   little: {
     track_color: 'rgba(252,222,56,0.55)',
@@ -121,7 +135,9 @@ const progress = () => {
 .between {
   display: flex;
 }
-
+.slider{
+  /*position: relative;*/
+}
 .title {
   font-size: 60px;
   font-weight: 600;
@@ -130,6 +146,9 @@ const progress = () => {
 
 .progress {
   margin-left: 5px;
+  position: relative;
+  left: 150px;
+  top: 100px;
 }
 
 .percentage-label {

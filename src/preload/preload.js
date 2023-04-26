@@ -1,5 +1,3 @@
-import {electronAPI} from '@electron-toolkit/preload'
-
 import {ipcRenderer, contextBridge} from 'electron'
 /*
  //原始electron-vite 预加载js
@@ -26,8 +24,13 @@ if (process.contextIsolated) {
   //electron文档的IPC处理
  */
 contextBridge.exposeInMainWorld('electronAPI', {
+  //双向监听
   handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
+  changeLoginPanel: (callback) => ipcRenderer.on('change-login-panel', callback),
+  //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
-  loging: (callback) => ipcRenderer.send('loging', callback),
+  openFile: (callback) => ipcRenderer.send('open-file', callback),
+  login: (callback) => ipcRenderer.send('login', callback),
+  loadSetting:(callback) => ipcRenderer.send('load-setting', callback)
 })
 

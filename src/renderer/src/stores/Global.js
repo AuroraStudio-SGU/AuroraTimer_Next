@@ -7,8 +7,15 @@ export const GlobalStore = defineStore('main', {
   // other options...
   state:()=>{
     return{
-      count:ref(1000),
-      backgroundImg:ref(null)
+      loginPanel:ref(false)
+    }
+  },
+  getters:{
+
+  },
+  actions:{
+    changeLoginPanel(){
+      this.loginPanel = true
     }
   }
 })

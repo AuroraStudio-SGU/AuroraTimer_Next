@@ -1,7 +1,8 @@
 <template>
   <el-button type="success" @click="sendMsg">测试通知</el-button><br>
   <el-button  plain @click="sendMsgIn"> 应用内通知 </el-button><br>
-  <el-button type="success" @click="saveFile">上传文件</el-button><br>
+  <el-button type="success" @click="openFile">上传文件</el-button><br>
+  <el-button type="success" @click="loadSetting">加载设置文件</el-button><br>
 </template>
 
 
@@ -11,11 +12,15 @@ import os from 'node:os'
 import fs from 'fs'
 import {ElNotification} from "element-plus";
 
-const saveFile = () => {
-  window.electronAPI.loging()
+const openFile = () => {
+  window.electronAPI.openFile()
 
   // console.log(os.homedir())
 }
+const loadSetting = ()=>{
+  window.electronAPI.loadSetting()
+}
+
 
 const sendMsgIn = ()=>{
   ElNotification({
