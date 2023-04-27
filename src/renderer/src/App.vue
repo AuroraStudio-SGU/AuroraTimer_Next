@@ -1,65 +1,38 @@
 <template>
   <router-view v-if="!loginPanel"></router-view>
   <div class="main" v-if="loginPanel">
-    <div>
-      <!--    标题栏-->
-    </div>
-    <div class="top-bar">
-      <div class="drag-bar"></div>
-      <div class="window-bar">
+    <div class="top-bar"><!-- 顶部栏 -->
+      <div class="drag-bar"></div> <!-- 拖拽栏 -->
+      <div class="window-bar"> <!-- 红 绿 灯  -->
         <div class="circle-green" @click="windowOperation('Min')" style="width: 17px;height: 17px; background-color:#65bc60;border-radius: 50%;"></div>
         <div class="circle-yellow" @click="windowOperation('Max')" style="width: 17px;height: 17px; background-color:#e7c168;border-radius: 50%;"></div>
         <div class="circle-red" @click="windowOperation('Close')" style="width: 17px;height: 17px; background-color:#e36f6c;border-radius: 50%;"></div>
-        <!-- <el-button type="primary" :icon="Edit" circle @click="windowOperation('Min')" style="transform: scale(0.8)"/>
-        <el-button type="primary" :icon="Edit" circle @click="windowOperation('Max')" style="transform: scale(0.8)"/>
-        <el-button type="primary" :icon="Edit" circle @click="windowOperation('Close')" style="transform: scale(0.8)"/> -->
       </div>
     </div>
     <div class="app-box">
-      <SliderBar></SliderBar>
-
-      <router-view></router-view>
-      <!--    <timer-progress :size="300" :bar-size="25"></timer-progress>-->
+      <SliderBar></SliderBar> <!-- 侧标栏显示 -->
+      <router-view></router-view><!-- 路由显示 -->
     </div>
-    <!--    <el-slider :min="0" :max="10" :step="0.01" v-model="plex" />-->
   </div>
 </template>
 
 <script setup>
 import SliderBar from "./components/SliderBar.vue";
-import TimerProgress from "./Page/TimerProgress.vue";
-import Other from "./Page/Other.vue";
-import {Edit} from '@element-plus/icons-vue'
-import {GlobalStore} from "./stores/Global";
-import * as url from "url";
 import {ref} from "vue";
-
-
-
+//登录状态栏
 const loginPanel = ref(false)
 
 //主进程通知主窗口进行渲染
 try{
   window.electronAPI.changeLoginPanel((_event, value) => {
-    console.log("状态修改")
     loginPanel.value = true
   })
 }catch (e) {
-  console.log(e)
+  console.error(e)
 }
-
-
 const windowOperation = (op) => {
   window.electronAPI.windowOperate(op)
 }
-
-const debug = ()=>{
-  const path = 'D:\\void风花节4k.jpg'
-  img.value = `custom://${path}`
-}
-
-let img = ref('')
-
 
 </script>
 
@@ -81,14 +54,14 @@ let img = ref('')
   display: flex;
   border-radius: 20px;
   height: 97vh;
-  
+
 }
 
 .drag-bar{
   border-radius: 20px;
   width: 86vw;
   height: 100%;
-  
+
   -webkit-app-region: drag;
 }
 
@@ -98,7 +71,7 @@ let img = ref('')
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+
 }
 
 .window-bar {

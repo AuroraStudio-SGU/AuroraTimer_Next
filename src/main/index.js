@@ -1,19 +1,17 @@
 import {
   app, shell, BrowserWindow,
-  Menu, ipcMain, Tray, protocol, session
-  , nativeImage ,Notification
+  Menu, ipcMain, Tray, session
+  , nativeImage
 } from 'electron'
 import {join} from 'path'
 
-import {electronApp, optimizer, is} from '@electron-toolkit/utils'
+import {optimizer, is} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
-import os from "node:os";
-import {loadSetting, loging, openFile, windowOperate} from "./function";
-import {GlobalStore} from "../renderer/src/stores/Global";
+import {loadSetting, openFile, windowOperate} from "./function";
 
 
-const Windows_Main_Width = 1000
+const Windows_Main_Width = 1280
 const Windows_Main_Height = 670
 
 
@@ -39,10 +37,11 @@ function createLoginWindow() {
   })
   return win;
 }
-
+let isLogin = false
 function login() {
   console.log("登录成功")
   mainWindow.webContents.send('change-login-panel', 1)
+  isLogin = true
   loginWindow.close()
   mainWindow.show()
 }
@@ -59,7 +58,7 @@ function createWindow() {
     transparent: true,
     resizable: true,
     webPreferences: {
-      devTools:true,
+      devTools: true,
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
       // 设置内容安全策略
@@ -67,25 +66,22 @@ function createWindow() {
     },
     // titleBarStyle:'hidden'
   })
-  const menu = Menu.buildFromTemplate([
-    {
-      label: 'abcd',
-      submenu: [
-        {
-          click: () => mainWindow.webContents.send('update-counter', 1),
-          label: 'Increment',
-        },
-        {
-          click: () => mainWindow.webContents.send('update-counter', -1),
-          label: 'Decrement',
-        }
-      ]
-    }
-  ])
-  Menu.setApplicationMenu(menu)
-
-
-
+  // const menu = Menu.buildFromTemplate([
+  //   {
+  //     label: 'abcd',
+  //     submenu: [
+  //       {
+  //         click: () => mainWindow.webContents.send('update-counter', 1),
+  //         label: 'Increment',
+  //       },
+  //       {
+  //         click: () => mainWindow.webContents.send('update-counter', -1),
+  //         label: 'Decrement',
+  //       }
+  //     ]
+  //   }
+  // ])
+  // Menu.setApplicationMenu(menu)
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return {action: 'deny'}
@@ -104,26 +100,30 @@ function createWindow() {
   }
   mainWindow.setMinimumSize(700, 550)
 
-  let isLogin = false
+
   // const globalStore = GlobalStore()
 
   //子窗口加载
-  let winUrl;
   mainWindow.on('ready-to-show', () => {
     if (isLogin) {
       mainWindow.show()
     } else {
-      if (!app.isPackaged) {
-        winUrl = `http://127.0.0.1:5173/Login`
-      } else {
-        winUrl = 'http://127.0.0.1:5173/Login'
-      }
       loginWindow = createLoginWindow()
-      loginWindow.loadFile(join(__dirname, '../renderer/index.html'),{
-        hash:'login'
-      })
+      if (app.isPackaged) {
+        loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
+          hash: 'login'
+        })
+      } else {
+        const winUrl = 'http://127.0.0.1:5173/#/login';
+        loginWindow.loadURL(winUrl)
+      }
       loginWindow.on('ready-to-show', () => {
         loginWindow.show()
+      })
+      loginWindow.on('close', () => {
+        if(!isLogin){
+          app.quit()
+        }
       })
     }
   })

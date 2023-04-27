@@ -3,10 +3,7 @@ const electron = require("electron");
 const path = require("path");
 const utils = require("@electron-toolkit/utils");
 const os = require("node:os");
-require("node:process");
 const fs = require("fs");
-const pinia = require("pinia");
-const vue = require("vue");
 const icon = path.join(__dirname, "../../resources/icon.png");
 path.join(os.homedir(), "/AuroraTimer/log");
 const HomePath = path.join(os.homedir(), "/AuroraTimer");
@@ -28,6 +25,7 @@ const defaultSetting = {
   WeekTime: 96e4,
   isAdmin: true
 };
+let isMaximized = false;
 function windowOperate(event, op) {
   const webContents = event.sender;
   const win = electron.BrowserWindow.fromWebContents(webContents);
@@ -38,12 +36,13 @@ function windowOperate(event, op) {
       console.log("最小化");
       break;
     case "Max":
-      console.log(win.isMaximized());
-      if (!win.isMaximized()) {
+      if (!isMaximized) {
         win.maximize();
+        isMaximized = true;
       } else {
         win.setContentSize(1e3, 670);
         win.center();
+        isMaximized = false;
       }
       break;
     case "Close":
@@ -54,7 +53,6 @@ function windowOperate(event, op) {
 }
 function loadSetting() {
   settingFilePath = path.join(os.homedir(), "/AuroraTimer/setting.json");
-  console.log(settingFilePath);
   fs.readFile(settingFilePath, (err, data) => {
     if (err) {
       if (err.errno === -4058) {
@@ -90,21 +88,7 @@ function openFile() {
     console.log(err);
   });
 }
-pinia.defineStore("main", {
-  // other options...
-  state: () => {
-    return {
-      loginPanel: vue.ref(false)
-    };
-  },
-  getters: {},
-  actions: {
-    changeLoginPanel() {
-      this.loginPanel = true;
-    }
-  }
-});
-const Windows_Main_Width = 1e3;
+const Windows_Main_Width = 1280;
 const Windows_Main_Height = 670;
 let mainWindow;
 let loginWindow;
@@ -134,9 +118,11 @@ function createLoginWindow() {
   });
   return win;
 }
+let isLogin = false;
 function login() {
   console.log("登录成功");
   mainWindow.webContents.send("change-login-panel", 1);
+  isLogin = true;
   loginWindow.close();
   mainWindow.show();
 }
@@ -158,22 +144,6 @@ function createWindow() {
     }
     // titleBarStyle:'hidden'
   });
-  const menu = electron.Menu.buildFromTemplate([
-    {
-      label: "abcd",
-      submenu: [
-        {
-          click: () => mainWindow.webContents.send("update-counter", 1),
-          label: "Increment"
-        },
-        {
-          click: () => mainWindow.webContents.send("update-counter", -1),
-          label: "Decrement"
-        }
-      ]
-    }
-  ]);
-  electron.Menu.setApplicationMenu(menu);
   mainWindow.webContents.setWindowOpenHandler((details) => {
     electron.shell.openExternal(details.url);
     return { action: "deny" };
@@ -187,15 +157,25 @@ function createWindow() {
   }
   mainWindow.setMinimumSize(700, 550);
   mainWindow.on("ready-to-show", () => {
-    {
-      if (!electron.app.isPackaged)
-        ;
+    if (isLogin) {
+      mainWindow.show();
+    } else {
       loginWindow = createLoginWindow();
-      loginWindow.loadFile(path.join(__dirname, "../renderer/index.html"), {
-        hash: "login"
-      });
+      if (electron.app.isPackaged) {
+        loginWindow.loadFile(path.join(__dirname, "../renderer/index.html"), {
+          hash: "login"
+        });
+      } else {
+        const winUrl = "http://127.0.0.1:5173/#/login";
+        loginWindow.loadURL(winUrl);
+      }
       loginWindow.on("ready-to-show", () => {
         loginWindow.show();
+      });
+      loginWindow.on("close", () => {
+        if (!isLogin) {
+          electron.app.quit();
+        }
       });
     }
   });

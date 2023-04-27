@@ -1,21 +1,16 @@
 <template>
-  This is Main Page {{ counter }}<br>
+  <div class="menu">
+    <div class="title" >
+      工作室公告
+    </div>
+    <div class="white-box">
+      今天是个好日子
+    </div>
+  </div>
 </template>
 
 <script setup>
-
-import {ref} from "vue";
-
-window.electronAPI.handleCounter((event, value) => {
-  counter.value = counter.value + value
-  event.sender.send('counter-value', counter.value)
-})
-
-
-const counter = ref(0)
-
-
-
+import '../assets/css/common.css'
 </script>
 
 <style scoped>

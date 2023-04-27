@@ -57,7 +57,7 @@
       <button class="button" id="signup">Sign Up</button>
     </div>
   </div>
-</div>   
+</div>
 </template>
 
 <script setup>

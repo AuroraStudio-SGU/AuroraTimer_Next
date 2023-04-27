@@ -3,6 +3,7 @@
   <el-button  plain @click="sendMsgIn"> 应用内通知 </el-button><br>
   <el-button type="success" @click="openFile">上传文件</el-button><br>
   <el-button type="success" @click="loadSetting">加载设置文件</el-button><br>
+
 </template>
 
 

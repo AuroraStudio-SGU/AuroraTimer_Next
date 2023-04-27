@@ -15,6 +15,7 @@ const defaultSetting = {
   isAdmin: true
 }
 
+let isMaximized = false
 
 export function windowOperate(event, op) {
   const webContents = event.sender
@@ -26,12 +27,14 @@ export function windowOperate(event, op) {
       console.log('最小化')
       break;
     case 'Max':
-      console.log(win.isMaximized())
-      if (!win.isMaximized()) {
+      if (!isMaximized) {
         win.maximize();
+        isMaximized = true
       } else {
+        // win.restore()
         win.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
         win.center(); // 窗口居中
+        isMaximized = false
       }
       break;
     case 'Close':
@@ -43,7 +46,6 @@ export function windowOperate(event, op) {
 
 export function loadSetting() {
   settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
-  console.log(settingFilePath)
   fs.readFile(settingFilePath, (err, data) => {
     if (err) {
       if (err.errno === -4058) { //没有就创建
@@ -81,14 +83,4 @@ export function openFile() {
   }).catch(err => {
     console.log(err)
   })
-}
-
-export function startTimer() {
-  process.dlopen = () => {
-    throw new Error('Load native module is not safe')
-  }
-  const worker = new Worker(__dirname + "/seprateThread.js")
-}
-
-export function loginWindows() {
 }

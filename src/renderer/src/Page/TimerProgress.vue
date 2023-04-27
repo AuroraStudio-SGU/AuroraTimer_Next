@@ -13,10 +13,8 @@
               :hidden="115"
               type="circle"
               :percentage="timerStore.getTimerProgress.little"
-              :color="percentageStyle.little.bar_color"
               :stroke-width="40"
             >
-              <!--        <span class="percentage-label">{{ props.percent }}</span>-->
               <span class="percentage-label"></span>
             </el-progress>
           </div>
@@ -27,10 +25,8 @@
               :hidden="195"
               type="circle"
               :percentage="timerStore.getTimerProgress.middle"
-              :color="percentageStyle.middle.bar_color"
               :stroke-width="40"
             >
-              <!--        <span class="percentage-label">{{ props.percent }}</span>-->
               <span class="percentage-label"></span>
             </el-progress>
           </div>
@@ -41,10 +37,8 @@
               :hidden="270"
               type="circle"
               :percentage="timerStore.getTimerProgress.big"
-              :color="percentageStyle.big.bar_color"
               :stroke-width="40"
             >
-              <!--        <span class="percentage-label">{{ props.percent }}</span>-->
               <span class="percentage-label"></span>
             </el-progress>
           </div>
@@ -78,7 +72,6 @@
         </div>
         <div class="container">
           <div class="time">已打卡：</div>
-          <!-- <div class="time">{{ timerStore.getTimeStr }}</div> -->
           <div class="clock">
             <div class="flip">
               <div class="digital front" data-number="0"></div>
@@ -121,6 +114,7 @@
 </template>
 
 <script setup>
+import '../assets/css/common.css'
 import { onMounted, ref, watch } from 'vue'
 import { TimerStore } from '../stores/Timer'
 import { Timer } from '../utils/Timer'
@@ -134,21 +128,6 @@ const SwitchTimer = (flag) => {
 const clearTimer = () => {
   timerStore.clearTime()
 }
-const percentageStyle = {
-  little: {
-    track_color: 'rgba(252,222,56,0.55)',
-    bar_color: '#58ffea'
-  },
-  middle: {
-    track_color: 'rgba(0,128,28,0.6)',
-    bar_color: '#72ccb4'
-  },
-  big: {
-    track_color: 'rgba(255,0,0,0.52)',
-    bar_color: '#d23d5f'
-  }
-}
-
 const percent = ref(0)
 
 const progress = () => {
@@ -167,12 +146,6 @@ const progress = () => {
 .between {
   display: flex;
   align-items: center;
-}
-
-.title {
-  font-size: 60px;
-  font-weight: 600;
-  margin-bottom: 20px;
 }
 
 .progress {
@@ -214,7 +187,6 @@ const progress = () => {
   flex-direction: column;
 }
 
-/*v-bind('percentageStyle.middle.track_color');*/
 :deep(.el-progress path:first-child) {
   stroke: #ffffff;
 }
@@ -237,6 +209,7 @@ const progress = () => {
 
 .svg-box {
   position: absolute;
+  pointer-events: none;
 }
 
 .time {
@@ -248,11 +221,7 @@ const progress = () => {
 .container {
   margin-left: 20px;
 }
-.white-box {
-  background-color: #fff;
-  padding: 30px 100px 30px 50px;
-  border-radius: 35px;
-}
+
 
 body {
     display: flex;
@@ -260,11 +229,11 @@ body {
     align-items: center;
     height: 100vh;
 }
-  
+
   .clock {
     display: flex;
   }
-  
+
   /* 时钟的分隔 */
   .clock .divider {
     font-size: 66px;
@@ -350,14 +319,14 @@ body {
     -webkit-animation: backFlipDown 0.6s ease-in-out;
             animation: backFlipDown 0.6s ease-in-out;
   }
-  
+
   @-webkit-keyframes frontFlipDown {
     to {
       -webkit-transform: rotateX(0.5turn);
               transform: rotateX(0.5turn);
     }
   }
-  
+
   @keyframes frontFlipDown {
     to {
       -webkit-transform: rotateX(0.5turn);
@@ -371,7 +340,7 @@ body {
               transform: rotateX(0);
     }
   }
-  
+
   @keyframes backFlipDown {
     to {
       -webkit-transform: rotateX(0);

@@ -1,19 +1,19 @@
 <template>
   <div class="Retract-sidebar">
     <a class="sidebar-item" @click="jumpTo('Timer')"
-    ><img :src="getUrl('icon.png')" alt="" class="logo" /><span>Timer</span></a
+    ><img :src="getUrl('icon.png')" alt="" class="logo" /><span>计时</span></a
     >
     <a class="sidebar-item" @click="jumpTo('Main')"
-    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Main</span></a
+    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>公告</span></a
     >
     <a class="sidebar-item" @click="jumpTo('Rank')"
-    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Rank</span></a
+    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>排行榜</span></a
     >
     <a class="sidebar-item" @click="jumpTo('Other')"
-    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>Other</span></a
+    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>测试</span></a
     >
     <a class="sidebar-item" @click="jumpTo('About')"
-    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>About</span></a
+    ><img :src="getUrl('icon.png')" class="logo" alt="" /><span>设置</span></a
     >
     <a class="sidebar-item"
     ><img :src="getUrl('icon.png')" class="logo" alt="" /><span
@@ -74,7 +74,7 @@ const jumpTo = (local) => {
   color: rgb(160, 160, 175);
 }
 .sidebar-item img {
-  
+
   position: absolute;
 }
 .sidebar-item:nth-child(1)::before {
@@ -113,7 +113,7 @@ const jumpTo = (local) => {
   /* background-color: rgb(55, 65, 81); */
   background-color: #c73b3b;
   color: #fff;
- 
+
 }
 .Retract-sidebar:hover span {
   opacity: 1;
@@ -126,8 +126,6 @@ const jumpTo = (local) => {
 }
 .Retract-sidebar:nth-child(1) .sidebar-item:hover {
   background-color: rgb(227, 227, 227);
-  /*padding: 5px 5px;*/
-  /*margin: 15px 15px;*/
   transform: scale(1.2);
   transition: all 0.5s;
   color: #0077ff;
