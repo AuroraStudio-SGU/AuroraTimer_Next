@@ -23,9 +23,9 @@ let tray;
 
 function createLoginWindow() {
   const win = new BrowserWindow({
-    width: 432,
-    height: 331,
-    alwaysOnTop: true,//窗口一直保持在其他窗口前面
+    width: 1000,
+    height: 750,
+    alwaysOnTop: false,//窗口一直保持在其他窗口前面
     frame: false,
     resizable: false,//用户不可以调整窗口
     center: true, // 窗口居中

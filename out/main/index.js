@@ -111,9 +111,9 @@ let loginWindow;
 let tray;
 function createLoginWindow() {
   const win = new electron.BrowserWindow({
-    width: 432,
-    height: 331,
-    alwaysOnTop: true,
+    width: 1e3,
+    height: 750,
+    alwaysOnTop: false,
     //窗口一直保持在其他窗口前面
     frame: false,
     resizable: false,
