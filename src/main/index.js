@@ -11,7 +11,7 @@ import icon from '../../resources/icon.png?asset'
 import {loadSetting, openFile, windowOperate} from "./function";
 
 
-const Windows_Main_Width = 1280
+const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
 
 

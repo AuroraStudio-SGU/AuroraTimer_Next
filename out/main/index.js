@@ -88,7 +88,7 @@ function openFile() {
     console.log(err);
   });
 }
-const Windows_Main_Width = 1280;
+const Windows_Main_Width = 1e3;
 const Windows_Main_Height = 670;
 let mainWindow;
 let loginWindow;

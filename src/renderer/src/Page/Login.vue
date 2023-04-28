@@ -65,6 +65,7 @@ import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import  $  from 'jquery';
 
+
 onMounted(()=>{
   $('#signup').click(function() {
   $('.pinkbox').css('transform', 'translateX(80%)');

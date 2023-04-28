@@ -8,6 +8,8 @@ import TimerProgress from "../Page/TimerProgress.vue";
 import Rank from "../Page/Rank.vue";
 import Other from "../Page/Other.vue";
 import Login from "../Page/Login.vue";
+import Welcome from "../Page/Welcome.vue";
+import IconTest from "../Page/IconTest.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
@@ -16,6 +18,9 @@ const routes = [
   {path: '/rank', name: 'Rank', component: Rank},
   {path: '/other', name: 'Other', component: Other},
   {path: '/Login', name: 'Login', component: Login},
+  {path: '/welcome', name: 'Welcome', component: Welcome},
+  {path: '/icontest', name: 'IconTest', component: IconTest},
+
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

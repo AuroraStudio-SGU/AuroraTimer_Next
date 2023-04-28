@@ -8,7 +8,8 @@ export const TimerStore = defineStore('timer', {
   state:()=>({
     percent:ref(0),
     size:ref(0),
-    time:ref(0)
+    time:ref(0),
+    isStarted:ref(false)
   }),
   getters:{
     getPercent(state){
@@ -31,6 +32,12 @@ export const TimerStore = defineStore('timer', {
     },
     clearTime(){
       this.time = 0;
+    },
+    OpenTimer(){
+      this.isStarted = true
+    },
+    CloseTimer(){
+      this.isStarted = false
     }
   }
 })
