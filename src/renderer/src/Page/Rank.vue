@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
 import {UserFilled} from '@element-plus/icons-vue'
-import {formatTime} from "../utils/TimeUtil";
+import {formatSecondTime} from "../utils/TimeUtil";
 import {UserList} from '../utils/offlineData'
 import {computed, h, nextTick, onMounted, Ref, ref, watch, watchEffect} from "vue";
 import '../assets/css/common.css'
@@ -78,7 +78,7 @@ const getTableSize = computed(()=>{
 
 
 const formatter = (row,colum)=>{
-  return formatTime(row[colum.property])
+  return formatSecondTime(row[colum.property])
 }
 
 

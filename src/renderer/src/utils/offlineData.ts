@@ -9,22 +9,22 @@ interface User {
 export const UserList:User[] = [
   {
     name: '欧润丰',
-    TotalTime: 4800000,
-    WeekTime: 960000,
+    TotalTime: 576000,
+    WeekTime: 64800,
     isAdmin:false,
     job:'normal'
   },
   {
     name: '陈典灿',
-    TotalTime: 6000000,
-    WeekTime: 1080000,
+    TotalTime: 676000,
+    WeekTime: 94200,
     isAdmin:false,
     job:'normal',
   },
   {
     name: '梓聪',
-    TotalTime: 7200000,
-    WeekTime: 1440000,
+    TotalTime: 720000,
+    WeekTime: 140000,
     isAdmin:false,
     job:'normal',
   },
