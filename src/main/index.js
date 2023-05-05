@@ -114,7 +114,8 @@ function createWindow() {
           hash: 'login'
         })
       } else {
-        const winUrl = 'http://127.0.0.1:5173/#/login';
+        //127.0.0.1 → localhost （in some case someone can't connect local ip)
+        const winUrl = 'http://localhost:5173/#/login';
         loginWindow.loadURL(winUrl)
       }
       loginWindow.on('ready-to-show', () => {

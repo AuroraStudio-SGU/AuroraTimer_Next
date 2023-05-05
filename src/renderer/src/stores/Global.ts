@@ -7,7 +7,8 @@ export const GlobalStore = defineStore('main', {
   // other options...
   state:()=>{
     return{
-      loginPanel:ref(false)
+      loginPanel:ref(false),
+      UserList:ref([])
     }
   },
   getters:{

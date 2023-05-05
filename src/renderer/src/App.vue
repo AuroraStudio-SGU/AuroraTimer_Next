@@ -43,7 +43,7 @@ const windowOperation = (op) => {
 }
 .main {
   margin: 5px 5px ;
-  height: 97vh;
+  height: 99vh;
   background-color: #eef2f5;
   border-radius: 20px 20px;
   box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.2);
@@ -54,7 +54,6 @@ const windowOperation = (op) => {
   display: flex;
   border-radius: 20px;
   height: 97vh;
-
 }
 
 .drag-bar{
