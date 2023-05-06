@@ -95,8 +95,8 @@ let loginWindow;
 let tray;
 function createLoginWindow() {
   const win = new electron.BrowserWindow({
-    width: 1e3,
-    height: 750,
+    width: 650,
+    height: 600,
     alwaysOnTop: false,
     //窗口一直保持在其他窗口前面
     frame: false,
@@ -104,7 +104,7 @@ function createLoginWindow() {
     //用户不可以调整窗口
     center: true,
     // 窗口居中
-    transparent: false,
+    transparent: true,
     //窗口透明
     show: false,
     // 显示窗口将没有视觉闪烁（配合下面的ready-to-show事件）
@@ -166,7 +166,7 @@ function createWindow() {
           hash: "login"
         });
       } else {
-        const winUrl = "http://127.0.0.1:5173/#/login";
+        const winUrl = "http://localhost:5173/#/login";
         loginWindow.loadURL(winUrl);
       }
       loginWindow.on("ready-to-show", () => {

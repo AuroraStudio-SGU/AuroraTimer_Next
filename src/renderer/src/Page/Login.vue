@@ -17,50 +17,51 @@
     <div class="pinkbox">
       <!-- 注册 -->
       <div class="signup nodisplay">
-        <h1>Register</h1>
+        <h1>注册</h1>
         <form autocomplete="off">
           <input type="text" placeholder="Username">
           <input type="email" placeholder="Email">
           <input type="password" placeholder="Password">
           <input type="password" placeholder="Confirm Password">
-          <button class="button submit">Create Account</button>
+          <button class="button submit">注册</button>
         </form>
       </div>
 
       <!-- 登录 -->
       <div class="signin">
-        <h1>Sign In</h1>
+        <h1>登录</h1>
         <form class="more-padding" autocomplete="off">
           <input type="text" placeholder="Username">
           <input type="password" placeholder="Password">
           <div class="checkbox">
             <input type="checkbox" id="remember" /><label for="remember">Remember Me</label>
           </div>
-          <button class="buttom sumbit" @click="login()">Login</button>
+          <button class="buttom sumbit" @click="login()">登录</button>
         </form>
       </div>
     </div>
 
     <div class="leftbox">
-      <h2 class="title"><span>BLOOM</span>&<br>BOUQUET</h2>
+      <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
       <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower smaller" src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp" />
-      <p class="account">Have an account?</p>
-      <button class="button" id="signin">Login</button>
+      <img class="flower smaller" :src="getUrl('icon.png')" />
+      <p class="account">已经有账号了?</p>
+      <button class="button" id="signin">登录</button>
     </div>
 
     <div class="rightbox">
-      <h2 class="title"><span>BLOOM</span>&<br>BOUQUET</h2>
+      <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
       <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower" src="https://hbimg.huabanimg.com/b28be92c8198975a74ad656eba00b352c9b9e589819af-lDXUAS_fw658/format/webp" />
-      <p class="account">Don't have an account?</p>
-      <button class="button" id="signup">Sign Up</button>
+      <img class="flower" :src="getUrl('icon.png')" />
+      <p class="account">还没有账号?</p>
+      <button class="button" id="signup">立即注册</button>
     </div>
   </div>
 </div>
 </template>
 
 <script setup>
+import {getUrl} from '../utils/urlUtils'
 import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import  $  from 'jquery';
@@ -165,6 +166,7 @@ body {
 /* 字体和按钮的样式 */
 h1 {
   font-family: "Open Sans", sans-serif;
+  
   text-align: center;
   margin-top: 95px;
   text-transform: uppercase;
@@ -207,18 +209,18 @@ span {
 
 .flower {
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   top: 45%;
-  left: 27%;
+  left: 32%;
   opacity: 0.8;
 }
 
 .smaller {
-  width: 130px;
-  height: 130px;
+  width: 110px;
+  height: 110px;
   top: 48%;
-  left: 30%;
+  left: 34%;
   opacity: 0.9;
 }
 
@@ -245,6 +247,8 @@ button:hover {
   background: #f6f6f6;
   color: #ce7d88;
   border: solid 1px #eac7cc;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 600;
 }
 
 /* 表单样式 */
