@@ -217,8 +217,11 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
-    tray.destroy()
   }
+})
+//app准备退出后进行的操作
+app.on('will-quit',()=>{
+  tray.destroy()
 })
 
 

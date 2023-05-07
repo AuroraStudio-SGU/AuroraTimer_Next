@@ -166,7 +166,7 @@ function createWindow() {
           hash: "login"
         });
       } else {
-        const winUrl = "http://127.0.0.1:5173/#/login";
+        const winUrl = "http://localhost:5173/#/login";
         loginWindow.loadURL(winUrl);
       }
       loginWindow.on("ready-to-show", () => {
@@ -219,6 +219,8 @@ electron.app.whenReady().then(() => {
 electron.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     electron.app.quit();
-    tray.destroy();
   }
+});
+electron.app.on("will-quit", () => {
+  tray.destroy();
 });
