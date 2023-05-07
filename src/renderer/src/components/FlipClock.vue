@@ -41,11 +41,12 @@ const SecondToTimeStr = (second) => {
 }
 const run = () => {
   if (timeStore.isStarted) return
+  timeStore.OpenTimer()
+  let LastTime = 0
   timer = setInterval(() => {
-    timeStore.OpenTimer()
-    // 获取当前时间
+    let time = timeStore.time
     let nowTimeStr = SecondToTimeStr(time)
-    let nextTimeStr = SecondToTimeStr(time - 60)
+    let nextTimeStr = SecondToTimeStr(LastTime)
     for (let i = 0; i < flipObjs.length; i++) {
       if (nowTimeStr[i] === nextTimeStr[i]) {
         continue
@@ -55,7 +56,8 @@ const run = () => {
         nowTimeStr[i]
       )
     }
-    time += 60
+    LastTime = time
+    timeStore.TimePlusPlus()
   }, 1000)
 }
 defineExpose({

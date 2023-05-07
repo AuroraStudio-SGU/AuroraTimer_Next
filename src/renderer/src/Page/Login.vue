@@ -1,17 +1,4 @@
 <template>
-<!--  <el-form class="login-form" label-position="top" label-width="100px" :rules="rules" :model="formContent" status-icon-->
-<!--           ref="loginForm">-->
-<!--    <el-form-item class="form-item" label="邮箱" prop="email">-->
-<!--      <el-input class="input-box" type="text" v-model="formContent.email"></el-input>-->
-<!--    </el-form-item>-->
-<!--    <el-form-item class="form-item" label="密码" prop="password">-->
-<!--      <el-input class="input-box" type="password" v-model="formContent.password"></el-input>-->
-<!--    </el-form-item>-->
-<!--    <el-form-item>-->
-<!--      <el-button style="width: 100%" type="primary" @click="submitForm()">登录</el-button>-->
-<!--    </el-form-item>-->
-<!--    <el-tag v-if="error" class="ml-2" type="danger">登录失败, 可能是邮箱或密码错误</el-tag>-->
-<!--  </el-form>-->
 <div class="container">
   <div class="welcome">
     <div class="pinkbox">
@@ -26,7 +13,6 @@
           <button class="button submit">注册</button>
         </form>
       </div>
-
       <!-- 登录 -->
       <div class="signin">
         <h1>登录</h1>
@@ -40,19 +26,17 @@
         </form>
       </div>
     </div>
-
     <div class="leftbox">
       <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
       <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower smaller" :src="getUrl('icon.png')" />
+      <img class="flower smaller" src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp" />
       <p class="account">已经有账号了?</p>
       <button class="button" id="signin">登录</button>
     </div>
-
     <div class="rightbox">
       <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
       <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower" :src="getUrl('icon.png')" />
+      <img class="flower" src="https://hbimg.huabanimg.com/b28be92c8198975a74ad656eba00b352c9b9e589819af-lDXUAS_fw658/format/webp" />
       <p class="account">还没有账号?</p>
       <button class="button" id="signup">立即注册</button>
     </div>
@@ -61,9 +45,7 @@
 </template>
 
 <script setup>
-import {getUrl} from '../utils/urlUtils'
 import {onMounted, ref} from "vue";
-import {GlobalStore} from "../stores/Global";
 import  $  from 'jquery';
 
 
@@ -81,30 +63,9 @@ $('#signin').click(function() {
 });
 })
 
-const globalStore = GlobalStore()
-
-
-const formContent = ref({ email: '', password: '' })
-
-let error = ref(false)
-const rules = {
-  email: [{ required: true, message: '请填写邮箱', trigger: 'blur' },],
-  password: [{ required: true, message: '请填写密码', trigger: 'blur' }, {
-    min: 5,
-    max: 12,
-    message: '密码的长度范围为5-12',
-    trigger: 'blur'
-  }]
-}
-
 const login = ()=>{
   console.log("登录操作")
   window.electronAPI.login()
-}
-
-
-const submitForm = ()=>{
-  console.log("登录按钮")
 }
 </script>
 
@@ -166,7 +127,7 @@ body {
 /* 字体和按钮的样式 */
 h1 {
   font-family: "Open Sans", sans-serif;
-  
+
   text-align: center;
   margin-top: 95px;
   text-transform: uppercase;
