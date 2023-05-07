@@ -44,10 +44,11 @@ const windowOperation = (op) => {
 .main {
   margin: 5px 5px ;
   height: 99vh;
-  background-color: #eef2f5;
+  background-color: #eef2f5ee;
   border-radius: 20px 20px;
-  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.2);
+  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.1);
   transform: scale(v-bind(plex));
+  backdrop-filter:blur(10px);
 }
 
 .app-box {
