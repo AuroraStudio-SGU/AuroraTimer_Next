@@ -187,7 +187,7 @@ onMounted(() => {
 .time {
   font-size: 60px;
   font-weight: 600;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
 }
 
 .container {
