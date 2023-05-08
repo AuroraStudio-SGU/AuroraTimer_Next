@@ -1,7 +1,7 @@
 import {
   app, shell, BrowserWindow,
   Menu, ipcMain, Tray, session
-  , nativeImage
+  , nativeImage, clipboard,globalShortcut
 } from 'electron'
 import {join} from 'path'
 
@@ -9,6 +9,15 @@ import {optimizer, is} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
 import {loadSetting, openFile, windowOperate} from "./function";
+
+const {
+  getColorHexRGB,
+  // for more control and customized checks
+  DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
+  darwinGetColorHexRGB, // darwin only, throw error on other platform
+  darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
+  darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
+} = require('electron-color-picker')
 
 
 const Windows_Main_Width = 1000
@@ -37,7 +46,9 @@ function createLoginWindow() {
   })
   return win;
 }
+
 let isLogin = false
+
 function login() {
   console.log("登录成功")
   mainWindow.webContents.send('change-login-panel', 1)
@@ -46,6 +57,16 @@ function login() {
   mainWindow.show()
 }
 
+async function saveColorToClipboard() {
+  // color may be '#0099ff' or '' (pick cancelled with ESC)
+  const color = await getColorHexRGB().catch((error) => {
+    console.warn('[ERROR] getColor', error)
+    return ''
+  })
+  console.log(`getColor: ${color}`)
+  color && clipboard.writeText(color)
+  return color;
+}
 
 function createWindow() {
   // Create the browser window.
@@ -122,7 +143,7 @@ function createWindow() {
         loginWindow.show()
       })
       loginWindow.on('close', () => {
-        if(!isLogin){
+        if (!isLogin) {
           app.quit()
         }
       })
@@ -198,11 +219,34 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+  //取色器特性支持
+  if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
+    const darwinScreenPermissionSample = async () => {
+      const isGranted = await darwinGetScreenPermissionGranted() // initial check
+      console.log('darwinGetScreenPermissionGranted:', isGranted)
+      if (!isGranted) { // request user for permission, no result, and will not wait for user click
+        await darwinRequestScreenPermissionPopup()
+        console.warn('no permission granted yet, try again')
+        return ''
+      }
+      const color = await darwinGetColorHexRGB().catch((error) => {
+        console.warn('[ERROR] getColor', error)
+        return ''
+      })
+      console.log(`getColor: ${color}`)
+      color && clipboard.writeText(color)
+    }
+  }
+  //截图功能设置
+
+
+
   // 双向通信监听
   ipcMain.on('counter-value', (_event, value) => {
     console.log("你干嘛~~") // 将打印到 Node 控制台
   })
-// 渲染层-主进程通信
+  ipcMain.handle('save-color-to-clipboard', saveColorToClipboard)
+  // 渲染层-主进程通信
   ipcMain.on('window-operate', windowOperate)
   ipcMain.on('open-file', openFile)
   ipcMain.on('login', login)
@@ -220,7 +264,7 @@ app.on('window-all-closed', () => {
   }
 })
 //app准备退出后进行的操作
-app.on('will-quit',()=>{
+app.on('will-quit', () => {
   tray.destroy()
 })
 

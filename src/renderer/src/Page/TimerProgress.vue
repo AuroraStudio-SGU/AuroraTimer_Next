@@ -48,24 +48,24 @@
           <svg>
             <defs>
               <linearGradient id="little-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color: #fff1eb" stop-opacity="0.8"></stop>
-                <stop offset="100%" style="stop-color: #ace0f9" stop-opacity="1"></stop>
+                <stop offset="0%"  :style="{stopColor:timerStore.progressColor.small.start}" stop-opacity="0.8"></stop>
+                <stop offset="100%" :style="{stopColor:timerStore.progressColor.small.end}" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="medium-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color: #a8edea" stop-opacity="0.8"></stop>
-                <stop offset="100%" style="stop-color: #fed6e3" stop-opacity="1"></stop>
+                <stop offset="0%" :style="{stopColor:timerStore.progressColor.medium.start}" stop-opacity="0.8"></stop>
+                <stop offset="100%" :style="{stopColor:timerStore.progressColor.medium.end}" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="big-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color: #a6c0fe" stop-opacity="0.8"></stop>
-                <stop offset="100%" style="stop-color: #f68084" stop-opacity="0.9"></stop>
+                <stop offset="0%" :style="{stopColor:timerStore.progressColor.big.start}" stop-opacity="0.8"></stop>
+                <stop offset="100%" :style="{stopColor:timerStore.progressColor.big.end}" stop-opacity="0.9"></stop>
               </linearGradient>
             </defs>
           </svg>
@@ -97,7 +97,6 @@ import FlipClock from "../components/FlipClock.vue";
 const timerStore = TimerStore()
 const flipClock = ref(null)
 
-const flips = ref(null)
 
 
 const startTimer = () => {

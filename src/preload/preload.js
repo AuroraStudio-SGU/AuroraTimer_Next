@@ -1,4 +1,4 @@
-import {ipcRenderer, contextBridge} from 'electron'
+import {ipcRenderer, contextBridge } from 'electron'
 /*
  //原始electron-vite 预加载js
 // Custom APIs for renderer
@@ -27,10 +27,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
   //双向监听
   handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
   changeLoginPanel: (callback) => ipcRenderer.on('change-login-panel', callback),
+  saveColorToClipboard:() => ipcRenderer.invoke('save-color-to-clipboard'),
   //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
   openFile: (callback) => ipcRenderer.send('open-file', callback),
   login: (callback) => ipcRenderer.send('login', callback),
-  loadSetting:(callback) => ipcRenderer.send('load-setting', callback)
+  loadSetting:(callback) => ipcRenderer.send('load-setting', callback),
+
+
 })
 

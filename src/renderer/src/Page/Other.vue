@@ -1,19 +1,27 @@
 <template>
-  <el-button plain type="success" @click="sendMsg">测试通知</el-button><br>
-  <el-button plain @click="sendMsgIn"> 应用内通知</el-button><br>
-  <el-button plain type="success" @click="openFile">上传文件</el-button><br>
-  <el-button plain type="success" @click="loadSetting">加载设置文件</el-button><br>
-  <el-button plain type="success" @click="SunRise">日落日期测试</el-button><br>
-
+  <div class="menu">
+    <div class="title" >
+      用来测试各种功能
+    </div>
+    <div class="white-box">
+      <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>
+      <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
+      <el-button class="obj" plain type="success" @click="openFile">上传文件</el-button>
+      <el-button class="obj" plain type="success" @click="loadSetting">加载设置文件</el-button>
+      <el-button class="obj" plain type="success" @click="SunRise">日落日期测试</el-button>
+    </div>
+  </div>
 </template>
 
 
 <script setup>
-// import {dialog} from 'electron'
-import os from 'node:os'
-import fs from 'fs'
+import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import {CalculateSunTime, currentDate, formatSecondTime} from "../utils/TimeUtil";
+import {ref} from "vue";
+
+
+
 
 const openFile = () => {
   window.electronAPI.openFile()
@@ -27,7 +35,8 @@ const loadSetting = () => {
 const SunRise = () => {
   let sunTime = CalculateSunTime()
   let curDate = Date.parse(currentDate().Date)
-  let message = '当前日出时间' + formatSecondTime((sunTime.Sunrise - curDate ) / 1000) + ' \n 日落时间:' + formatSecondTime((sunTime.Sunset - curDate) / 1000)
+  let message = '当前日出时间' + formatSecondTime((sunTime.Sunrise - curDate ) / 1000) +
+                ' \n 日落时间:' + formatSecondTime((sunTime.Sunset - curDate) / 1000)
   ElNotification({
     title: '日出日落测试',
     message,
@@ -55,5 +64,7 @@ const sendMsg = () => {
 </script>
 
 <style scoped>
-
+.white-box .obj{
+  padding: 10px;
+}
 </style>

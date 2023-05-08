@@ -15,7 +15,7 @@ const timeStore = TimerStore()
 let timer = null
 let flips = ref([])
 let flipObjs = []
-let time = 60
+
 const StopTimer = () => {
   window.clearInterval(timer)
   timer = null
@@ -23,7 +23,7 @@ const StopTimer = () => {
 }
 const clearTimer = () => {
   init()
-  time = 60
+  timeStore.clearTime()
 }
 
 const init = () => {

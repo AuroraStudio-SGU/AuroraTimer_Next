@@ -8,14 +8,14 @@
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>排行榜</span></a>
     <a class="sidebar-item" @click="jumpTo('Other')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>测试</span></a>
-    <a class="sidebar-item" @click="jumpTo('About')"
+    <a class="sidebar-item" @click="jumpTo('Setting')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>设置</span></a>
     <a class="sidebar-item" @click="jumpTo('Welcome')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>早安晚安动画</span></a>
     <a class="sidebar-item" @click="jumpTo('IconTest')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>图标测试</span></a>
-    <a class="sidebar-item"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>leave</span></a>
+    <a class="sidebar-item" @click="jumpTo('Calculator')"
+    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>日历测试</span></a>
   </div>
 </template>
 <script setup>

@@ -1,9 +1,10 @@
-import {BrowserWindow, dialog} from "electron";
+import {BrowserWindow, clipboard, dialog} from "electron";
 import os from "node:os";
 import process from "node:process";
 import fs from 'fs'
 import {join} from 'path'
 import {checkAndMakeHomeDir, HomePath} from "../renderer/src/utils/LogUtil";
+
 
 let settingFilePath
 
@@ -84,3 +85,5 @@ export function openFile() {
     console.log(err)
   })
 }
+
+
