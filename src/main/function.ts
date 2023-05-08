@@ -1,20 +1,17 @@
-import {BrowserWindow, clipboard, dialog} from "electron";
+import {BrowserWindow, dialog} from "electron";
 import os from "node:os";
 import process from "node:process";
 import fs from 'fs'
 import {join} from 'path'
 import {checkAndMakeHomeDir, HomePath} from "../renderer/src/utils/LogUtil";
+import {Setting, userInfo} from "../renderer/src/utils/Setting";
 
 
 let settingFilePath
 
+let SettingObject
 
-const defaultSetting = {
-  uid: '21125023044',
-  name: 'DAY',
-  WeekTime: 960000,
-  isAdmin: true
-}
+
 
 let isMaximized = false
 
@@ -46,6 +43,8 @@ export function windowOperate(event, op) {
 }
 
 export function loadSetting() {
+  //载入用户信息和配置信息
+  SettingObject = Object.assign(userInfo,Setting)
   settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
   fs.readFile(settingFilePath, (err, data) => {
     if (err) {
@@ -53,7 +52,7 @@ export function loadSetting() {
         console.log("尝试创建文件", HomePath)
         checkAndMakeHomeDir()
         try {
-          fs.writeFileSync(settingFilePath, JSON.stringify(defaultSetting,null,2))
+          fs.writeFileSync(settingFilePath, JSON.stringify(SettingObject,null,2))
         } catch (e) {
           console.error("创建文件失败",e)
         }
