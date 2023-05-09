@@ -1,14 +1,11 @@
-import {
-  app, shell, BrowserWindow,
-  Menu, ipcMain, Tray, session
-  , nativeImage, clipboard,globalShortcut
-} from 'electron'
+import {app, BrowserWindow, clipboard, ipcMain, Menu, nativeImage, shell, Tray, session} from 'electron'
 import {join} from 'path'
 
-import {optimizer, is} from '@electron-toolkit/utils'
+import {is, optimizer} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
-import {loadSetting, openFile, windowOperate} from "./function";
+import {loadSetting, openBrowser, openFile, SaveSetting, windowOperate} from "./function";
+import * as SettingJS from "../renderer/src/utils/Setting";
 
 const {
   getColorHexRGB,
@@ -29,7 +26,7 @@ let loginWindow;
 let tray;
 
 function createLoginWindow() {
-  const win = new BrowserWindow({
+  return new BrowserWindow({
     width: 650,
     height: 600,
     alwaysOnTop: false,//窗口一直保持在其他窗口前面
@@ -43,8 +40,7 @@ function createLoginWindow() {
       preload: join(__dirname, '../preload/preload.js'),
       devTools: true,//客户端可以打开开发者工具（在客户端打开快捷键：ctrl+shift+i）
     },
-  })
-  return win;
+  });
 }
 
 let isLogin = false
@@ -87,27 +83,10 @@ function createWindow() {
     },
     // titleBarStyle:'hidden'
   })
-  // const menu = Menu.buildFromTemplate([
-  //   {
-  //     label: 'abcd',
-  //     submenu: [
-  //       {
-  //         click: () => mainWindow.webContents.send('update-counter', 1),
-  //         label: 'Increment',
-  //       },
-  //       {
-  //         click: () => mainWindow.webContents.send('update-counter', -1),
-  //         label: 'Decrement',
-  //       }
-  //     ]
-  //   }
-  // ])
-  // Menu.setApplicationMenu(menu)
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return {action: 'deny'}
   })
-
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
@@ -122,33 +101,8 @@ function createWindow() {
   mainWindow.setMinimumSize(700, 550)
 
 
-  // const globalStore = GlobalStore()
 
-  //子窗口加载
-  mainWindow.on('ready-to-show', () => {
-    if (isLogin) {
-      mainWindow.show()
-    } else {
-      loginWindow = createLoginWindow()
-      if (app.isPackaged) {
-        loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
-          hash: 'login'
-        })
-      } else {
-        //127.0.0.1 → localhost （in some case someone can't connect local ip)
-        const winUrl = 'http://localhost:5173/#/login';
-        loginWindow.loadURL(winUrl)
-      }
-      loginWindow.on('ready-to-show', () => {
-        loginWindow.show()
-      })
-      loginWindow.on('close', () => {
-        if (!isLogin) {
-          app.quit()
-        }
-      })
-    }
-  })
+
 }
 
 // This method will be called when Electron has finished
@@ -159,8 +113,8 @@ app.whenReady().then(() => {
   app.setAppUserModelId('新·极光工作室打卡器')
 
   //设置开发扩展
-  // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0`
-  // session.defaultSession.loadExtension(devToolPath)
+  const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0`
+  session.defaultSession.loadExtension(devToolPath)
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -171,7 +125,6 @@ app.whenReady().then(() => {
 
   // 设置系统托盘
   const iconImg = nativeImage.createFromPath(icon)
-  console.log(iconImg.isEmpty())
   tray = new Tray(iconImg)
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -223,7 +176,6 @@ app.whenReady().then(() => {
   if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
     const darwinScreenPermissionSample = async () => {
       const isGranted = await darwinGetScreenPermissionGranted() // initial check
-      console.log('darwinGetScreenPermissionGranted:', isGranted)
       if (!isGranted) { // request user for permission, no result, and will not wait for user click
         await darwinRequestScreenPermissionPopup()
         console.warn('no permission granted yet, try again')
@@ -242,16 +194,66 @@ app.whenReady().then(() => {
 
 
   // 双向通信监听
-  ipcMain.on('counter-value', (_event, value) => {
-    console.log("你干嘛~~") // 将打印到 Node 控制台
-  })
   ipcMain.handle('save-color-to-clipboard', saveColorToClipboard)
+  ipcMain.handle('save-setting', (_event,value)=>{
+    return SaveSetting(value)
+  })
+  ipcMain.handle('load-setting', loadSetting)
   // 渲染层-主进程通信
   ipcMain.on('window-operate', windowOperate)
   ipcMain.on('open-file', openFile)
   ipcMain.on('login', login)
-  ipcMain.on('load-setting', loadSetting)
+  ipcMain.on('open-browser', openBrowser)
+  //创建主窗口
   createWindow()
+  //主窗口监听事件
+  mainWindow.on('ready-to-show', () => {
+    //登录判断,开始加载配置文件
+    console.log("加载配置文件")
+    let setting = loadSetting()
+    if(setting){
+      SettingJS.Setting = setting
+    }else {
+      console.error("配置文件加载失败,使用默认设置")
+      SettingJS.Setting = SettingJS.DefaultSetting
+    }
+    mainWindow.webContents.send('setting-update',JSON.stringify(SettingJS.Setting))
+    if (isLogin) {
+      mainWindow.show()
+    } else {
+      //没有登录则开始加载登录窗口
+      loginWindow = createLoginWindow()
+      if (app.isPackaged) {
+        //生产环境跳转
+        loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
+          hash: 'login'
+        })
+      } else {
+        //开发环境跳转
+        //127.0.0.1 → localhost (in some case someone can't connect local ip)
+        const winUrl = 'http://localhost:5173/#/login';
+        loginWindow.loadURL(winUrl)
+      }
+      loginWindow.on('ready-to-show', () => {
+        loginWindow.show()
+      })
+      loginWindow.on('close', () => {
+        if (!isLogin) {
+          app.quit()
+        }
+      })
+
+
+
+    }
+  })
+  mainWindow.on('session-end',()=>{
+    if(BrowserWindow.getAllWindows().length === 0){
+      app.quit()
+    }
+  })
+  mainWindow.on('show',()=>{
+  })
 
 })
 
@@ -267,7 +269,3 @@ app.on('window-all-closed', () => {
 app.on('will-quit', () => {
   tray.destroy()
 })
-
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.

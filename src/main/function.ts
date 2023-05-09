@@ -1,17 +1,15 @@
-import {BrowserWindow, dialog} from "electron";
+import {BrowserWindow, dialog,shell} from "electron";
 import os from "node:os";
 import process from "node:process";
 import fs from 'fs'
 import {join} from 'path'
 import {checkAndMakeHomeDir, HomePath} from "../renderer/src/utils/LogUtil";
-import {Setting, userInfo} from "../renderer/src/utils/Setting";
+import * as SettingJS from "../renderer/src/utils/Setting";
 
 
 let settingFilePath
 
 let SettingObject
-
-
 
 let isMaximized = false
 
@@ -43,25 +41,42 @@ export function windowOperate(event, op) {
 }
 
 export function loadSetting() {
-  //载入用户信息和配置信息
-  SettingObject = Object.assign(userInfo,Setting)
+  let curSetting:SettingJS.SettingFile
   settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
-  fs.readFile(settingFilePath, (err, data) => {
-    if (err) {
-      if (err.errno === -4058) { //没有就创建
-        console.log("尝试创建文件", HomePath)
-        checkAndMakeHomeDir()
-        try {
-          fs.writeFileSync(settingFilePath, JSON.stringify(SettingObject,null,2))
-        } catch (e) {
-          console.error("创建文件失败",e)
-        }
-        console.log("创建完成")
+  let buffer
+  try{
+    buffer = fs.readFileSync(settingFilePath)
+  }catch (e) {
+    if (e.errno === -4058){
+      checkAndMakeHomeDir()
+      try {
+        //载入默认的用户信息和配置信息
+        fs.writeFileSync(settingFilePath, JSON.stringify(SettingJS.DefaultSetting,null,2))
+        buffer = SettingObject
+      } catch (e) {
+        console.error("创建文件失败",e)
+        buffer = ''
       }
-    } else {
-      console.log(data)
+    }else {
+      buffer = ''
     }
-  });
+  }
+  if(buffer){
+    //加载出设置内容
+    curSetting = JSON.parse(buffer.toString())
+    console.log(curSetting)
+    return curSetting
+  }else return ''
+}
+
+export function SaveSetting(setting):boolean {
+  try{
+    fs.writeFileSync(settingFilePath,JSON.stringify(JSON.parse(setting),null,2))
+  }catch (e) {
+    console.error(e)
+    return false
+  }
+  return true
 }
 
 export function openFile() {
@@ -83,6 +98,10 @@ export function openFile() {
   }).catch(err => {
     console.log(err)
   })
+}
+
+export function openBrowser(event,URL:string) {
+  shell.openExternal(URL)
 }
 
 

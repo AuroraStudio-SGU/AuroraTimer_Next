@@ -27,13 +27,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   //双向监听
   handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
   changeLoginPanel: (callback) => ipcRenderer.on('change-login-panel', callback),
+  handleSetting: (callback) => ipcRenderer.on('setting-update', callback),
   saveColorToClipboard:() => ipcRenderer.invoke('save-color-to-clipboard'),
+  SaveSetting:(callback) => ipcRenderer.invoke('save-setting',callback),
+  loadSetting:(callback) => ipcRenderer.invoke('load-setting', callback),
   //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
   openFile: (callback) => ipcRenderer.send('open-file', callback),
   login: (callback) => ipcRenderer.send('login', callback),
-  loadSetting:(callback) => ipcRenderer.send('load-setting', callback),
-
-
+  openBrowser:(callback) => ipcRenderer.send('open-browser', callback),
 })
 

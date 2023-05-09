@@ -53,7 +53,7 @@
       <p class="text">喜欢本打卡器请给个赞吧</p>
       <div class="heart">
         <div class="con-like">
-          <input title="like" type="checkbox" class="like" />
+          <input title="like" type="checkbox" class="like" @click="toProjectHub"/>
           <div class="checkmark">
             <svg viewBox="0 0 24 24" class="outline" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -83,13 +83,23 @@
 <script setup>
 import SliderBar from './components/SliderBar.vue'
 import { ref } from 'vue'
+import {GlobalStore} from "./stores/Global";
+import {Setting} from "./utils/Setting";
 //登录状态栏
 const loginPanel = ref(false)
 
-//主进程通知主窗口进行渲染
+const globalStore = GlobalStore()
+
+//主进程处理完毕,例如登录成功,通知主窗口进行渲染
 try {
   window.electronAPI.changeLoginPanel((_event, value) => {
     loginPanel.value = true
+  })
+  window.electronAPI.handleSetting((_event, value) => {
+    if(value){
+      console.log("从主进程加载配置文件")
+      globalStore.loadAllSetting(JSON.parse(value))
+    }
   })
 } catch (e) {
   console.error(e)
@@ -97,6 +107,10 @@ try {
 const windowOperation = (op) => {
   window.electronAPI.windowOperate(op)
 }
+const toProjectHub = () => {
+  window.electronAPI.openBrowser(globalStore.ProjectLink)
+}
+
 </script>
 
 <style>

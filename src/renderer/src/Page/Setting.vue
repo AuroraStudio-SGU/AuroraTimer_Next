@@ -19,7 +19,9 @@
       <br>
       <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
       <br>
-      <el-button plain type="info" @click="SaveSetting">保存!</el-button>
+      <el-button plain type="default" @click="SaveSetting">保存!</el-button>
+      <el-button plain type="info" @click="ResetSetting">重置默认设置</el-button>
+      <br>
     </div>
   </div>
 </template>
@@ -28,7 +30,7 @@
 import '../assets/css/common.css'
 import {TimerStore} from "../stores/Timer";
 import {ElNotification} from "element-plus";
-import {Setting} from "../utils/Setting";
+import  * as SettingJS from "../utils/Setting";
 import {ref} from "vue";
 
 const props = defineProps(['text'])
@@ -57,12 +59,35 @@ const ColorSelector = async () => {
 }
 
 const SaveSetting = () => {
-  Setting.progressBar.color = timerStore.progressColor
-  ElNotification({
-    title: '保存成功',
-    type:'success'
-  })
-  console.log(Setting.progressBar.color)
+  SettingJS.Setting.progressBar.color = timerStore.progressColor
+  let flag = window.electronAPI.SaveSetting(JSON.stringify(SettingJS.Setting))
+  if(flag){
+    ElNotification({
+      title: '保存成功',
+      type:'success'
+    })
+  }else {
+    ElNotification({
+      title: '保存失败',
+      type:'error'
+    })
+  }
+}
+const ResetSetting = () => {
+  let DefaultSetting = SettingJS.DefaultSetting
+  timerStore.progressColor = DefaultSetting.progressBar.color
+  let flag = window.electronAPI.SaveSetting(JSON.stringify(DefaultSetting))
+  if(flag){
+    ElNotification({
+      title: '重置成功',
+      type:'success'
+    })
+  }else {
+    ElNotification({
+      title: '保存失败',
+      type:'error'
+    })
+  }
 }
 
 const addChoiceList = (value) => {
@@ -79,7 +104,7 @@ const addChoiceList = (value) => {
 .demonstration {
   margin-right: 16px;
 }
-.white-box {
+.white-box *{
   padding: 15px;
 }
 

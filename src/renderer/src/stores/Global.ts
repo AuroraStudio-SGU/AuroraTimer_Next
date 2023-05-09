@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import {ref} from "vue";
+import {SettingFile} from "../utils/Setting";
+import {TimerStore} from "./Timer";
 
 // 第一个参数是应用程序中 store 的唯一 id
 export const GlobalStore = defineStore('main', {
@@ -9,7 +11,8 @@ export const GlobalStore = defineStore('main', {
       loginPanel:ref(false),
       UserList:ref([]),
       UserInfo:ref({}),
-      Settings:ref({})
+      Settings:ref({}),
+      ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next'
     }
   },
   getters:{
@@ -18,6 +21,12 @@ export const GlobalStore = defineStore('main', {
   actions:{
     changeLoginPanel(){
       this.loginPanel = true
+    },
+    loadAllSetting(setting:SettingFile){
+      this.UserInfo = setting.userInfo
+      const timeStore = TimerStore()
+      console.log(setting.progressBar.color)
+      timeStore.progressColor = setting.progressBar.color
     }
   }
 })
