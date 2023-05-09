@@ -2189,6 +2189,11 @@ plist@^3.0.1, plist@^3.0.4:
     base64-js "^1.5.1"
     xmlbuilder "^15.1.1"
 
+plotly.js-dist@^2.22.0:
+  version "2.22.0"
+  resolved "https://registry.npmjs.org/plotly.js-dist/-/plotly.js-dist-2.22.0.tgz#523590d89622371839b4880e9804ee4680778618"
+  integrity sha512-ldb7TzxN8lOqV61wA9P3X5PAcI4h7u2G1WK2cSw1RfcAbheLfFrGO8xMhb+jOoi2/tCGO5vqwHfECIekQ5CEcg==
+
 postcss@^8.1.10, postcss@^8.4.21:
   version "8.4.23"
   resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.23.tgz"

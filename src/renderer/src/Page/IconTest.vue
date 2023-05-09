@@ -3,13 +3,13 @@
     <div class="title" >
       图标测试
     </div>
-    <div class="white-box">
-      <a href="#" class="icon green ion-ios-star-outline"></a>
-      <a href="#" class="icon blue ion-ios-list-outline"></a>
-      <a href="#" class="icon navy ion-ios-chatboxes-outline"></a>
-      <a href="#" class="icon yellow ion-ios-home-outline"></a>
-      <a href="#" class="icon red ion-ios-pie-outline"></a>
-      <a href="#" class="icon ion-ios-gear-outline"></a>
+    <div class="icon-box">
+      <a class="icon green ion-ios-star-outline"></a>
+      <a class="icon blue ion-ios-list-outline"></a>
+      <a class="icon navy ion-ios-chatboxes-outline"></a>
+      <a class="icon yellow ion-ios-home-outline"></a>
+      <a class="icon red ion-ios-pie-outline"></a>
+      <a class="icon ion-ios-gear-outline"></a>
     </div>
   </div>
 </template>
@@ -28,6 +28,8 @@ onMounted(()=>{
 </script>
 
 <style scoped>
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css); /* 仅演示所用，可自行调整 */
+
 /* 对应分组
    .green
    .blue
@@ -35,7 +37,18 @@ onMounted(()=>{
    .yellow
    .red
  */
-
+.icon-box {
+  /*background-color: #212121;*/
+  padding: 30px 100px 30px 50px;
+  border-radius: 35px;
+  width: 60vw;
+  height: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: wrap;
+  margin: 0;
+}
 .icon {
   position: relative;
   font-size: 40px;
@@ -186,19 +199,5 @@ onMounted(()=>{
   100% {
     transform: rotate(360deg);
   }
-}
-
-/* 仅演示所用，可自行调整 */
-html {
-  height: 100%;
-}
-body {
-  background-color: #212121;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-flow: wrap;
-  margin: 0;
-  height: 100%;
 }
 </style>

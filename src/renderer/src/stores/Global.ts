@@ -25,7 +25,6 @@ export const GlobalStore = defineStore('main', {
     loadAllSetting(setting:SettingFile){
       this.UserInfo = setting.userInfo
       const timeStore = TimerStore()
-      console.log(setting.progressBar.color)
       timeStore.progressColor = setting.progressBar.color
     }
   }

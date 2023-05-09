@@ -25,6 +25,7 @@
     "element-plus": "^2.3.3",
     "jquery": "^3.6.4",
     "pinia": "^2.0.34",
+    "plotly.js-dist": "^2.22.0",
     "vue": "^3.2.47",
     "vue-router": "4"
   },

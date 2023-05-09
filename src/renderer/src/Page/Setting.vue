@@ -22,6 +22,15 @@
       <el-button plain type="default" @click="SaveSetting">保存!</el-button>
       <el-button plain type="info" @click="ResetSetting">重置默认设置</el-button>
       <br>
+      <div class="dark-mode">
+        <p class="text">切换黑夜/白天模式</p>
+        <div class="switch">
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
     </div>
   </div>
 </template>
