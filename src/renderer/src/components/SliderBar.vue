@@ -1,7 +1,7 @@
 <template>
   <div class="Retract-sidebar">
     <a class="sidebar-item" @click="jumpTo('Timer')"
-    ><img :src="getUrl('icon.png')" alt="" class="logo"/><span>计时</span></a>
+    ><a class="icon ion-ios-gear-outline"></a><span>计时</span></a>
     <a class="sidebar-item" @click="jumpTo('Main')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>公告</span></a>
     <a class="sidebar-item" @click="jumpTo('Rank')"
@@ -30,8 +30,9 @@ const jumpTo = (local) => {
 </script>
 
 <style scoped>
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+/* 导入的icon图标，可以换成其他icon */
 .Retract-sidebar {
-
   margin-top: 15px;
   width: 7%;
   height: 86%;
@@ -40,6 +41,7 @@ const jumpTo = (local) => {
   align-items: center;
   flex-direction: column;
   background-color: rgb(255, 255, 255);
+  opacity: 0.99;
   transition: 0.3s;
   border-radius: 25px;
   overflow: hidden;
@@ -115,7 +117,7 @@ const jumpTo = (local) => {
 
 .Retract-sidebar:nth-child(1) {
   background-color: rgb(255, 255, 255);
-
+  opacity: 0.99;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -135,5 +137,166 @@ const jumpTo = (local) => {
   margin-left: 10px;
   height: 40px;
   width: 40px;
+}
+/* 对应分组
+   .green
+   .blue
+   .navy
+   .yellow
+   .red
+ */
+
+.icon {
+  position: relative;
+  font-size: 40px;
+  color: #ffffff;
+  width: 50px;
+  /*margin: 10px;*/
+  height: 50px;
+  line-height: 75px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.icon * {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.icon:before,
+.icon:after {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.icon:before {
+  position: relative;
+  bottom: 15px;
+  color: #ffffff;
+}
+
+.icon:after {
+  background: #333333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border: 4px solid #000000;
+  content: '';
+  z-index: -1;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.icon.blue:after {
+  border-color: #2980b9;
+  background-color: #123851;
+}
+
+.icon.yellow:after {
+  border-color: #f39c12;
+  background-color: #7f5006;
+}
+
+.icon.green:after {
+  border-color: #27ae60;
+  background-color: #104627;
+}
+
+.icon.navy:after {
+  border-color: #34495e;
+  background-color: #1b2029;
+}
+
+.icon.red:after {
+  border-color: #c0392b;
+  background-color: #581a14;
+}
+
+.icon:hover:after,
+.icon.hover:after {
+  border-color: transparent;
+  animation: icon cubic-bezier(0.18, 0.14, 0.29, 1) 1s;
+  border-right-color: #000000;
+  border-left-color: #000000;
+  border-top-color: #ffffff !important;
+  border-bottom-color: #ffffff !important;
+}
+
+.icon:hover.blue,
+.icon.hover.blue {
+  color: #2980b9;
+}
+
+.icon:hover.blue:after,
+.icon.hover.blue:after {
+  border-right-color: #2980b9;
+  border-left-color: #2980b9;
+}
+
+.icon:hover.yellow,
+.icon.hover.yellow {
+  color: #f39c12;
+}
+
+.icon:hover.yellow:after,
+.icon.hover.yellow:after {
+  border-right-color: #f39c12;
+  border-left-color: #f39c12;
+}
+
+.icon:hover.green,
+.icon.hover.green {
+  color: #27ae60;
+}
+
+.icon:hover.green:after,
+.icon.hover.green:after {
+  border-right-color: #27ae60;
+  border-left-color: #27ae60;
+}
+
+.icon:hover.navy,
+.icon.hover.navy {
+  color: #34495e;
+}
+
+.icon:hover.navy:after,
+.icon.hover.navy:after {
+  border-right-color: #34495e;
+  border-left-color: #34495e;
+}
+
+.icon:hover.red,
+.icon.hover.red {
+  color: #c0392b;
+}
+
+.icon:hover.red:after,
+.icon.hover.red:after {
+  border-right-color: #c0392b;
+  border-left-color: #c0392b;
+}
+
+@-webkit-keyframes icon {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes icon {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

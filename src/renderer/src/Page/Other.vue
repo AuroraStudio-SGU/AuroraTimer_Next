@@ -37,7 +37,7 @@ const plotlyContainer = ref(null)
 let value = ref('')
 
 const otherTestPage = [
-  { label:'图标测试',value:'IconTest'},
+  { label:'新UI框架测试',value:'NewUI'},
 ]
 const jumpTo = (local) => {
   router.push({

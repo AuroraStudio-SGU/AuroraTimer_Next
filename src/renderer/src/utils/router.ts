@@ -11,6 +11,7 @@ import Login from "../Page/Login.vue";
 import Welcome from "../Page/Welcome.vue";
 import IconTest from "../Page/IconTest.vue";
 import Calculator from "../Page/Calculator.vue";
+import NewUI from "../Page/NewUI.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
@@ -22,6 +23,7 @@ const routes = [
   {path: '/welcome', name: 'Welcome', component: Welcome},
   {path: '/icontest', name: 'IconTest', component: IconTest},
   {path: '/calculator', name: 'Calculator', component: Calculator},
+  {path: '/newUI', name: 'NewUI', component: NewUI},
 
 ]
 

@@ -28,17 +28,11 @@ onMounted(()=>{
 </script>
 
 <style scoped>
-@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css); /* 仅演示所用，可自行调整 */
 
-/* 对应分组
-   .green
-   .blue
-   .navy
-   .yellow
-   .red
- */
+@import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css); /* 仅演示所用，可自行调整 */
 .icon-box {
-  /*background-color: #212121;*/
+  opacity: 0.999;
+  background-color: #fff;
   padding: 30px 100px 30px 50px;
   border-radius: 35px;
   width: 60vw;
@@ -49,6 +43,14 @@ onMounted(()=>{
   flex-flow: wrap;
   margin: 0;
 }
+/* 对应分组
+   .green
+   .blue
+   .navy
+   .yellow
+   .red
+ */
+
 .icon {
   position: relative;
   font-size: 40px;
