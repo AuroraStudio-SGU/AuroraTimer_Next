@@ -12,8 +12,8 @@
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>设置</span></a>
     <a class="sidebar-item" @click="jumpTo('Welcome')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>早安晚安动画</span></a>
-    <a class="sidebar-item" @click="jumpTo('IconTest')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>图标测试</span></a>
+    <a class="sidebar-item" @click="jumpTo('NewUI')"
+    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>新UI测试</span></a>
     <a class="sidebar-item" @click="jumpTo('Calculator')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>日历测试</span></a>
   </div>

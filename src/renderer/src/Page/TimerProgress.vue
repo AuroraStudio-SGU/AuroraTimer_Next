@@ -5,7 +5,7 @@
     </div>
     <div class="white-box">
       <div class="between">
-        <div class="progress">
+        <div class="progress1">
           <div class="little">
             <el-progress
               class="littleCircle"
@@ -120,7 +120,7 @@ onMounted(() => {
   align-items: center;
 }
 
-.progress {
+.progress1 {
   margin-left: 5px;
   position: relative;
 }
