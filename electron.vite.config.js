@@ -12,9 +12,15 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer/src'),
+        '~tailwindcss': resolve('src/renderer/src/tailwindcss.css'),
       }
     },
     plugins: [vue()]
+  },
+  css: {
+    postcss: {
+      plugins: [require('tailwindcss')],
+    },
   }
 })
