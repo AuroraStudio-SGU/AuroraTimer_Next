@@ -1,12 +1,16 @@
 .white-box {
   background-color: #fff;
-  padding: 30px 100px 30px 50px;
+  padding: 20px;
   border-radius: 35px;
-  width: 60vw;
+  @apply w-11/12 xl:w-10/12;
   height: 60%;
 }
 .title {
   font-size: 60px;
   font-weight: 600;
   margin-bottom: 20PX;
+}
+.menu{
+  height: 100%;
+  width: 100%;
 }

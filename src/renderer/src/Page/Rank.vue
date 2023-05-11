@@ -76,7 +76,7 @@ onBeforeMount(() => {
     }
     GradeFilters.push(obj)
   })
-  console.log("年级列表:", GradeFilters)
+  // console.log("年级列表:", GradeFilters)
 })
 const filterHandler = (
   value: string,

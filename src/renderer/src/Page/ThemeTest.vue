@@ -27,7 +27,7 @@
 import {onBeforeMount, onMounted, ref} from "vue";
 
 
-let themeSelected = ref('')
+let themeSelected = ref('light')
 const themes = ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
   "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
   "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",

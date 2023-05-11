@@ -2,33 +2,34 @@
   <div class="menu">
     <div class="title">设置功能</div>
     <div class="white-box">
-      <span class="demonstration">进度条1(&lt;24h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.big.start" />
-      <span class="demonstration">进度条1(&lt;24h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.big.end" />
-      <br>
-      <span class="demonstration">进度条2(&lt;48h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.medium.start" />
-      <span class="demonstration">进度条2(&lt;48h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.medium.end" />
-      <br>
-      <span class="demonstration">进度条3(&lt;72h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.small.start" />
-      <span class="demonstration">进度条3(&lt;72h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-      @change="addChoiceList" v-model="timerStore.progressColor.small.end" />
-      <br>
-      <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
-      <br>
-      <el-button plain type="default" @click="SaveSetting">保存!</el-button>
-      <el-button plain type="info" @click="ResetSetting">重置默认设置</el-button>
-      <br>
-      <div class="dark-mode">
-        <p class="text">切换黑夜/白天模式</p>
-        <div class="switch">
-          <label class="switch">
-            <input type="checkbox" />
-            <span class="slider"></span>
-          </label>
+      <div class="color-setting">
+        <span class="demonstration">进度条1(&lt;24h)渐变色0%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.big.start" />
+        <span class="demonstration">进度条1(&lt;24h)渐变色100%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.big.end" />
+        <br>
+        <span class="demonstration">进度条2(&lt;48h)渐变色0%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.medium.start" />
+        <span class="demonstration">进度条2(&lt;48h)渐变色100%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.medium.end" />
+        <br>
+        <span class="demonstration">进度条3(&lt;72h)渐变色0%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.small.start" />
+        <span class="demonstration">进度条3(&lt;72h)渐变色100%</span><el-color-picker :predefine="lastChoice"
+        @change="addChoiceList" v-model="timerStore.progressColor.small.end" />
+      </div>
+      <div class="operation">
+        <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
+        <el-button plain type="default" @click="SaveSetting">保存!</el-button>
+        <el-button plain type="info" @click="ResetSetting">重置默认设置</el-button>
+        <div class="dark-mode">
+          <p class="text">切换黑夜/白天模式</p>
+          <div class="switch">
+            <label class="switch">
+              <input type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
         </div>
       </div>
     </div>

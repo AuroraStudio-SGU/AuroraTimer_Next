@@ -1,7 +1,7 @@
 <template>
   <div class="Retract-sidebar">
     <a class="sidebar-item" @click="jumpTo('Timer')"
-    ><a class="icon ion-ios-gear-outline"></a><span>计时</span></a>
+    ><i class="icon ion-ios-gear-outline"></i><span>计时</span></a>
     <a class="sidebar-item" @click="jumpTo('Main')"
     ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>公告</span></a>
     <a class="sidebar-item" @click="jumpTo('Rank')"
@@ -34,7 +34,7 @@ const jumpTo = (local) => {
 /* 导入的icon图标，可以换成其他icon */
 .Retract-sidebar {
   margin-top: 15px;
-  width: 7%;
+  width: 10%;
   height: 86%;
   display: flex;
   justify-content: center;
@@ -52,10 +52,9 @@ const jumpTo = (local) => {
 
 .sidebar-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 15%;
-  width: 85%;
+  @apply w-11/12;
   margin: 9px;
   border-radius: 25px;
   position: relative;
@@ -64,7 +63,6 @@ const jumpTo = (local) => {
 }
 
 .sidebar-item img {
-
   position: absolute;
 }
 
@@ -90,7 +88,7 @@ const jumpTo = (local) => {
 
 .sidebar-item span {
   position: relative;
-  left: 100px;
+  @apply left-20;
   font-weight: 500;
   font-size: 15px;
   opacity: 0;
@@ -148,13 +146,14 @@ const jumpTo = (local) => {
 
 .icon {
   position: relative;
+  flex-shrink: 0;
   font-size: 40px;
   color: #ffffff;
   width: 50px;
-  /*margin: 10px;*/
+  margin: 6px;
   height: 50px;
   line-height: 75px;
-  display: inline-block;
+  display: block;
   text-align: center;
   border-radius: 50%;
 }
