@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="title">工作室公告</div>
-    <div class="white-box bg-base-100">
+    <div class="white-box">
       今天是个好日子
       <div class="xiaoxi-box">
         <div class="card w-96 bg-base-100 shadow-xl">

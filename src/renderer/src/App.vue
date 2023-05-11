@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div class="main bg-base-300" v-if="loginPanel" data-theme="valentine">
+    <div class="main bg-base-300" v-if="loginPanel" :data-theme="globalStore.currentTheme">
       <div class="top-bar bg-base-200" >
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
@@ -42,7 +42,6 @@
       </div>
       <SliderBar></SliderBar>
       <div class="app-box">
-        
         <!-- 侧标栏显示 -->
         <router-view></router-view><!-- 路由显示 -->
       </div>
@@ -67,11 +66,10 @@
       </div>
       <div class="select-bar-self">
         <el-select
-          v-model="themeSelected"
+          v-model="globalStore.currentTheme"
           class="m-2"
           placeholder="主题切换"
-          @change="switchTheme"
-          ><!-- 太多测试页面了放不下！!-->
+          >
           <el-option
             v-for="item in themeList"
             :key="item.value"
@@ -137,9 +135,7 @@ import { GlobalStore } from "./stores/Global";
 import { onBeforeMount, onMounted } from "vue";
 //登录状态栏
 const loginPanel = ref(false);
-let themeChanged = "light";
 const globalStore = GlobalStore();
-let themeSelected = ref("light");
 const themes = [
   "light",
   "dark",
@@ -194,9 +190,6 @@ const toProjectHub = () => {
   window.electronAPI.openBrowser(globalStore.ProjectLink);
 };
 
-const switchTheme = (theme) => {
-  this.themeChanged = theme;
-};
 onBeforeMount(() => {
   themes.forEach((value, index) => {
     let obj = {

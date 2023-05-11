@@ -12,7 +12,8 @@ export const GlobalStore = defineStore('main', {
       UserList:ref([]),
       UserInfo:ref({}),
       Settings:ref({}),
-      ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next'
+      ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
+      currentTheme:ref('valentine'),
     }
   },
   getters:{
