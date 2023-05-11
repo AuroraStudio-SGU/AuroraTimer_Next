@@ -1,9 +1,9 @@
 <template>
   <div class="menu">
-    <div class="title">
+    <div class="title" >
       <p>Aurora</p>
     </div>
-    <div class="white-box">
+    <div class="white-box bg-base-100">
       <div class="between">
         <div class="progress1">
           <div class="little">

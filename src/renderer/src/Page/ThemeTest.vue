@@ -3,7 +3,7 @@
     <div class="title">
       主题切换测试
     </div>
-    <div class="white-box">
+    <div class="white-box bg-base-100">
       <el-select v-model="themeSelected" class="m-2" placeholder="主题切换" @change="switchTheme"><!-- 太多测试页面了放不下！!-->
         <el-option
           v-for="item in themeList"

@@ -3,7 +3,7 @@
     <div class="title" >
       图标测试
     </div>
-    <div class="icon-box">
+    <div class="icon-box bg-base-100" >
       <a class="icon green ion-ios-star-outline"></a>
       <a class="icon blue ion-ios-list-outline"></a>
       <a class="icon navy ion-ios-chatboxes-outline"></a>

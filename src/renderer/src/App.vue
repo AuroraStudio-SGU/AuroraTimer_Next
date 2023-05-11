@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div class="main" v-if="loginPanel">
+    <div class="main bg-base-300" v-if="loginPanel" data-theme='valentine'>
       <div class="top-bar">
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
@@ -50,6 +50,16 @@
           </svg>
         </div>
       </div>
+      <div class="select-bar-self">
+        <el-select v-model="themeSelected" class="m-2" placeholder="主题切换" @change="switchTheme"><!-- 太多测试页面了放不下！!-->
+        <el-option
+          v-for="item in themeList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+      </div>
       <div class="love">
         <p class="text">喜欢本打卡器请给个赞吧</p>
         <div class="heart">
@@ -86,11 +96,19 @@
 import SliderBar from './components/SliderBar.vue'
 import { ref } from 'vue'
 import {GlobalStore} from "./stores/Global";
+import {onBeforeMount, onMounted} from "vue";
 //登录状态栏
 const loginPanel = ref(false)
-
+let themeChanged = 'light'
 const globalStore = GlobalStore()
+let themeSelected = ref('light')
+const themes = ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate",
+  "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden",
+  "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black",
+  "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade",
+  "night", "coffee", "winter"]
 
+const themeList = []
 //主进程处理完毕,例如登录成功,通知主窗口进行渲染
 try {
   window.electronAPI.changeLoginPanel((_event, value) => {
@@ -112,6 +130,19 @@ const toProjectHub = () => {
   window.electronAPI.openBrowser(globalStore.ProjectLink)
 }
 
+const switchTheme = (theme) => {
+  this.themeChanged=theme
+}
+onBeforeMount(()=>{
+  themes.forEach((value,index)=>{
+    let obj = {
+      label:value,
+      value:value,
+    }
+    themeList.push(obj)
+  })
+})
+
 </script>
 
 <style>
@@ -122,9 +153,9 @@ const toProjectHub = () => {
 .main {
   margin: 5px 5px;
   height: 99vh;
-  background-color: #eef2f5ee;
+  /* background-color: #eef2f5ee; */
   border-radius: 20px 20px;
-  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.1);
+  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.07);
   transform: scale(v-bind(plex));
   backdrop-filter: blur(10px);
 }
@@ -428,5 +459,11 @@ const toProjectHub = () => {
     opacity: 0;
     display: none;
   }
+}
+
+.select-bar-self {
+  position: absolute;
+  bottom: 40px;
+  left: 400px;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="title">
       用来测试各种功能
     </div>
-    <div class="white-box">
+    <div class="white-box bg-base-100">
       <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>
       <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
       <el-button class="obj" plain type="success" @click="openFile">上传文件</el-button>
@@ -205,9 +205,7 @@ const sendMsg = () => {
 </script>
 
 <style scoped>
-.white-box .obj {
-  padding: 10px;
-}
+
 
 .plotly-container {
   width: 70vw;
