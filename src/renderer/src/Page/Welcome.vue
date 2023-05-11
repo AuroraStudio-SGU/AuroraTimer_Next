@@ -4,7 +4,7 @@
     <div class="title" >
       Good Morning, Goodnight
     </div>
-    <div class="white-box">
+    <div class="white-box bg-base-100" >
       <div class="container-wrapper">
         <div class="container">
           <div class="circle-container">
@@ -130,7 +130,7 @@ onMounted(()=>{
   position: absolute;
 }
 .white-box {
-  background-color: #fff;
+  
   padding: 30px 100px 30px 50px;
   border-radius: 35px;
   width: 60vw;

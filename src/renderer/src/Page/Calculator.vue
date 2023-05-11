@@ -3,7 +3,7 @@
     <div class="title" >
      日历测试
     </div>
-    <div class="white-box">
+    <div class="white-box bg-base-100">
       <el-button type='success' @click="setCalCTX" >
         测试
       </el-button>

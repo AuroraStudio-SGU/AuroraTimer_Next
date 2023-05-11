@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="title">设置功能</div>
-    <div class="white-box">
+    <div class="white-box bg-base-100">
       <div class="color-setting">
         <span class="demonstration">进度条1(&lt;24h)渐变色0%</span><el-color-picker :predefine="lastChoice"
         @change="addChoiceList" v-model="timerStore.progressColor.big.start" />
@@ -114,9 +114,7 @@ const addChoiceList = (value) => {
 .demonstration {
   margin-right: 16px;
 }
-.white-box *{
-  padding: 15px;
-}
+
 
 .text {
   margin-right: 10px;

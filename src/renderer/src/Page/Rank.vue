@@ -4,7 +4,7 @@
       工作室本周打卡情况
     </div>
     {{ tableHeight }}
-    <div class="white-box" ref="boxComponent">
+    <div class="white-box bg-base-100" ref="boxComponent">
       <el-table
         :border="true"
         :data="UserList"

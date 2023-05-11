@@ -1,8 +1,8 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div class="main" v-if="loginPanel">
-      <div class="top-bar">
+    <div class="main bg-base-300" v-if="loginPanel" data-theme="valentine">
+      <div class="top-bar bg-base-200" >
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
         <!-- 拖拽栏 -->
@@ -11,25 +11,40 @@
           <div
             class="circle-green"
             @click="windowOperation('Min')"
-            style="width: 17px; height: 17px; background-color: #65bc60; border-radius: 50%"
+            style="
+              width: 17px;
+              height: 17px;
+              background-color: #65bc60;
+              border-radius: 50%;
+            "
           ></div>
           <div
             class="circle-yellow"
             @click="windowOperation('Max')"
-            style="width: 17px; height: 17px; background-color: #e7c168; border-radius: 50%"
+            style="
+              width: 17px;
+              height: 17px;
+              background-color: #e7c168;
+              border-radius: 50%;
+            "
           ></div>
           <div
             class="circle-red"
             @click="windowOperation('Close')"
-            style="width: 17px; height: 17px; background-color: #e36f6c; border-radius: 50%"
+            style="
+              width: 17px;
+              height: 17px;
+              background-color: #e36f6c;
+              border-radius: 50%;
+            "
           ></div>
         </div>
       </div>
+      <SliderBar></SliderBar>
       <div class="app-box">
-        <SliderBar></SliderBar>
+        
         <!-- 侧标栏显示 -->
-        <router-view></router-view
-        ><!-- 路由显示 -->
+        <router-view></router-view><!-- 路由显示 -->
       </div>
       <div class="animate">
         <div class="loader">
@@ -50,23 +65,56 @@
           </svg>
         </div>
       </div>
+      <div class="select-bar-self">
+        <el-select
+          v-model="themeSelected"
+          class="m-2"
+          placeholder="主题切换"
+          @change="switchTheme"
+          ><!-- 太多测试页面了放不下！!-->
+          <el-option
+            v-for="item in themeList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
       <div class="love">
         <p class="text">喜欢本打卡器请给个赞吧</p>
         <div class="heart">
           <div class="con-like">
-            <input title="like" type="checkbox" class="like" @click="toProjectHub"/>
+            <input
+              title="like"
+              type="checkbox"
+              class="like"
+              @click="toProjectHub"
+            />
             <div class="checkmark">
-              <svg viewBox="0 0 24 24" class="outline" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                viewBox="0 0 24 24"
+                class="outline"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,11,8.967a1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05A4.8,4.8,0,0,1,22,8.967C22,11.87,19.053,16.006,13.915,20.313Z"
                 ></path>
               </svg>
-              <svg viewBox="0 0 24 24" class="filled" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                viewBox="0 0 24 24"
+                class="filled"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"
                 ></path>
               </svg>
-              <svg class="celebrate" width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                class="celebrate"
+                width="100"
+                height="100"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <polygon points="10,10 20,20" class="poly"></polygon>
                 <polygon points="10,50 20,50" class="poly"></polygon>
                 <polygon points="20,80 30,70" class="poly"></polygon>
@@ -83,35 +131,81 @@
 </template>
 
 <script setup>
-import SliderBar from './components/SliderBar.vue'
-import { ref } from 'vue'
-import {GlobalStore} from "./stores/Global";
+import SliderBar from "./components/SliderBar.vue";
+import { ref } from "vue";
+import { GlobalStore } from "./stores/Global";
+import { onBeforeMount, onMounted } from "vue";
 //登录状态栏
-const loginPanel = ref(false)
+const loginPanel = ref(false);
+let themeChanged = "light";
+const globalStore = GlobalStore();
+let themeSelected = ref("light");
+const themes = [
+  "light",
+  "dark",
+  "cupcake",
+  "bumblebee",
+  "emerald",
+  "corporate",
+  "synthwave",
+  "retro",
+  "cyberpunk",
+  "valentine",
+  "halloween",
+  "garden",
+  "forest",
+  "aqua",
+  "lofi",
+  "pastel",
+  "fantasy",
+  "wireframe",
+  "black",
+  "luxury",
+  "dracula",
+  "cmyk",
+  "autumn",
+  "business",
+  "acid",
+  "lemonade",
+  "night",
+  "coffee",
+  "winter",
+];
 
-const globalStore = GlobalStore()
-
+const themeList = [];
 //主进程处理完毕,例如登录成功,通知主窗口进行渲染
 try {
   window.electronAPI.changeLoginPanel((_event, value) => {
-    loginPanel.value = true
-  })
+    loginPanel.value = true;
+  });
   window.electronAPI.handleSetting((_event, value) => {
-    if(value){
-      console.log("从主进程加载配置文件")
-      globalStore.loadAllSetting(JSON.parse(value))
+    if (value) {
+      console.log("从主进程加载配置文件");
+      globalStore.loadAllSetting(JSON.parse(value));
     }
-  })
+  });
 } catch (e) {
-  console.error(e)
+  console.error(e);
 }
 const windowOperation = (op) => {
-  window.electronAPI.windowOperate(op)
-}
+  window.electronAPI.windowOperate(op);
+};
 const toProjectHub = () => {
-  window.electronAPI.openBrowser(globalStore.ProjectLink)
-}
+  window.electronAPI.openBrowser(globalStore.ProjectLink);
+};
 
+const switchTheme = (theme) => {
+  this.themeChanged = theme;
+};
+onBeforeMount(() => {
+  themes.forEach((value, index) => {
+    let obj = {
+      label: value,
+      value: value,
+    };
+    themeList.push(obj);
+  });
+});
 </script>
 
 <style>
@@ -122,9 +216,9 @@ const toProjectHub = () => {
 .main {
   margin: 5px 5px;
   height: 99vh;
-  background-color: #eef2f5ee;
+  /* background-color: #eef2f5ee; */
   border-radius: 20px 20px;
-  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.1);
+  box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.07);
   transform: scale(v-bind(plex));
   backdrop-filter: blur(10px);
 }
@@ -133,6 +227,7 @@ const toProjectHub = () => {
   display: flex;
   border-radius: 20px;
   height: 97vh;
+  padding: 67px 0 0 206px;
 }
 
 .drag-bar {
@@ -144,7 +239,7 @@ const toProjectHub = () => {
 }
 
 .top-bar {
-  border-radius: 20px;
+  border-radius: 20px 20px 0 0;
   height: 6vh;
   display: flex;
   align-items: center;
@@ -202,7 +297,7 @@ const toProjectHub = () => {
 }
 
 .loader:before {
-  content: '';
+  content: "";
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -212,7 +307,8 @@ const toProjectHub = () => {
   top: 37px;
   left: 19px;
   transform: translate(-18px, -18px);
-  animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader svg {
@@ -234,7 +330,8 @@ const toProjectHub = () => {
 .loader svg polygon {
   stroke-dasharray: 145 76 145 76;
   stroke-dashoffset: 0;
-  animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader svg rect {
@@ -246,7 +343,8 @@ const toProjectHub = () => {
 .loader svg circle {
   stroke-dasharray: 150 50 150 50;
   stroke-dashoffset: 75;
-  animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader.triangle {
@@ -256,7 +354,8 @@ const toProjectHub = () => {
 .loader.triangle:before {
   left: 21px;
   transform: translate(-10px, -18px);
-  animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 @keyframes pathTriangle {
@@ -346,7 +445,6 @@ const toProjectHub = () => {
   margin: 0 16px;
 }
 
-
 .con-like {
   --red: #ee427b;
   position: relative;
@@ -395,11 +493,11 @@ const toProjectHub = () => {
 }
 
 .con-like .like:checked ~ .checkmark .filled {
-  display: block
+  display: block;
 }
 
 .con-like .like:checked ~ .checkmark .celebrate {
-  display: block
+  display: block;
 }
 
 @keyframes kfr-filled {
@@ -429,4 +527,11 @@ const toProjectHub = () => {
     display: none;
   }
 }
+
+.select-bar-self {
+  position: absolute;
+  bottom: 40px;
+  left: 400px;
+}
+
 </style>
