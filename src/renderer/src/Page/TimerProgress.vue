@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="title" >
-      <p>Aurora</p>
+      <p>占位（要删的）</p>
     </div>
     <div class="white-box bg-base-100">
       <div class="between">

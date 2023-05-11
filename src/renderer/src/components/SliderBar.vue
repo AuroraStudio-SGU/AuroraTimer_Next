@@ -1,53 +1,220 @@
 <template>
   <div class="Retract-sidebar">
-    <a class="sidebar-item" @click="jumpTo('Timer')"
-    ><i class="icon ion-ios-gear-outline"></i><span>计时</span></a>
-    <a class="sidebar-item" @click="jumpTo('Main')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>公告</span></a>
-    <a class="sidebar-item" @click="jumpTo('Rank')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>排行榜</span></a>
-    <a class="sidebar-item" @click="jumpTo('Other')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>测试</span></a>
-    <a class="sidebar-item" @click="jumpTo('Setting')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>设置</span></a>
-    <a class="sidebar-item" @click="jumpTo('Welcome')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>早安晚安动画</span></a>
-    <a class="sidebar-item" @click="jumpTo('NewUI')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>新UI测试</span></a>
-    <a class="sidebar-item" @click="jumpTo('Calculator')"
-    ><img :src="getUrl('icon.png')" class="logo" alt=""/><span>日历测试</span></a>
+    <div class="navbar bg-base-100 fixed top-35 get-topup">
+      <div class="flex-1">
+        <a class="btn btn-ghost normal-case text-3xl">Aurora</a>
+      </div>
+      <div class="flex-none gap-2">
+        <div class="form-control">
+          <input
+            type="text"
+            placeholder="Search"
+            class="input input-bordered"
+          />
+        </div>
+        <div class="dropdown dropdown-end">
+          <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+            <div class="w-10 rounded-full">
+              <img :src="getUrl('icon.png')" />
+            </div>
+          </label>
+          <ul
+            tabindex="0"
+            class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a class="justify-between">
+                Profile
+                <span class="badge">New</span>
+              </a>
+            </li>
+            <li><a>Settings</a></li>
+            <li><a>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside
+      id="default-sidebar"
+      class="fixed bottom-0 left-0 w-50 transition-transform -translate-x-full sm:translate-x-0"
+      aria-label="Sidebar"
+    >
+      <div
+        class="set-high px-3 py-5 overflow-y-auto bg-base-100 dark:bg-gray-800"
+      >
+        <ul class="space-y-2 font-medium">
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+              </svg>
+              <span class="ml-3">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Kanban</span>
+              <span
+                class="inline-flex items-center justify-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300"
+                >Pro</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"
+                ></path>
+                <path
+                  d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Inbox</span>
+              <span
+                class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+                >3</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Users</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Products</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Sign In</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              <span class="flex-1 ml-3 whitespace-nowrap">Sign Up</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </template>
 <script setup>
-import {getUrl} from '../utils/urlUtils'
-import {router} from '../utils/router'
+import { getUrl } from "../utils/urlUtils";
+import { router } from "../utils/router";
 
 const jumpTo = (local) => {
   router.push({
-    name: local
-  })
-}
+    name: local,
+  });
+};
 </script>
 
 <style scoped>
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
 /* 导入的icon图标，可以换成其他icon */
 .Retract-sidebar {
-  margin-top: 15px;
-  width: 10%;
-  height: 86%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: rgb(255, 255, 255);
-  opacity: 0.99;
-  transition: 0.3s;
-  border-radius: 25px;
-  overflow: hidden;
-  margin-right: 40px;
-  margin-left: 20px;
-  box-shadow: 2px 2px 9px 2px rgba(90, 90, 90, 0.2);
+  
 }
 
 .sidebar-item {
@@ -67,7 +234,7 @@ const jumpTo = (local) => {
 }
 
 .sidebar-item:nth-child(1)::before {
-  content: '';
+  content: "";
   display: block;
   width: 100%;
   height: 2px;
@@ -77,7 +244,7 @@ const jumpTo = (local) => {
 }
 
 .sidebar-item:nth-child(5)::before {
-  content: '';
+  content: "";
   display: block;
   width: 100%;
   height: 2px;
@@ -95,41 +262,21 @@ const jumpTo = (local) => {
   transition: 0.1s;
 }
 
-.Retract-sidebar:hover {
-  width: 210px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+
 
 .sidebar-item:hover {
   /* background-color: rgb(55, 65, 81); */
   background-color: #c73b3b;
   color: #fff;
-
 }
 
-.Retract-sidebar:hover span {
-  opacity: 1;
-}
 
-.Retract-sidebar:nth-child(1) {
-  background-color: rgb(255, 255, 255);
-  opacity: 0.99;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.Retract-sidebar:nth-child(1) .sidebar-item:hover {
-  background-color: rgb(227, 227, 227);
-  transform: scale(1.2);
-  transition: all 0.5s;
-  color: #0077ff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
-.Retract-sidebar:nth-child(1) .sidebar-item {
-  color: rgb(82, 82, 82);
-}
+
+
+
+
 
 .logo {
   margin-left: 10px;
@@ -185,7 +332,7 @@ const jumpTo = (local) => {
   height: 100%;
   width: 100%;
   border: 4px solid #000000;
-  content: '';
+  content: "";
   z-index: -1;
   border-radius: 50%;
   box-sizing: border-box;
@@ -297,5 +444,14 @@ const jumpTo = (local) => {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.set-high {
+  height: 86vh;
+  border-radius: 18px;
+}
+
+.get-topup {
+  z-index: 99;
 }
 </style>
