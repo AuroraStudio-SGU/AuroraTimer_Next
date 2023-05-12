@@ -27,7 +27,7 @@ let tray;
 
 function createLoginWindow() {
   return new BrowserWindow({
-    width: 650,
+    width: 1000,
     height: 600,
     alwaysOnTop: false,//窗口一直保持在其他窗口前面
     frame: false,
@@ -35,7 +35,7 @@ function createLoginWindow() {
     center: true, // 窗口居中
     transparent: true,//窗口透明
     show: false,// 显示窗口将没有视觉闪烁（配合下面的ready-to-show事件）
-    hasShadow: true,//窗口是否有阴影
+    hasShadow: false,//窗口是否有阴影
     webPreferences: {
       preload: join(__dirname, '../preload/preload.js'),
       devTools: true,//客户端可以打开开发者工具（在客户端打开快捷键：ctrl+shift+i）

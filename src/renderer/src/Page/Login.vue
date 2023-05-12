@@ -1,21 +1,23 @@
 <template>
-<div class="container">
+  <div class="big-box bg-base-300" data-theme="cupcake">
+    <div class="container">
   <div class="welcome">
     <div class="pinkbox">
       <!-- 注册 -->
       <div class="signup nodisplay">
-        <h1>注册</h1>
+        <h1 class="font-bold">注册</h1>
         <form autocomplete="off">
           <input type="text" placeholder="Username">
           <input type="email" placeholder="Email">
           <input type="password" placeholder="Password">
           <input type="password" placeholder="Confirm Password">
           <button class="button submit">注册</button>
+          
         </form>
       </div>
       <!-- 登录 -->
       <div class="signin">
-        <h1>登录</h1>
+        <h1 class="font-bold">登录</h1>
         <form class="more-padding" autocomplete="off">
           <input type="text" placeholder="Username">
           <input type="password" placeholder="Password">
@@ -42,6 +44,8 @@
     </div>
   </div>
 </div>
+  </div>
+
 </template>
 
 <script setup>
@@ -70,20 +74,19 @@ const login = ()=>{
 </script>
 
 <style scoped>
-body {
-  background: #cbc0d3;
-}
+
 
 /* 容器的样式 */
 .container {
   margin: auto;
-  width: 650px;
-  height: 550px;
+ 
+  height: 400px;
   position: relative;
+  
 }
 
 .welcome {
-  background: #f6f6f6;
+  @apply bg-base-100;
   width: 650px;
   height: 415px;
   position: absolute;
@@ -96,7 +99,7 @@ body {
   position: absolute;
   top: -10%;
   left: 5%;
-  background: #eac7cc;
+  @apply bg-primary;
   width: 320px;
   height: 500px;
   border-radius: 5px;
@@ -131,14 +134,13 @@ h1 {
   text-align: center;
   margin-top: 95px;
   text-transform: uppercase;
-  color: #f6f6f6;
+  
   font-size: 2em;
   letter-spacing: 8px;
 }
 
 .title {
   font-family: "Lora", serif;
-  color: #8e9aaf;
   font-size: 1.8em;
   line-height: 1.1em;
   letter-spacing: 3px;
@@ -160,12 +162,12 @@ p {
   font-family: "Open Sans", sans-serif;
   font-size: 0.7em;
   letter-spacing: 2px;
-  color: #8e9aaf;
+  font-weight: 600;
   text-align: center;
 }
 
 span {
-  color: #eac7cc;
+  @apply text-primary;
 }
 
 .flower {
@@ -198,16 +200,16 @@ button {
 }
 
 button:hover {
-  background: #eac7cc;
-  color: #f6f6f6;
+  @apply bg-primary text-primary-content;
+  
   transition: background-color 1s ease-out;
 }
 
 .button {
   margin-top: 3%;
-  background: #f6f6f6;
-  color: #ce7d88;
-  border: solid 1px #eac7cc;
+  @apply bg-base-200 text-primary-content;
+  
+  
   font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 600;
 }
@@ -235,18 +237,19 @@ form {
 .sumbit {
   margin-top: 25px;
   padding: 12px;
-  border-color: #ce7d88;
+  @apply border-primary-content;
+  
 }
 
 .sumbit:hover {
-  background: #cbc0d3;
-  border-color: #bfb1c9;
+  @apply bg-base-100 border-primary;
+  
 }
 
 input {
-  background: #eac7cc;
+  @apply bg-primary;
   width: 65%;
-  color: #ce7d88;
+  @apply text-primary-content font-bold;
   border: none;
   border-bottom: 1px solid rgba(246, 246, 246, 0.5);
   padding: 9px;
@@ -254,14 +257,14 @@ input {
 }
 
 input::placeholder {
-  color: #f6f6f6;
+  @apply text-primary-content font-bold;
   letter-spacing: 2px;
   font-size: 1.0em;
   font-weight: 100;
 }
 
 input:focus {
-  color: #ce7d88;
+  @apply text-primary-content font-bold;
   outline: none;
   border-bottom: 1.2px solid rgba(206, 125, 136, 0.7);
   font-size: 1.0em;
@@ -274,7 +277,7 @@ input:focus::placeholder {
 
 label {
   font-family: "Open Sans", sans-serif;
-  color: #ce7d88;
+  @apply text-primary-content;
   font-size: 0.8em;
   letter-spacing: 1px;
 }
@@ -289,11 +292,17 @@ label {
 
 input[type=checkbox] {
   width: 15px;
-  background: #ce7d88;
+  @apply bg-primary;
 }
 
 .checkbox input[type=checkbox]:checked + label {
-  color: #ce7d88;
+  @apply text-primary-content;
   transition: 0.5s all ease;
+}
+
+.big-box {
+  width: 1000px;
+  height: 600px;
+  border-radius: 20px;
 }
 </style>

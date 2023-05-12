@@ -1,8 +1,6 @@
 <template>
   <div class="menu">
-    <div class="title" >
-      <p>占位（要删的）</p>
-    </div>
+    
     <div class="white-box bg-base-100">
       <div class="between">
         <div class="progress1">
@@ -322,5 +320,8 @@ body {
   }
 }
 
-
+.white-box {
+  width: 123vh;
+  border-radius: 20px;
+}
 </style>

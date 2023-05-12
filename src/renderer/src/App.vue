@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div class="main bg-base-300" v-if="loginPanel" data-theme="valentine">
+    <div class="main bg-base-300" v-if="loginPanel" :data-theme="globalStore.currentTheme">
       <div class="top-bar bg-base-200" >
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
@@ -67,7 +67,7 @@
       </div>
       <div class="select-bar-self">
         <el-select
-          v-model="themeSelected"
+          v-model="globalStore.currentTheme"
           class="m-2"
           placeholder="主题切换"
           @change="switchTheme"
@@ -227,7 +227,7 @@ onBeforeMount(() => {
   display: flex;
   border-radius: 20px;
   height: 97vh;
-  padding: 67px 0 0 206px;
+  padding: 110px 0 0 140px;
 }
 
 .drag-bar {
