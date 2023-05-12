@@ -220,7 +220,7 @@ onBeforeMount(() => {
   display: flex;
   border-radius: 20px;
   height: 97vh;
-  padding: 67px 0 0 206px;
+  padding: 110px 0 0 140px;
 }
 
 .drag-bar {

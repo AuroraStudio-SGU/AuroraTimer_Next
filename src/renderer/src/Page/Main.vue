@@ -1,19 +1,18 @@
 <template>
   <div class="menu">
-    <div class="title">工作室公告</div>
-    <div class="white-box">
-      今天是个好日子
-      <div class="xiaoxi-box">
-        <div class="card w-96 bg-base-100 shadow-xl">
-          <figure>
-            <img src="../assets/icon.png" alt="Shoes" />
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title">打卡时长</h2>
-            <p>本周打卡时长改为0小时</p>
-            <div class="card-actions justify-end">
-              <button class="btn btn-primary">收到！</button>
-            </div>
+    <div class="white-box bg-base-100">
+      <div class="hero min-h-screen bg-base-100">
+        <div class="hero-content flex-col lg:flex-row">
+          <img
+          :src="getUrl('icon.jpg')"
+            class="max-w-sm rounded-lg shadow-2xl"
+          />
+          <div>
+            <h1 class="text-5xl font-bold">工作室公告</h1>
+            <p class="py-6">
+              本周打卡时间为0小时，祝大家国庆节快乐！
+            </p>
+            <button class="btn btn-primary">收到！</button>
           </div>
         </div>
       </div>
@@ -28,5 +27,9 @@ import "../assets/css/common.css";
 <style scoped>
 .xiaoxi-box {
   transform: scale(0.7);
+}
+.white-box {
+  width: 123vh;
+  border-radius: 20px;
 }
 </style>
