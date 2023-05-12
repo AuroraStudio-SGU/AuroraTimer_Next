@@ -1,7 +1,7 @@
 <template>
-  <div class="M-Flipper" :class="[flipType, {'go': isFlipping}]">
-    <div class="digital front" :class="_textClass(frontTextFromData)"></div>
-    <div class="digital back" :class="_textClass(backTextFromData)"></div>
+  <div :class="[flipType, {'go': isFlipping}]" class="M-Flipper">
+    <div :class="_textClass(frontTextFromData)" class="digital front"></div>
+    <div :class="_textClass(backTextFromData)" class="digital back"></div>
   </div>
 </template>
 

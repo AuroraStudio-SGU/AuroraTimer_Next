@@ -1,7 +1,7 @@
 <template>
-  <div class="FlipClock" v-for="(item, index) in 4">
+  <div v-for="(item, index) in 4" class="FlipClock">
     <Flipper ref="flips"/>
-    <em class="divider" v-if="index===1">:</em>
+    <em v-if="index===1" class="divider">:</em>
   </div>
 </template>
 
@@ -12,17 +12,18 @@ import {TimerStore} from "../stores/Timer";
 
 const timeStore = TimerStore()
 
-let timer = null
+
 let flips = ref([])
 let flipObjs = []
-
+let LastTime = 0
 const StopTimer = () => {
-  window.clearInterval(timer)
-  timer = null
+  window.clearTimeout(timeStore.timer)
+  timeStore.timer = null
   timeStore.CloseTimer()
 }
 const clearTimer = () => {
   init()
+  LastTime = 0
   timeStore.clearTime()
 }
 
@@ -39,14 +40,49 @@ const SecondToTimeStr = (second) => {
   if (min < 10) min = '0' + min
   return hour + min + ''
 }
+
+const setTimer = () => {
+  const tick = () => {
+    try {
+      let time = timeStore.time
+      let nowTimeStr = SecondToTimeStr(time)
+      let nextTimeStr = SecondToTimeStr(LastTime)
+      for (let i = 0; i < flipObjs.length; i++) {
+        if (nowTimeStr[i] === nextTimeStr[i]) {
+          continue
+        }
+        flipObjs[i].flipDown(
+          nextTimeStr[i],
+          nowTimeStr[i]
+        )
+      }
+      LastTime = time
+      timeStore.TimePlusPlus()
+    } catch (e) {
+    }
+    timeStore.timer = setTimeout(tick, 1000)
+  }
+  return tick;
+}
+
 const run = () => {
   if (timeStore.isStarted) return
   timeStore.OpenTimer()
-  let LastTime = 0
-  timer = setInterval(() => {
-    let time = timeStore.time
-    let nowTimeStr = SecondToTimeStr(time)
-    let nextTimeStr = SecondToTimeStr(LastTime)
+  let tick = setTimer()
+  tick()
+}
+defineExpose({
+  run,
+  StopTimer,
+  clearTimer
+})
+onMounted(() => {
+  flipObjs = flips.value
+
+  if (timeStore.isStarted) {
+    LastTime = timeStore.time
+    let nowTimeStr = SecondToTimeStr(timeStore.time)
+    let nextTimeStr = '0000'
     for (let i = 0; i < flipObjs.length; i++) {
       if (nowTimeStr[i] === nextTimeStr[i]) {
         continue
@@ -56,19 +92,12 @@ const run = () => {
         nowTimeStr[i]
       )
     }
-    LastTime = time
-    timeStore.TimePlusPlus()
-  }, 1000)
-}
-defineExpose({
-  run,
-  timer,
-  StopTimer,
-  clearTimer
-})
-onMounted(() => {
-  flipObjs = flips.value
-  init()
+    window.clearTimeout(timeStore.timer)
+    let tick = setTimer()
+    tick()
+  } else {
+    init()
+  }
 })
 </script>
 

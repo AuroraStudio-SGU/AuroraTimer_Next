@@ -1,73 +1,75 @@
 <template>
   <div class="big-box bg-base-300" data-theme="cupcake">
     <div class="container">
-  <div class="welcome">
-    <div class="pinkbox">
-      <!-- 注册 -->
-      <div class="signup nodisplay">
-        <h1 class="font-bold">注册</h1>
-        <form autocomplete="off">
-          <input type="text" placeholder="Username">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Password">
-          <input type="password" placeholder="Confirm Password">
-          <button class="button submit">注册</button>
-          
-        </form>
-      </div>
-      <!-- 登录 -->
-      <div class="signin">
-        <h1 class="font-bold">登录</h1>
-        <form class="more-padding" autocomplete="off">
-          <input type="text" placeholder="Username">
-          <input type="password" placeholder="Password">
-          <div class="checkbox">
-            <input type="checkbox" id="remember" /><label for="remember">Remember Me</label>
+      <div class="welcome">
+        <div class="pinkbox">
+          <!-- 注册 -->
+          <div class="signup nodisplay">
+            <h1 class="font-bold">注册</h1>
+            <form autocomplete="off">
+              <input placeholder="Username" type="text">
+              <input placeholder="Email" type="email">
+              <input placeholder="Password" type="password">
+              <input placeholder="Confirm Password" type="password">
+              <button class="button submit">注册</button>
+
+            </form>
           </div>
-          <button class="buttom sumbit" @click="login()">登录</button>
-        </form>
+          <!-- 登录 -->
+          <div class="signin">
+            <h1 class="font-bold">登录</h1>
+            <form autocomplete="off" class="more-padding">
+              <input placeholder="Username" type="text">
+              <input placeholder="Password" type="password">
+              <div class="checkbox">
+                <input id="remember" type="checkbox"/><label for="remember">Remember Me</label>
+              </div>
+              <button class="buttom sumbit" @click="login()">登录</button>
+            </form>
+          </div>
+        </div>
+        <div class="leftbox">
+          <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
+          <p class="desc">Pick your perfect <span>bouquet</span></p>
+          <img class="flower smaller"
+               src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp"/>
+          <p class="account">已经有账号了?</p>
+          <button id="signin" class="button">登录</button>
+        </div>
+        <div class="rightbox">
+          <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
+          <p class="desc">Pick your perfect <span>bouquet</span></p>
+          <img class="flower"
+               src="https://hbimg.huabanimg.com/b28be92c8198975a74ad656eba00b352c9b9e589819af-lDXUAS_fw658/format/webp"/>
+          <p class="account">还没有账号?</p>
+          <button id="signup" class="button">立即注册</button>
+        </div>
       </div>
     </div>
-    <div class="leftbox">
-      <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
-      <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower smaller" src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp" />
-      <p class="account">已经有账号了?</p>
-      <button class="button" id="signin">登录</button>
-    </div>
-    <div class="rightbox">
-      <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
-      <p class="desc">Pick your perfect <span>bouquet</span></p>
-      <img class="flower" src="https://hbimg.huabanimg.com/b28be92c8198975a74ad656eba00b352c9b9e589819af-lDXUAS_fw658/format/webp" />
-      <p class="account">还没有账号?</p>
-      <button class="button" id="signup">立即注册</button>
-    </div>
-  </div>
-</div>
   </div>
 
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
-import  $  from 'jquery';
+import {onMounted} from "vue";
+import $ from 'jquery';
 
 
-onMounted(()=>{
-  $('#signup').click(function() {
-  $('.pinkbox').css('transform', 'translateX(80%)');
-  $('.signin').addClass('nodisplay');
-  $('.signup').removeClass('nodisplay');
-});
+onMounted(() => {
+  $('#signup').click(function () {
+    $('.pinkbox').css('transform', 'translateX(80%)');
+    $('.signin').addClass('nodisplay');
+    $('.signup').removeClass('nodisplay');
+  });
 
-$('#signin').click(function() {
-  $('.pinkbox').css('transform', 'translateX(0%)');
-  $('.signup').addClass('nodisplay');
-  $('.signin').removeClass('nodisplay');
-});
+  $('#signin').click(function () {
+    $('.pinkbox').css('transform', 'translateX(0%)');
+    $('.signup').addClass('nodisplay');
+    $('.signin').removeClass('nodisplay');
+  });
 })
 
-const login = ()=>{
+const login = () => {
   console.log("登录操作")
   window.electronAPI.login()
 }
@@ -79,10 +81,10 @@ const login = ()=>{
 /* 容器的样式 */
 .container {
   margin: auto;
- 
+
   height: 400px;
   position: relative;
-  
+
 }
 
 .welcome {
@@ -134,7 +136,7 @@ h1 {
   text-align: center;
   margin-top: 95px;
   text-transform: uppercase;
-  
+
   font-size: 2em;
   letter-spacing: 8px;
 }
@@ -201,16 +203,16 @@ button {
 
 button:hover {
   @apply bg-primary text-primary-content;
-  
+
   transition: background-color 1s ease-out;
 }
 
 .button {
   margin-top: 3%;
   @apply bg-base-200 text-primary-content;
-  
-  
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 600;
 }
 
@@ -238,12 +240,12 @@ form {
   margin-top: 25px;
   padding: 12px;
   @apply border-primary-content;
-  
+
 }
 
 .sumbit:hover {
   @apply bg-base-100 border-primary;
-  
+
 }
 
 input {

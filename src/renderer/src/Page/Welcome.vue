@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-<!-- TODO 自动判断时间进行动画效果   -->
-    <div class="title" >
-      Good Morning, Goodnight
-    </div>
-    <div class="white-box bg-base-100" >
+    <!-- TODO 自动判断时间进行动画效果   -->
+    <div class="white-box">
+      <div class="title">
+        Good Morning, Goodnight
+      </div>
       <div class="container-wrapper">
         <div class="container">
           <div class="circle-container">
@@ -84,9 +84,9 @@
 
 <script setup>
 import {onMounted} from "vue";
-import  $  from 'jquery';
+import $ from 'jquery';
 
-onMounted(()=>{
+onMounted(() => {
   $('.sun').click(function (e) {
     e.stopPropagation();
     $("html").toggleClass('container-night');
@@ -129,13 +129,7 @@ onMounted(()=>{
   content: "";
   position: absolute;
 }
-.white-box {
-  
-  padding: 30px 100px 30px 50px;
-  border-radius: 35px;
-  width: 60vw;
-  height: 60%;
-}
+
 html {
   font-family: "Sanchez", serif;
 }
@@ -360,8 +354,8 @@ html {
 
 @-webkit-keyframes boat {
   0% {
-    -webkit-transform: rotate(1deg)translate(2px, 0px);
-    transform: rotate(1deg)translate(2px, 0px);
+    -webkit-transform: rotate(1deg) translate(2px, 0px);
+    transform: rotate(1deg) translate(2px, 0px);
   }
   25% {
     -webkit-transform: rotate(-1deg) translate(-2px, -2px);
@@ -383,8 +377,8 @@ html {
 
 @keyframes boat {
   0% {
-    -webkit-transform: rotate(1deg)translate(2px, 0px);
-    transform: rotate(1deg)translate(2px, 0px);
+    -webkit-transform: rotate(1deg) translate(2px, 0px);
+    transform: rotate(1deg) translate(2px, 0px);
   }
   25% {
     -webkit-transform: rotate(-1deg) translate(-2px, -2px);
@@ -686,9 +680,9 @@ html {
 .bird-1 {
   left: 240px;
   top: 140px;
-  -webkit-transform: scale(0.9)rotate(10deg);
-  -ms-transform: scale(0.9)rotate(10deg);
-  transform: scale(0.9)rotate(10deg);
+  -webkit-transform: scale(0.9) rotate(10deg);
+  -ms-transform: scale(0.9) rotate(10deg);
+  transform: scale(0.9) rotate(10deg);
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
@@ -696,9 +690,9 @@ html {
 .bird-2 {
   left: 280px;
   top: 120px;
-  -webkit-transform: scale(0.8)rotate(-5deg);
-  -ms-transform: scale(0.8)rotate(-5deg);
-  transform: scale(0.8)rotate(-5deg);
+  -webkit-transform: scale(0.8) rotate(-5deg);
+  -ms-transform: scale(0.8) rotate(-5deg);
+  transform: scale(0.8) rotate(-5deg);
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
@@ -706,9 +700,9 @@ html {
 .bird-3 {
   left: 250px;
   top: 100px;
-  -webkit-transform: scale(1)rotate(8deg);
-  -ms-transform: scale(1)rotate(8deg);
-  transform: scale(1)rotate(8deg);
+  -webkit-transform: scale(1) rotate(8deg);
+  -ms-transform: scale(1) rotate(8deg);
+  transform: scale(1) rotate(8deg);
 }
 
 @-webkit-keyframes bird {
@@ -1241,15 +1235,15 @@ html {
 
 @-webkit-keyframes shooting-star {
   100% {
-    -webkit-transform: rotate(-40deg)translateX(-450px);
-    transform: rotate(-40deg)translateX(-450px);
+    -webkit-transform: rotate(-40deg) translateX(-450px);
+    transform: rotate(-40deg) translateX(-450px);
   }
 }
 
 @keyframes shooting-star {
   100% {
-    -webkit-transform: rotate(-40deg)translateX(-450px);
-    transform: rotate(-40deg)translateX(-450px);
+    -webkit-transform: rotate(-40deg) translateX(-450px);
+    transform: rotate(-40deg) translateX(-450px);
   }
 }
 
@@ -1276,8 +1270,8 @@ p {
 }
 
 .title {
-  margin: 60px 0 10px 0;
-  font-size: 30px;
+  @apply m-3.5;
+  @apply text-3xl font-semibold;
   position: relative;
 }
 
@@ -1287,7 +1281,7 @@ p {
   line-height: 16px;
   margin: 40px;
   position: relative;
-  opacity:0.6;
+  opacity: 0.6;
 }
 
 .text-color {

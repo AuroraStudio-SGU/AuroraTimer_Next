@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div class="white-box bg-base-100">
-      <div class="hero min-h-screen bg-base-100">
+    <div class="white-box">
+      <div class="hero h-full">
         <div class="hero-content flex-col lg:flex-row">
           <img
-          :src="getUrl('icon.jpg')"
+            :src="getUrl('icon.png')"
             class="max-w-sm rounded-lg shadow-2xl"
           />
           <div>
@@ -22,14 +22,9 @@
 
 <script setup>
 import "../assets/css/common.css";
-</script>
+import {getUrl} from "../utils/urlUtils";</script>
 
 <style scoped>
-.xiaoxi-box {
-  transform: scale(0.7);
-}
-.white-box {
-  width: 123vh;
-  border-radius: 20px;
-}
+
+
 </style>

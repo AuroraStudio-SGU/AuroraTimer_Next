@@ -1,41 +1,40 @@
 <template>
   <div class="menu">
-    
-    <div class="white-box bg-base-100">
+    <div class="white-box">
       <div class="between">
         <div class="progress1">
           <div class="little">
             <el-progress
-              class="littleCircle"
-              :width="115"
               :hidden="115"
-              type="circle"
               :percentage="timerStore.getTimerProgress.little"
               :stroke-width="40"
+              :width="115"
+              class="littleCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="medium">
             <el-progress
-              class="mediumCircle"
-              :width="195"
               :hidden="195"
-              type="circle"
               :percentage="timerStore.getTimerProgress.middle"
               :stroke-width="40"
+              :width="195"
+              class="mediumCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="big">
             <el-progress
-              class="bigCircle"
-              :width="270"
               :hidden="270"
-              type="circle"
               :percentage="timerStore.getTimerProgress.big"
               :stroke-width="40"
+              :width="270"
+              class="bigCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
@@ -45,25 +44,25 @@
         <div class="svg-box">
           <svg>
             <defs>
-              <linearGradient id="little-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"  :style="{stopColor:timerStore.progressColor.small.start}" stop-opacity="0.8"></stop>
-                <stop offset="100%" :style="{stopColor:timerStore.progressColor.small.end}" stop-opacity="1"></stop>
+              <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
+                <stop :style="{stopColor:timerStore.progressColor.small.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:timerStore.progressColor.small.end}" offset="100%" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
-              <linearGradient id="medium-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" :style="{stopColor:timerStore.progressColor.medium.start}" stop-opacity="0.8"></stop>
-                <stop offset="100%" :style="{stopColor:timerStore.progressColor.medium.end}" stop-opacity="1"></stop>
+              <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
+                <stop :style="{stopColor:timerStore.progressColor.medium.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:timerStore.progressColor.medium.end}" offset="100%" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
-              <linearGradient id="big-w" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" :style="{stopColor:timerStore.progressColor.big.start}" stop-opacity="0.8"></stop>
-                <stop offset="100%" :style="{stopColor:timerStore.progressColor.big.end}" stop-opacity="0.9"></stop>
+              <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
+                <stop :style="{stopColor:timerStore.progressColor.big.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:timerStore.progressColor.big.end}" offset="100%" stop-opacity="0.9"></stop>
               </linearGradient>
             </defs>
           </svg>
@@ -75,12 +74,10 @@
           </div>
         </div>
       </div>
-      <div class="slider">
-        <div>
-          <el-button type="success" @click="startTimer">开始计时</el-button>
-          <el-button type="success" @click="stopTimer">停止计时</el-button>
-          <el-button type="success" @click="clearTimer">清除计时</el-button>
-        </div>
+      <div class="btns">
+        <button class="btn btn-success" @click="startTimer">开始计时</button>
+        <button class="btn btn-error" @click="stopTimer">停止计时</button>
+        <button class="btn btn-warning" @click="clearTimer">清除计时</button>
       </div>
     </div>
   </div>
@@ -94,8 +91,6 @@ import FlipClock from "../components/FlipClock.vue";
 
 const timerStore = TimerStore()
 const flipClock = ref(null)
-
-
 
 const startTimer = () => {
   flipClock.value.run()

@@ -1,9 +1,9 @@
 <template>
   <div class="menu">
-    <div class="title">
-      用来测试各种功能
-    </div>
     <div class="white-box">
+      <div class="title">
+        用来测试各种功能
+      </div>
       <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>
       <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
       <el-button class="obj" plain type="success" @click="openFile">上传文件</el-button>
@@ -20,11 +20,11 @@
       <span class="label-text">显示图表</span>
       <el-switch
         v-model="isShowTable"
-        class="mt-2"
-        style="margin-left: 24px"
-        inline-prompt
         :active-icon="Check"
         :inactive-icon="Close"
+        class="mt-2"
+        inline-prompt
+        style="margin-left: 24px"
         @change="loadTable"
       />
       <br>
@@ -39,7 +39,7 @@ import {Check, Close} from '@element-plus/icons-vue'
 import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import {CalculateSunTime, currentDate, formatSecondTime} from "../utils/TimeUtil";
-import {onBeforeMount, onMounted, ref} from "vue";
+import {ref} from "vue";
 import Plotly from 'plotly.js-dist'
 import {router} from "../utils/router";
 
@@ -208,9 +208,7 @@ const sendMsg = () => {
 </script>
 
 <style scoped>
-
-
 .plotly-container {
-  @apply w-9/12 h-3/5;
+  @apply w-9/12 h-4/5;
 }
 </style>

@@ -1,22 +1,28 @@
 <template>
   <div class="menu">
-    <div class="title">设置功能</div>
-    <div class="white-box bg-base-100">
+    <div class="white-box">
       <div class="color-setting">
-        <span class="demonstration">进度条1(&lt;24h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.big.start" />
-        <span class="demonstration">进度条1(&lt;24h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.big.end" />
+        <div class="title">设置功能</div>
+        <span class="demonstration">进度条1(&lt;24h)渐变色0%</span>
+        <el-color-picker v-model="timerStore.progressColor.big.start"
+                         :predefine="lastChoice" @change="addChoiceList"/>
+        <span class="demonstration">进度条1(&lt;24h)渐变色100%</span>
+        <el-color-picker v-model="timerStore.progressColor.big.end"
+                         :predefine="lastChoice" @change="addChoiceList"/>
         <br>
-        <span class="demonstration">进度条2(&lt;48h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.medium.start" />
-        <span class="demonstration">进度条2(&lt;48h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.medium.end" />
+        <span class="demonstration">进度条2(&lt;48h)渐变色0%</span>
+        <el-color-picker v-model="timerStore.progressColor.medium.start"
+                         :predefine="lastChoice" @change="addChoiceList"/>
+        <span class="demonstration">进度条2(&lt;48h)渐变色100%</span>
+        <el-color-picker v-model="timerStore.progressColor.medium.end"
+                         :predefine="lastChoice" @change="addChoiceList"/>
         <br>
-        <span class="demonstration">进度条3(&lt;72h)渐变色0%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.small.start" />
-        <span class="demonstration">进度条3(&lt;72h)渐变色100%</span><el-color-picker :predefine="lastChoice"
-        @change="addChoiceList" v-model="timerStore.progressColor.small.end" />
+        <span class="demonstration">进度条3(&lt;72h)渐变色0%</span>
+        <el-color-picker v-model="timerStore.progressColor.small.start"
+                         :predefine="lastChoice" @change="addChoiceList"/>
+        <span class="demonstration">进度条3(&lt;72h)渐变色100%</span>
+        <el-color-picker v-model="timerStore.progressColor.small.end"
+                         :predefine="lastChoice" @change="addChoiceList"/>
       </div>
       <div class="operation">
         <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
@@ -26,7 +32,7 @@
           <p class="text">切换黑夜/白天模式</p>
           <div class="switch">
             <label class="switch">
-              <input type="checkbox" />
+              <input type="checkbox"/>
               <span class="slider"></span>
             </label>
           </div>
@@ -40,7 +46,7 @@
 import '../assets/css/common.css'
 import {TimerStore} from "../stores/Timer";
 import {ElNotification} from "element-plus";
-import  * as SettingJS from "../utils/Setting";
+import * as SettingJS from "../utils/Setting";
 import {ref} from "vue";
 
 const props = defineProps(['text'])
@@ -71,15 +77,15 @@ const ColorSelector = async () => {
 const SaveSetting = () => {
   SettingJS.Setting.progressBar.color = timerStore.progressColor
   let flag = window.electronAPI.SaveSetting(JSON.stringify(SettingJS.Setting))
-  if(flag){
+  if (flag) {
     ElNotification({
       title: '保存成功',
-      type:'success'
+      type: 'success'
     })
-  }else {
+  } else {
     ElNotification({
       title: '保存失败',
-      type:'error'
+      type: 'error'
     })
   }
 }
@@ -87,22 +93,22 @@ const ResetSetting = () => {
   let DefaultSetting = SettingJS.DefaultSetting
   timerStore.progressColor = DefaultSetting.progressBar.color
   let flag = window.electronAPI.SaveSetting(JSON.stringify(DefaultSetting))
-  if(flag){
+  if (flag) {
     ElNotification({
       title: '重置成功',
-      type:'success'
+      type: 'success'
     })
-  }else {
+  } else {
     ElNotification({
       title: '保存失败',
-      type:'error'
+      type: 'error'
     })
   }
 }
 
 const addChoiceList = (value) => {
   if (!value) return
-  if(lastChoice.value.length>=20){
+  if (lastChoice.value.length >= 20) {
     lastChoice.value.pop()
   }
   lastChoice.value.push(value)
@@ -119,10 +125,12 @@ const addChoiceList = (value) => {
 .text {
   margin-right: 10px;
 }
+
 .dark-mode {
   display: flex;
   align-items: center;
 }
+
 .switch {
   font-size: 17px;
   position: relative;

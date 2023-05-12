@@ -50,6 +50,10 @@ function login() {
   mainWindow.webContents.send('change-login-panel', 1)
   isLogin = true
   loginWindow.close()
+  // setTimeout(()=>{mainWindow.show()},200)
+  mainWindow.once('ready-to-show',()=>{
+    mainWindow.show()
+  })
   mainWindow.show()
 }
 
@@ -65,7 +69,6 @@ async function saveColorToClipboard() {
 }
 
 function createWindow() {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     width: Windows_Main_Width,
     height: Windows_Main_Height,
@@ -81,7 +84,6 @@ function createWindow() {
       // 设置内容安全策略
       webSecurity: true,
     },
-    // titleBarStyle:'hidden'
   })
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
@@ -92,16 +94,11 @@ function createWindow() {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
     mainWindow.webContents.openDevTools()
-    console.log("开发模式！")
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     //DEV setting
-
   }
   mainWindow.setMinimumSize(700, 550)
-
-
-
 
 }
 
@@ -113,12 +110,11 @@ app.whenReady().then(() => {
   app.setAppUserModelId('新·极光工作室打卡器')
 
   //设置开发扩展
-  // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0`
+  // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
   // session.defaultSession.loadExtension(devToolPath)
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
@@ -140,32 +136,6 @@ app.whenReady().then(() => {
   tray.setToolTip('极光工作室打卡器.')
   tray.setContextMenu(contextMenu)
 
-  // 注册file协议的处理程序
-  // protocol.registerFileProtocol('custom', (request, callback) => {
-  //   const url = request.url.substr(7) // 剥离file://前缀
-  //   const filePath = path.normalize(decodeURI(url)) // 解码url并标准化路径
-  //   fs.readFile(filePath, (err, data) => {
-  //     if (err) {
-  //       console.error(`Failed to read file ${filePath}: ${err}`)
-  //       return callback(-6) // 返回-6表示文件读取失败
-  //     }
-  //     const extension = path.extname(filePath).toLowerCase()
-  //     let mimeType = ''
-  //     if (extension === '.jpg' || extension === '.jpeg') {
-  //       mimeType = 'image/jpeg'
-  //     } else if (extension === '.png') {
-  //       mimeType = 'image/png'
-  //     } else if (extension === '.gif') {
-  //       mimeType = 'image/gif'
-  //     } else {
-  //       mimeType = 'application/octet-stream'
-  //     }
-  //     callback({
-  //       mimeType,
-  //       data
-  //     })
-  //   })
-  // })
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -191,8 +161,6 @@ app.whenReady().then(() => {
   }
   //截图功能设置
 
-
-
   // 双向通信监听
   ipcMain.handle('save-color-to-clipboard', saveColorToClipboard)
   ipcMain.handle('save-setting', (_event,value)=>{
@@ -204,57 +172,36 @@ app.whenReady().then(() => {
   ipcMain.on('open-file', openFile)
   ipcMain.on('login', login)
   ipcMain.on('open-browser', openBrowser)
-  //创建主窗口
+
+  //创建窗口
   createWindow()
-  //主窗口监听事件
-  mainWindow.on('ready-to-show', () => {
-    //登录判断,开始加载配置文件
-    console.log("加载配置文件")
-    let setting = loadSetting()
-    if(setting){
-      SettingJS.Setting = setting
-    }else {
-      console.error("配置文件加载失败,使用默认设置")
-      SettingJS.Setting = SettingJS.DefaultSetting
-    }
-    mainWindow.webContents.send('setting-update',JSON.stringify(SettingJS.Setting))
-    if (isLogin) {
-      mainWindow.show()
-    } else {
-      //没有登录则开始加载登录窗口
-      loginWindow = createLoginWindow()
-      if (app.isPackaged) {
-        //生产环境跳转
-        loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
-          hash: 'login'
-        })
-      } else {
-        //开发环境跳转
-        //127.0.0.1 → localhost (in some case someone can't connect local ip)
-        const winUrl = 'http://localhost:5173/#/login';
-        loginWindow.loadURL(winUrl)
-      }
-      loginWindow.on('ready-to-show', () => {
-        loginWindow.show()
-      })
-      loginWindow.on('close', () => {
-        if (!isLogin) {
-          app.quit()
-        }
-      })
+  loginWindow = createLoginWindow()
 
-
-
-    }
+  //登录判断,开始加载配置文件
+  LoadSetting()
+  //生产环境跳转
+  if (app.isPackaged) {
+    loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
+      hash: 'login'
+    })
+  } else {
+    //开发环境跳转
+    //127.0.0.1 → localhost (in some case someone can't connect local ip)
+    const winUrl = 'http://localhost:5173/#/login';
+    loginWindow.loadURL(winUrl)
+  }
+  loginWindow.once('ready-to-show', () => {
+    loginWindow.show()
   })
-  mainWindow.on('session-end',()=>{
-    if(BrowserWindow.getAllWindows().length === 0){
+  loginWindow.on('close', () => {
+    if (!isLogin) {
       app.quit()
     }
   })
-  mainWindow.on('show',()=>{
+  //主窗口监听事件
+  mainWindow.on('session-end',()=>{
+    app.quit()
   })
-
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -269,3 +216,15 @@ app.on('window-all-closed', () => {
 app.on('will-quit', () => {
   tray.destroy()
 })
+
+const LoadSetting = async () =>  {
+  console.log("加载配置文件")
+  let setting = loadSetting()
+  if(setting){
+    SettingJS.Setting = setting
+  }else {
+    console.error("配置文件加载失败,使用默认设置")
+    SettingJS.Setting = SettingJS.DefaultSetting
+  }
+  mainWindow.webContents.send('setting-update',JSON.stringify(SettingJS.Setting))
+}

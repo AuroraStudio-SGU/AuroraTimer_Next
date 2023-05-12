@@ -13,6 +13,7 @@ import IconTest from "../Page/IconTest.vue";
 import Calculator from "../Page/Calculator.vue";
 import NewUI from "../Page/NewUI.vue";
 import ThemeTest from "../Page/ThemeTest.vue";
+import ThemeChange from "../Page/ThemeChange.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
@@ -25,6 +26,7 @@ const routes = [
   {path: '/icontest', name: 'IconTest', component: IconTest},
   {path: '/calculator', name: 'Calculator', component: Calculator},
   {path: '/newUI', name: 'NewUI', component: NewUI},
+  {path: '/themes', name: 'Themes', component: ThemeChange},
 
 ]
 

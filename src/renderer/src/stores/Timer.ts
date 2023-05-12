@@ -39,7 +39,9 @@ export const TimerStore = defineStore('timer', {
     size:ref(0),
     time:ref(0),
     isStarted:ref(false),
-    progressColor:ref(defaultColor)
+    progressColor:ref(defaultColor),
+    inited:ref(false),
+    timer:'',
   }),
   getters:{
     getPercent(state){

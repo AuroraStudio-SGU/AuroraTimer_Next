@@ -1,9 +1,10 @@
 <template>
   <div class="menu">
-    <div class="title">新UI测试playground</div>
+
     <div class="white-box">
+      <div class="title">新UI测试playground</div>
       <div class="normalStytle">
-        <h1 class="text-3xl font-bold underline text-red-600" >
+        <h1 class="text-3xl font-bold underline text-red-600">
           Hello tailwind css
         </h1>
         <button class="btn glass w-64 rounded-full">Button</button>
@@ -27,7 +28,7 @@ import {GlobalStore} from "../stores/Global";
 
 const globalStore = GlobalStore()
 
-onMounted(()=>{
+onMounted(() => {
 
 })
 </script>

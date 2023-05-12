@@ -1,9 +1,9 @@
 <template>
   <div class="menu">
-    <div class="title" >
+    <div class="title">
       图标测试
     </div>
-    <div class="icon-box bg-base-100" >
+    <div class="icon-box">
       <a class="icon green ion-ios-star-outline"></a>
       <a class="icon blue ion-ios-list-outline"></a>
       <a class="icon navy ion-ios-chatboxes-outline"></a>
@@ -18,9 +18,10 @@
 import '../assets/css/common.css'
 import $ from 'jquery'
 import {onMounted} from "vue";
-onMounted(()=>{
+
+onMounted(() => {
   $("a").mouseleave(
-    function() {
+    function () {
       $(this).removeClass("hover")
     }
   )
@@ -43,6 +44,7 @@ onMounted(()=>{
   flex-flow: wrap;
   margin: 0;
 }
+
 /* 对应分组
    .green
    .blue

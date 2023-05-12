@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div class="title" >
-     日历测试
+    <div class="title">
+      日历测试
     </div>
-    <div class="white-box bg-base-100">
-      <el-button type='success' @click="setCalCTX" >
+    <div class="white-box">
+      <el-button type='success' @click="setCalCTX">
         测试
       </el-button>
       <el-calendar>
@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 
 
 import {ref} from "vue";
@@ -28,12 +28,12 @@ import {ElMessage, ElMessageBox} from "element-plus";
 
 let dialogTableVisible = ref(false)
 let content = ref('')
-const setCalCTX = async ()=>{
+const setCalCTX = async () => {
   ElMessageBox.prompt('设置内容', 'Tip', {
     confirmButtonText: 'OK',
     cancelButtonText: 'Cancel',
   })
-    .then(({ value }) => {
+    .then(({value}) => {
       ElMessage({
         type: 'success',
         message: `添加成功`,
