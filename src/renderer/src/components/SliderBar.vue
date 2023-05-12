@@ -5,13 +5,6 @@
         <a class="btn btn-ghost normal-case text-3xl">Aurora</a>
       </div>
       <div class="flex-none gap-2">
-        <div class="form-control">
-          <input
-            type="text"
-            placeholder="Search"
-            class="input input-bordered"
-          />
-        </div>
         <div class="dropdown dropdown-end">
           <label tabindex="0" class="btn btn-ghost btn-circle avatar">
             <div class="w-10 rounded-full">
@@ -24,12 +17,11 @@
           >
             <li>
               <a class="justify-between">
-                Profile
+                个人信息
                 <span class="badge">New</span>
               </a>
             </li>
-            <li><a>Settings</a></li>
-            <li><a>Logout</a></li>
+            <li><a @click="jumpTo('Setting')">设置</a></li>
           </ul>
         </div>
       </div>
@@ -181,45 +173,21 @@ const jumpTo = (local) => {
 @import url(https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
 /* 导入的icon图标，可以换成其他icon */
 .Retract-sidebar {
- 
+  
 }
 .side-bar-self {
   height: 68vh;
+}.navbar-svg-1{
+  @apply w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white;
 }
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  height: 15%;
-  @apply w-11/12;
-  margin: 9px;
-  border-radius: 25px;
-  position: relative;
-  transition: 0.3s;
-  color: rgb(160, 160, 175);
+.navbar-svg{
+  @apply flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white;
 }
-
-.sidebar-item img {
-  position: absolute;
+.navbar-span{
+  @apply flex-1 ml-3 whitespace-nowrap;
 }
-
-.sidebar-item:nth-child(1)::before {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 2px;
-  background-color: rgb(25, 99, 219);
-  position: absolute;
-  bottom: -10px;
-}
-
-.sidebar-item:nth-child(5)::before {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 2px;
-  background-color: rgb(43, 93, 173);
-  position: absolute;
-  bottom: -10px;
+.navbar-span-icon-1{
+  @apply inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300;
 }
 
 .sidebar-item span {
@@ -231,178 +199,12 @@ const jumpTo = (local) => {
   transition: 0.1s;
 }
 
+
+
 .sidebar-item:hover {
   /* background-color: rgb(55, 65, 81); */
   background-color: #c73b3b;
   color: #fff;
-}
-
-.logo {
-  margin-left: 10px;
-  height: 40px;
-  width: 40px;
-}
-/* 对应分组
-   .green
-   .blue
-   .navy
-   .yellow
-   .red
- */
-
-.icon {
-  position: relative;
-  flex-shrink: 0;
-  font-size: 40px;
-  color: #ffffff;
-  width: 50px;
-  margin: 6px;
-  height: 50px;
-  line-height: 75px;
-  display: block;
-  text-align: center;
-  border-radius: 50%;
-}
-
-.icon * {
-  -webkit-box-sizing: content-box;
-  box-sizing: content-box;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
-.icon:before,
-.icon:after {
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-
-.icon:before {
-  position: relative;
-  bottom: 15px;
-  color: #ffffff;
-}
-
-.icon:after {
-  background: #333333;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  border: 4px solid #000000;
-  content: "";
-  z-index: -1;
-  border-radius: 50%;
-  box-sizing: border-box;
-}
-
-.icon.blue:after {
-  border-color: #2980b9;
-  background-color: #123851;
-}
-
-.icon.yellow:after {
-  border-color: #f39c12;
-  background-color: #7f5006;
-}
-
-.icon.green:after {
-  border-color: #27ae60;
-  background-color: #104627;
-}
-
-.icon.navy:after {
-  border-color: #34495e;
-  background-color: #1b2029;
-}
-
-.icon.red:after {
-  border-color: #c0392b;
-  background-color: #581a14;
-}
-
-.icon:hover:after,
-.icon.hover:after {
-  border-color: transparent;
-  animation: icon cubic-bezier(0.18, 0.14, 0.29, 1) 1s;
-  border-right-color: #000000;
-  border-left-color: #000000;
-  border-top-color: #ffffff !important;
-  border-bottom-color: #ffffff !important;
-}
-
-.icon:hover.blue,
-.icon.hover.blue {
-  color: #2980b9;
-}
-
-.icon:hover.blue:after,
-.icon.hover.blue:after {
-  border-right-color: #2980b9;
-  border-left-color: #2980b9;
-}
-
-.icon:hover.yellow,
-.icon.hover.yellow {
-  color: #f39c12;
-}
-
-.icon:hover.yellow:after,
-.icon.hover.yellow:after {
-  border-right-color: #f39c12;
-  border-left-color: #f39c12;
-}
-
-.icon:hover.green,
-.icon.hover.green {
-  color: #27ae60;
-}
-
-.icon:hover.green:after,
-.icon.hover.green:after {
-  border-right-color: #27ae60;
-  border-left-color: #27ae60;
-}
-
-.icon:hover.navy,
-.icon.hover.navy {
-  color: #34495e;
-}
-
-.icon:hover.navy:after,
-.icon.hover.navy:after {
-  border-right-color: #34495e;
-  border-left-color: #34495e;
-}
-
-.icon:hover.red,
-.icon.hover.red {
-  color: #c0392b;
-}
-
-.icon:hover.red:after,
-.icon.hover.red:after {
-  border-right-color: #c0392b;
-  border-left-color: #c0392b;
-}
-
-@-webkit-keyframes icon {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes icon {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .set-high {

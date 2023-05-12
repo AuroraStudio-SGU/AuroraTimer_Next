@@ -25,7 +25,6 @@ const routes = [
   {path: '/icontest', name: 'IconTest', component: IconTest},
   {path: '/calculator', name: 'Calculator', component: Calculator},
   {path: '/newUI', name: 'NewUI', component: NewUI},
-  {path: '/themetest', name: 'ThemeTest', component: ThemeTest},
 
 ]
 

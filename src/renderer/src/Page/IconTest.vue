@@ -33,7 +33,7 @@ onMounted(()=>{
 .icon-box {
   opacity: 0.999;
   background-color: #fff;
-  padding: 30px 100px 30px 50px;
+  padding: 10px;
   border-radius: 35px;
   width: 60vw;
   height: 60%;

@@ -3,7 +3,7 @@
     <div class="title">
       用来测试各种功能
     </div>
-    <div class="white-box bg-base-100">
+    <div class="white-box">
       <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>
       <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
       <el-button class="obj" plain type="success" @click="openFile">上传文件</el-button>
@@ -17,7 +17,7 @@
           :value="item.value"
         />
       </el-select>
-      <span class="label-text">表格显示</span>
+      <span class="label-text">显示图表</span>
       <el-switch
         v-model="isShowTable"
         class="mt-2"
@@ -28,7 +28,6 @@
         @change="loadTable"
       />
       <br>
-
       <div v-if="isShowTable" id="plotly" ref="plotlyContainer" class="plotly-container"></div>
     </div>
   </div>
@@ -48,7 +47,7 @@ const plotlyContainer = ref(null)
 let testPage = ref('')
 const isShowTable = ref(false)
 const otherTestPage = [
-  {label: '主题测试', value: 'ThemeTest'},
+  // {label: '主题测试', value: 'ThemeTest'},
 ]
 
 const loadTable = (value) => {
@@ -187,19 +186,23 @@ const SunRise = () => {
 
 const sendMsgIn = () => {
   ElNotification({
-    title: 'Custom Position',
-    message: "I'm at the top right corner",
+    title: '应用内提示！',
+    message: "I'm storm of the power",
   })
 }
 
 const sendMsg = () => {
-  const NOTIFICATION_TITLE = "Title";
+  const NOTIFICATION_TITLE = "一个标题";
   const NOTIFICATION_BODY =
-    "Notification from the Renderer process. Click to log to console.";
-  const CLICK_MESSAGE = "Notification clicked";
+    "您有一个好！";
 
   new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-    () => console.log(CLICK_MESSAGE);
+    () => {
+      ElNotification({
+        title: '你点击了系统的通知提示',
+        message: "我知道了我知道了.jpg",
+      })
+    };
 }
 
 </script>
@@ -208,7 +211,6 @@ const sendMsg = () => {
 
 
 .plotly-container {
-  width: 70vw;
-  height: 60vh;
+  @apply w-9/12 h-3/5;
 }
 </style>
