@@ -2,74 +2,74 @@
   <div class="menu">
     <!-- TODO 自动判断时间进行动画效果   -->
     <div class="white-box">
-      <div class="title">
-        Good Morning, Goodnight
-      </div>
-      <div class="container-wrapper">
-        <div class="container">
-          <div class="circle-container">
-            <!-- 天空部分 -->
-            <div class="sky">
-              <div class="sky-night">
-                <div class="stars">
-                  <div class="shooting-star"></div>
-                  <div class="star-group-1"></div>
-                  <div class="star-group-2"></div>
-                  <div class="star-group-3"></div>
-                  <div class="star-group-4"></div>
+      <div class="welcome-box">
+        <div class="title">Good Morning, Goodnight</div>
+        <div class="container-wrapper">
+          <div class="container">
+            <div class="circle-container">
+              <!-- 天空部分 -->
+              <div class="sky">
+                <div class="sky-night">
+                  <div class="stars">
+                    <div class="shooting-star"></div>
+                    <div class="star-group-1"></div>
+                    <div class="star-group-2"></div>
+                    <div class="star-group-3"></div>
+                    <div class="star-group-4"></div>
+                  </div>
+                </div>
+
+                <!-- 云彩 -->
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+                <div class="cloud cloud-4"></div>
+                <div class="cloud cloud-5"></div>
+                <div class="cloud cloud-6"></div>
+                <div class="bird bird-1"></div>
+                <div class="bird bird-2"></div>
+                <div class="bird bird-3"></div>
+              </div>
+
+              <!-- 山川 -->
+              <div class="mountains">
+                <div class="mountain-back">
+                  <div class="mountain-back-1"></div>
+                  <div class="mountain-back-2"></div>
+                </div>
+                <div class="mountain-middle">
+                  <div class="mountain-middle-1"></div>
+                  <div class="mountain-middle-2"></div>
+                </div>
+                <div class="mountain-top">
+                  <div class="mountain-top-1"></div>
                 </div>
               </div>
 
-              <!-- 云彩 -->
-              <div class="cloud cloud-1"></div>
-              <div class="cloud cloud-2"></div>
-              <div class="cloud cloud-3"></div>
-              <div class="cloud cloud-4"></div>
-              <div class="cloud cloud-5"></div>
-              <div class="cloud cloud-6"></div>
-              <div class="bird bird-1"></div>
-              <div class="bird bird-2"></div>
-              <div class="bird bird-3"></div>
-            </div>
-
-            <!-- 山川 -->
-            <div class="mountains">
-              <div class="mountain-back">
-                <div class="mountain-back-1"></div>
-                <div class="mountain-back-2"></div>
+              <!-- 太阳 -->
+              <div class="sun-container">
+                <div class="sun"></div>
               </div>
-              <div class="mountain-middle">
-                <div class="mountain-middle-1"></div>
-                <div class="mountain-middle-2"></div>
-              </div>
-              <div class="mountain-top">
-                <div class="mountain-top-1"></div>
-              </div>
-            </div>
 
-            <!-- 太阳 -->
-            <div class="sun-container">
-              <div class="sun"></div>
-            </div>
+              <!-- 海洋 -->
+              <div class="ocean">
+                <div class="boat"></div>
+                <div class="ocean-night">
+                  <div class="moon"></div>
 
-            <!-- 海洋 -->
-            <div class="ocean">
-              <div class="boat"></div>
-              <div class="ocean-night">
-                <div class="moon"></div>
-
-                <!-- 山川 -->
-                <div class="mountains mountains-bottom">
-                  <div class="mountain-back">
-                    <div class="mountain-back-1"></div>
-                    <div class="mountain-back-2"></div>
-                  </div>
-                  <div class="mountain-middle">
-                    <div class="mountain-middle-1"></div>
-                    <div class="mountain-middle-2"></div>
-                  </div>
-                  <div class="mountain-top">
-                    <div class="mountain-top-1"></div>
+                  <!-- 山川 -->
+                  <div class="mountains mountains-bottom">
+                    <div class="mountain-back">
+                      <div class="mountain-back-1"></div>
+                      <div class="mountain-back-2"></div>
+                    </div>
+                    <div class="mountain-middle">
+                      <div class="mountain-middle-1"></div>
+                      <div class="mountain-middle-2"></div>
+                    </div>
+                    <div class="mountain-top">
+                      <div class="mountain-top-1"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -79,61 +79,48 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import {onMounted} from "vue";
-import $ from 'jquery';
+import { onMounted } from "vue";
+import $ from "jquery";
 
 onMounted(() => {
-  $('.sun').click(function (e) {
+  $(".sun").click(function (e) {
     e.stopPropagation();
-    $("html").toggleClass('container-night');
-    $(".sky-night").toggleClass('sky-night-fade');
-    $("p, .title").toggleClass('text-color');
-    $(".ocean-night").toggleClass('ocean-night-fade');
-    $(".moon").toggleClass('moon-fade');
-    $(".ocean").toggleClass('animation-stop');
-    $(".bird").toggleClass('birds-fly');
-    $(".boat").toggleClass('boat-sail');
-    $(".mountain-top, .mountain-top >*").toggleClass('mountain-top-night');
-    $(".mountain-middle, .mountain-middle >*").toggleClass('mountain-middle-night');
-    $(".mountain-back, .mountain-back >*").toggleClass('mountain-back-night');
+    $("html").toggleClass("container-night");
+    $(".sky-night").toggleClass("sky-night-fade");
+    $("p, .title").toggleClass("text-color");
+    $(".ocean-night").toggleClass("ocean-night-fade");
+    $(".moon").toggleClass("moon-fade");
+    $(".ocean").toggleClass("animation-stop");
+    $(".bird").toggleClass("birds-fly");
+    $(".boat").toggleClass("boat-sail");
+    $(".mountain-top, .mountain-top >*").toggleClass("mountain-top-night");
+    $(".mountain-middle, .mountain-middle >*").toggleClass(
+      "mountain-middle-night"
+    );
+    $(".mountain-back, .mountain-back >*").toggleClass("mountain-back-night");
     $(".cloud").delay(2500).fadeToggle(2500);
-    $(".stars").toggleClass('stars-fade');
-    $(".shooting-star").toggleClass('shooting');
+    $(".stars").toggleClass("stars-fade");
+    $(".shooting-star").toggleClass("shooting");
 
-    var angle = ($('.sun-container').data('angle') + 360) || 360;
-    $('.sun-container').css({
-      'transform': 'rotate(' + angle + 'deg)'
+    var angle = $(".sun-container").data("angle") + 360 || 360;
+    $(".sun-container").css({
+      transform: "rotate(" + angle + "deg)",
     });
-    $('.sun-container').data('angle', angle);
-
+    $(".sun-container").data("angle", angle);
   });
-})
+});
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css?family=Sanchez");
 
-* {
-  padding: 0;
-  margin: 0;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+.welcome-box {
+  transform: scale(0.8);
+  background-color: #d04242;
 }
-
-*:before,
-*:after {
-  content: "";
-  position: absolute;
-}
-
-html {
-  font-family: "Sanchez", serif;
-}
-
 .container-wrapper {
   width: 100%;
   height: 100%;
@@ -1273,8 +1260,8 @@ p {
   @apply m-3.5;
   @apply text-3xl font-semibold;
   position: relative;
+  font-family: Sanchez;
 }
-
 
 p {
   font-size: 16px;

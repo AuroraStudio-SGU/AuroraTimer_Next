@@ -1,5 +1,5 @@
 <template>
-  <div class="Animation">
+  <!-- <div class="Animation">
     <div class="loader">
       <svg viewBox="0 0 80 80">
         <circle id="test" cx="40" cy="40" r="32"></circle>
@@ -15,15 +15,24 @@
         <rect height="64" width="64" x="8" y="8"></rect>
       </svg>
     </div>
+  </div> 
+  -->
+  <div class="loader-wrapper">
+    <div class="packman"></div>
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
-
 </script>
 
 <style scoped>
-.Animation {
+/* .Animation {
   transform: scale(0.7);
 }
 
@@ -47,7 +56,8 @@
   top: 37px;
   left: 19px;
   transform: translate(-18px, -18px);
-  animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader svg {
@@ -69,7 +79,8 @@
 .loader svg polygon {
   stroke-dasharray: 145 76 145 76;
   stroke-dashoffset: 0;
-  animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader svg rect {
@@ -81,7 +92,8 @@
 .loader svg circle {
   stroke-dasharray: 150 50 150 50;
   stroke-dashoffset: 75;
-  animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 .loader.triangle {
@@ -91,7 +103,8 @@
 .loader.triangle:before {
   left: 21px;
   transform: translate(-10px, -18px);
-  animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86)
+    infinite;
 }
 
 @keyframes pathTriangle {
@@ -179,6 +192,120 @@
 .loader {
   display: inline-block;
   margin: 0 16px;
+} */
+
+/* next */
+.loader-wrapper {
+  position: relative;
+  top: -12px;
+  left: -80px;
+  bottom: 0;
+  right: 0;
+  margin: auto;
 }
+
+.loader-wrapper .packman::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background-color: #EFF107;
+  border-radius: 100px 100px 0 0;
+  transform: translate(-50%, -50%);
+  animation: pac-top 0.5s linear infinite;
+  transform-origin: center bottom;
+}
+
+.loader-wrapper .packman::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 25px;
+  background-color: #EFF107;
+  border-radius: 0 0 100px 100px;
+  transform: translate(-50%, 50%);
+  animation: pac-bot 0.5s linear infinite;
+  transform-origin: center top;
+}
+
+@keyframes pac-top {
+  0% {
+    transform: translate(-50%, -50%) rotate(0)
+  }
+
+  50% {
+    transform: translate(-50%, -50%) rotate(-30deg)
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(0)
+  }
+}
+
+@keyframes pac-bot {
+  0% {
+    transform: translate(-50%, 50%) rotate(0)
+  }
+
+  50% {
+    transform: translate(-50%, 50%) rotate(30deg)
+  }
+
+  100% {
+    transform: translate(-50%, 50%) rotate(0)
+  }
+}
+
+.dots .dot {
+  position: absolute;
+  z-index: -1;
+  top: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.dots .dot:nth-child(1) {
+  left: 90px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(2) {
+  left: 60px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(3) {
+  left: 30px;
+  animation: dot-stage1 0.5s infinite;
+}
+
+.dots .dot:nth-child(4) {
+  left: 10px;
+  animation: dot-stage2 0.5s infinite;
+}
+
+@keyframes dot-stage1 {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(-24px, 0);
+  }
+}
+
+@keyframes dot-stage2 {
+  0% {
+    transform: scale(1);
+  }
+
+  5%, 100% {
+    transform: scale(0);
+  }
+}
+
+
 
 </style>
