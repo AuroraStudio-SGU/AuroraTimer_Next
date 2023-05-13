@@ -15,7 +15,7 @@
         <rect height="64" width="64" x="8" y="8"></rect>
       </svg>
     </div>
-  </div> 
+  </div>
   -->
   <div class="loader-wrapper">
     <div class="packman"></div>
@@ -263,7 +263,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #fff;
+  @apply bg-primary;
 }
 
 .dots .dot:nth-child(1) {

@@ -4,7 +4,7 @@ import {join} from 'path'
 import {is, optimizer} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
-import {loadSetting, openBrowser, openFile, SaveSetting, windowOperate} from "./function";
+import {getMousePoint, loadSetting, openBrowser, openFile, SaveSetting, windowOperate} from "./function";
 import * as SettingJS from "../renderer/src/utils/Setting";
 
 const {
@@ -167,6 +167,7 @@ app.whenReady().then(() => {
     return SaveSetting(value)
   })
   ipcMain.handle('load-setting', loadSetting)
+  ipcMain.handle('get-mouse', getMousePoint)
   // 渲染层-主进程通信
   ipcMain.on('window-operate', windowOperate)
   ipcMain.on('open-file', openFile)

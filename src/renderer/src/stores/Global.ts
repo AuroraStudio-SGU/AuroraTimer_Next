@@ -45,6 +45,8 @@ export const GlobalStore = defineStore('main', {
       ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
       currentTheme:ref('valentine'),
       ThemeList:themes,
+      lastMousePoint:false,
+      AFKDetected:false,
     }
   },
   getters:{

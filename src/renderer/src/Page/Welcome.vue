@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <!-- TODO 自动判断时间进行动画效果   -->
-    <div class="white-box">
+    <div class="white-box flex overflow-auto">
       <div class="welcome-box">
         <div class="title">Good Morning, Goodnight</div>
         <div class="container-wrapper">
@@ -119,11 +119,8 @@ onMounted(() => {
 
 .welcome-box {
   transform: scale(0.8);
-  background-color: #d04242;
 }
 .container-wrapper {
-  width: 100%;
-  height: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -139,20 +136,9 @@ onMounted(() => {
   flex-direction: column;
 }
 
-html {
-  -webkit-transition: background-color 3s ease;
-  -o-transition: background-color 3s ease;
-  transition: background-color 3s ease;
-  -webkit-transition-delay: 2s;
-  -o-transition-delay: 2s;
-  transition-delay: 2s;
-  background-color: #fff7f4;
-}
 
 .container {
-  width: 450px;
-  height: 450px;
-  position: relative;
+
 }
 
 .container-night {
@@ -160,8 +146,7 @@ html {
 }
 
 .circle-container {
-  width: 450px;
-  height: 450px;
+  @apply w-96 h-96;
   -webkit-clip-path: circle(50% at 50% 50%);
   clip-path: circle(50% at 50% 50%);
   position: absolute;

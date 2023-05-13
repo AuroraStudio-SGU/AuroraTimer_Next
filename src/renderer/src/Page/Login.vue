@@ -12,7 +12,6 @@
               <input placeholder="Password" type="password">
               <input placeholder="Confirm Password" type="password">
               <button class="button submit">注册</button>
-
             </form>
           </div>
           <!-- 登录 -->

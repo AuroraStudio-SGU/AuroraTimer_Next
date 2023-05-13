@@ -40,7 +40,6 @@
             </el-progress>
           </div>
         </div>
-
         <div class="svg-box">
           <svg>
             <defs>
@@ -68,9 +67,21 @@
           </svg>
         </div>
         <div class="container">
+          <div class="swtich">
+            <span class="label-text">挂机检测</span>
+            <el-switch
+              v-model="globalStore.AFKDetected"
+              :active-icon="Check"
+              :inactive-icon="Close"
+              class="mt-2"
+              inline-prompt
+              style="margin-left: 24px"
+            />
+          </div>
           <div class="time">已打卡：</div>
           <div class="clock">
-            <FlipClock ref="flipClock"></FlipClock>
+<!--            <FlipClock ref="flipClock"></FlipClock>-->
+            <countdown ref="CountDown"></countdown>
           </div>
         </div>
       </div>
@@ -88,18 +99,26 @@ import '../assets/css/common.css'
 import {onMounted, ref} from 'vue'
 import {TimerStore} from '../stores/Timer'
 import FlipClock from "../components/FlipClock.vue";
+import Countdown from "../components/Countdown.vue";
+import {GlobalStore} from "../stores/Global";
+import {Check, Close} from "@element-plus/icons-vue";
 
+const globalStore = GlobalStore()
 const timerStore = TimerStore()
 const flipClock = ref(null)
+const CountDown = ref(null)
 
 const startTimer = () => {
-  flipClock.value.run()
+  CountDown.value.startTimer()
+  // flipClock.value.run()
 }
 const stopTimer = () => {
-  flipClock.value.StopTimer()
+  CountDown.value.StopTimer()
+  // flipClock.value.StopTimer()
 }
 const clearTimer = () => {
-  flipClock.value.clearTimer()
+  CountDown.value.clearTime()
+  // flipClock.value.clearTimer()
 }
 onMounted(() => {
 
@@ -109,8 +128,11 @@ onMounted(() => {
 
 <style scoped>
 .between {
-  display: flex;
-  align-items: center;
+  @apply flex space-x-4 items-center;
+}
+.btns {
+  @apply p-8;
+  @apply grid grid-cols-3 space-x-12;
 }
 
 .progress1 {
@@ -180,7 +202,6 @@ onMounted(() => {
 .time {
   font-size: 60px;
   font-weight: 600;
-
 }
 
 .container {

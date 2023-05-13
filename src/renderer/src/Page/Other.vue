@@ -1,127 +1,131 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="title">用来测试各种功能</div>
+      <div class="title p-4">用来测试各种功能</div>
       <div class="between">
-        <div class="container-self">
-          <div class="header-self">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
-                  stroke="#000000"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                ></path>
-              </g>
-            </svg>
-            <p>Browse File to upload!</p>
-          </div>
-          <label for="file" class="footer-self">
-            <svg
-              fill="#000000"
-              viewBox="0 0 32 32"
-              xmlns="http://www.w3.org/2000/svg"
-              
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path>
-                <path d="M18.153 6h-.009v5.342H23.5v-.002z"></path>
-              </g>
-            </svg>
-            <p>Not selected file</p>
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z"
-                  stroke="#000000"
-                  stroke-width="2"
-                ></path>
-                <path
-                  d="M19.5 5H4.5"
-                  stroke="#000000"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                ></path>
-                <path
-                  d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z"
-                  stroke="#000000"
-                  stroke-width="2"
-                ></path>
-              </g>
-            </svg>
-          </label>
-          <input id="file" type="file" />
+        <div>
+          <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>
         </div>
-        <el-button class="obj" plain type="success" @click="sendMsg"
-          >测试通知</el-button
-        >
-        <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
-        <el-button class="obj" plain type="success" @click="loadSetting"
-          >加载设置文件</el-button
-        >
-        <el-button class="obj" plain type="success" @click="SunRise"
-          >日落日期测试</el-button
-        >
-        <el-select
-          v-model="testPage"
-          class="m-2"
-          placeholder="其它测试页面"
-          @change="jumpTo"
+        <div>
+          <el-button class="obj" plain @click="sendMsgIn"> 应用内通知</el-button>
+        </div>
+        <div>
+          <el-button class="obj" plain type="success" @click="loadSetting">加载设置文件</el-button>
+        </div>
+        <div>
+          <el-button class="obj" plain type="success" @click="SunRise">日落日期测试</el-button>
+        </div>
+        <div>
+          <el-select
+            v-model="testPage"
+            class="m-2"
+            placeholder="其它测试页面"
+            @change="jumpTo"
           ><!-- 太多测试页面了放不下！!-->
-          <el-option
-            v-for="item in otherTestPage"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            <el-option
+              v-for="item in otherTestPage"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+        <div>
+          <span class="label-text">图表显示</span>
+          <el-switch
+            v-model="isShowTable"
+            :active-icon="Check"
+            :inactive-icon="Close"
+            class="mt-2"
+            inline-prompt
+            style="margin-left: 24px"
+            @change="loadTable"
           />
-        </el-select>
+          <div
+            v-if="isShowTable"
+            id="plotly"
+            ref="plotlyContainer"
+            class="plotly-container">
+          </div>
+        </div>
       </div>
+      <div class="container-self">
+        <div class="header-self">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </g>
+          </svg>
+          <p>Browse File to upload!</p>
+        </div>
+        <label for="file" class="footer-self">
+          <svg
+            fill="#000000"
+            viewBox="0 0 32 32"
+            xmlns="http://www.w3.org/2000/svg"
 
-      <span class="label-text">显示图表</span>
-      <el-switch
-        v-model="isShowTable"
-        :active-icon="Check"
-        :inactive-icon="Close"
-        class="mt-2"
-        inline-prompt
-        style="margin-left: 24px"
-        @change="loadTable"
-      />
-      <br />
-      <div
-        v-if="isShowTable"
-        id="plotly"
-        ref="plotlyContainer"
-        class="plotly-container"
-      ></div>
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path>
+              <path d="M18.153 6h-.009v5.342H23.5v-.002z"></path>
+            </g>
+          </svg>
+          <p>Not selected file</p>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z"
+                stroke="#000000"
+                stroke-width="2"
+              ></path>
+              <path
+                d="M19.5 5H4.5"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-linecap="round"
+              ></path>
+              <path
+                d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z"
+                stroke="#000000"
+                stroke-width="2"
+              ></path>
+            </g>
+          </svg>
+        </label>
+        <input id="file" type="file" />
+      </div>
     </div>
   </div>
 </template>
@@ -390,6 +394,6 @@ const sendMsg = () => {
 }
 
 .between {
-  display: flex;
+  @apply grid gap-4 grid-cols-5;
 }
 </style>

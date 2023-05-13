@@ -40,7 +40,6 @@ export const TimerStore = defineStore('timer', {
     time:ref(0),
     isStarted:ref(false),
     progressColor:ref(defaultColor),
-    inited:ref(false),
     timer:'',
   }),
   getters:{
@@ -51,10 +50,11 @@ export const TimerStore = defineStore('timer', {
       return SecondToString(state.time)
     },
     getTimerProgress(state){
+      let percentage = Number((state.time / 864).toFixed(2))
       return{
-        big: Number((state.time / 864).toFixed(2)),
-        middle: Number((state.time / 864).toFixed(2)) - 100 < 0 ? 0 : (state.time / 864).toFixed(2) - 100,
-        little: Number((state.time / 864).toFixed(2)) - 200 < 0 ? 0 : (state.time / 864).toFixed(2) - 200
+        big: percentage > 100 ? 100 : percentage,
+        middle: percentage - 100 < 0 ? 0 : percentage - 100 > 100 ? 100 : percentage -100,
+        little: percentage - 200 < 0 ? 0 : percentage - 200 > 100 ? 100 : percentage -200,
       }
     }
   },

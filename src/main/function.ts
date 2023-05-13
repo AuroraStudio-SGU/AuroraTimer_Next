@@ -1,4 +1,4 @@
-import {BrowserWindow, dialog,shell} from "electron";
+import {BrowserWindow, dialog,shell,screen} from "electron";
 import os from "node:os";
 import process from "node:process";
 import fs from 'fs'
@@ -104,4 +104,7 @@ export function openBrowser(event,URL:string) {
   shell.openExternal(URL)
 }
 
+export function getMousePoint() {
+  return screen.getCursorScreenPoint()
+}
 

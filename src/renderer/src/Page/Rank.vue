@@ -112,8 +112,5 @@ const TimeFormatter = (row, colum) => {
 </script>
 
 <style scoped>
-.white-box {
-  padding: 20px 20px 20px 20px;
-  width: 70vw;
-}
+
 </style>

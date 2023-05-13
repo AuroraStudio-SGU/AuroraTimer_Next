@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveColorToClipboard:() => ipcRenderer.invoke('save-color-to-clipboard'),
   SaveSetting:(callback) => ipcRenderer.invoke('save-setting',callback),
   loadSetting:(callback) => ipcRenderer.invoke('load-setting', callback),
+  getMousePoint:(callback) => ipcRenderer.invoke('get-mouse', callback),
   //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
   openFile: (callback) => ipcRenderer.send('open-file', callback),
