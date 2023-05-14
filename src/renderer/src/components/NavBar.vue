@@ -2,7 +2,9 @@
   <div class="navbar bg-base-100 get-topup fixed">
     <div class="flex-1">
       <a class="btn btn-ghost normal-case text-3xl rounded-badge">Aurora</a>
+      <div class="badge  ">挂机中</div>
     </div>
+    
     <div class="flex-none gap-2">
       <LoaderTriangle></LoaderTriangle>
       <div class="dropdown dropdown-end">
