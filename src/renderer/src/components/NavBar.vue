@@ -1,12 +1,12 @@
 <template>
   <div class="navbar bg-base-100 get-topup fixed">
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-3xl">Aurora</a>
+      <a class="btn btn-ghost normal-case text-3xl rounded-badge">Aurora</a>
     </div>
     <div class="flex-none gap-2">
       <LoaderTriangle></LoaderTriangle>
       <div class="dropdown dropdown-end">
-        <label class="btn btn-ghost btn-circle avatar" tabindex="0">
+        <label class="btn btn-ghost btn-circle" :class="{'avatar online': isActive, 'avatar offline': !isActive}" tabindex="0">
           <div class="w-10 rounded-full">
             <img :src="getUrl('profile.jpg')"/>
           </div>
@@ -35,9 +35,11 @@ import LoaderTriangle from "./LoaderTriangle.vue";</script>
 <style scoped>
 .get-topup {
   z-index: 99;
-  border-radius: 20px;
-  @apply w-10/12;
+  /* border-radius: 20px; */
+  @apply rounded-badge;
   top: 55px;
   left: 140px;
+  width: 83vw;
+  
 }
 </style>

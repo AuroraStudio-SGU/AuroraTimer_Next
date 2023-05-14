@@ -175,7 +175,7 @@ onMounted(() => {
 }
 
 :deep(.el-progress path:first-child) {
-  stroke: #ffffff;
+  @apply stroke-base-100;
 }
 
 :deep(.bigCircle path:first-child) {
@@ -200,7 +200,7 @@ onMounted(() => {
 }
 
 .time {
-  font-size: 60px;
+  font-size: 50px;
   font-weight: 600;
 }
 
@@ -334,10 +334,5 @@ body {
     -webkit-transform: rotateX(0);
     transform: rotateX(0);
   }
-}
-
-.white-box {
-  width: 123vh;
-  border-radius: 20px;
 }
 </style>
