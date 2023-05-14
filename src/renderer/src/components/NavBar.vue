@@ -2,13 +2,14 @@
   <div class="navbar bg-base-100 get-topup fixed">
     <div class="flex-1">
       <a class="btn btn-ghost normal-case text-3xl rounded-badge">Aurora</a>
-      <div class="badge  ">挂机中</div>
+      <div v-if="globalStore.isAFK" class="badge">挂机中</div>
+      <div v-if="!globalStore.isAFK" class="badge">打卡中</div>
     </div>
-    
+
     <div class="flex-none gap-2">
       <LoaderTriangle></LoaderTriangle>
       <div class="dropdown dropdown-end">
-        <label class="btn btn-ghost btn-circle" :class="{'avatar online': isActive, 'avatar offline': !isActive}" tabindex="0">
+        <label class="btn btn-ghost btn-circle" :class="{'avatar online': !globalStore.isAFK, 'avatar offline': globalStore.isAFK}" tabindex="0">
           <div class="w-10 rounded-full">
             <img :src="getUrl('profile.jpg')"/>
           </div>
@@ -32,7 +33,14 @@
 
 <script setup>
 import {getUrl} from "../utils/urlUtils";
-import LoaderTriangle from "./LoaderTriangle.vue";</script>
+import LoaderTriangle from "./LoaderTriangle.vue";
+import {GlobalStore} from "../stores/Global";
+
+const globalStore = GlobalStore()
+
+</script>
+
+
 
 <style scoped>
 .get-topup {
@@ -42,6 +50,5 @@ import LoaderTriangle from "./LoaderTriangle.vue";</script>
   top: 55px;
   left: 140px;
   width: 83vw;
-  
 }
 </style>

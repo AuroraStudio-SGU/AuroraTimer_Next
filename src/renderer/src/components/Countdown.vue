@@ -38,6 +38,7 @@ const startTimer = () => {
         window.electronAPI.getMousePoint().then((point) => {
           if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
             StopTimer()
+            globalStore.isAFK.value = true
             //TODO 提示用户是否正在挂机
             const NOTIFICATION_TITLE = "你是不是正在挂机？";
             const NOTIFICATION_BODY =
@@ -45,6 +46,7 @@ const startTimer = () => {
             new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
               () => {
                 tick()
+                globalStore.isAFK.value = false
                 ElNotification({
                   title: '重新恢复计时',
                   type: 'success'

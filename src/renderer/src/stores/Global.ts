@@ -47,6 +47,7 @@ export const GlobalStore = defineStore('main', {
       ThemeList:themes,
       lastMousePoint:false,
       AFKDetected:false,
+      isAFK:ref(false),
     }
   },
   getters:{

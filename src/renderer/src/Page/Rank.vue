@@ -108,9 +108,14 @@ const TimeFormatter = (row, colum) => {
   return formatSecondTime(row[colum.property])
 }
 
-
+//
 </script>
 
 <style scoped>
-
+:deep(.el-table) {
+  --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
+  --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
+  --el-table-row-hover-bg-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
+  --el-table-header-bg-color: hsl(var(--p) / var(--tw-bg-opacity));
+}
 </style>

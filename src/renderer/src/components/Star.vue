@@ -58,7 +58,7 @@ const toProject = () => {
 }
 
 .button:hover .text {
-  @apply text-current;
+  @apply font-bold;
 }
 
 .button:hover svg path {
