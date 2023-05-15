@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Sanchez");
 .white-box {
   @apply p-4;
-  @apply rounded-badge;
+  @apply rounded-box;
   /* @apply  md:w-11/12; */
   width: 83vw;
   @apply bg-base-100;

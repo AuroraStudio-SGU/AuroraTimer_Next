@@ -1,8 +1,8 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="hero h-full">
-        <div class="hero-content flex-col lg:flex-row">
+      <div class="hero h-full ">
+        <div class="hero-content flex-row">
           <img
             :src="getUrl('icon.png')"
             class="max-w-sm rounded-lg shadow-2xl"

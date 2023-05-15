@@ -98,7 +98,7 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     //DEV setting
   }
-  mainWindow.setMinimumSize(700, 550)
+  mainWindow.setMinimumSize(996, 635)
 
 }
 
