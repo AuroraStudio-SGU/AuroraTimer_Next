@@ -1,42 +1,62 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="color-setting">
-        <div class="title">设置功能</div>
-        <span class="demonstration">进度条1(&lt;24h)渐变色0%</span>
-        <el-color-picker v-model="timerStore.progressColor.big.start"
-                         :predefine="lastChoice" @change="addChoiceList"/>
-        <span class="demonstration">进度条1(&lt;24h)渐变色100%</span>
-        <el-color-picker v-model="timerStore.progressColor.big.end"
-                         :predefine="lastChoice" @change="addChoiceList"/>
-        <br>
-        <span class="demonstration">进度条2(&lt;48h)渐变色0%</span>
-        <el-color-picker v-model="timerStore.progressColor.medium.start"
-                         :predefine="lastChoice" @change="addChoiceList"/>
-        <span class="demonstration">进度条2(&lt;48h)渐变色100%</span>
-        <el-color-picker v-model="timerStore.progressColor.medium.end"
-                         :predefine="lastChoice" @change="addChoiceList"/>
-        <br>
-        <span class="demonstration">进度条3(&lt;72h)渐变色0%</span>
-        <el-color-picker v-model="timerStore.progressColor.small.start"
-                         :predefine="lastChoice" @change="addChoiceList"/>
-        <span class="demonstration">进度条3(&lt;72h)渐变色100%</span>
-        <el-color-picker v-model="timerStore.progressColor.small.end"
-                         :predefine="lastChoice" @change="addChoiceList"/>
+      <div class="title p-4">设置功能</div>
+      <div class="color-setting p-4">
+        <div class="colorSet">
+          <div>
+            <span class="demonstration">进度条1(&lt;24h)渐变色0%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.big.start"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+          <div>
+            <span class="demonstration">进度条1(&lt;24h)渐变色100%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.big.end"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+          <div>
+            <span class="demonstration">进度条2(&lt;48h)渐变色0%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.medium.start"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+          <div>
+            <span class="demonstration">进度条2(&lt;48h)渐变色100%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.medium.end"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+          <div>
+            <span class="demonstration">进度条3(&lt;72h)渐变色0%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.small.start"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+          <div>
+            <span class="demonstration">进度条3(&lt;72h)渐变色100%</span>
+            <el-color-picker v-model="globalStore.Setting.progressBar.color.small.end"
+                             :predefine="lastChoice" @change="addChoiceList"/>
+          </div>
+        </div>
       </div>
-      <div class="operation">
+      <div class="form-control w-full max-w-xs">
+        <label class="label">
+          <span class="label-text">服务器地址</span>
+        </label>
+        <input type="text" v-model="globalStore.Setting.netWork.host"
+               placeholder="服务器地址" class="input input-primary input-bordered w-full max-w-xs"
+        />
+      </div>
+      <div class="dark-mode p-4">
+        <p class="text">切换黑夜/白天模式(无功能)</p>
+        <div class="switch">
+          <label class="switch">
+            <input type="checkbox"/>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="operation p-4">
         <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
         <el-button plain type="default" @click="SaveSetting">保存!</el-button>
         <el-button plain type="info" @click="ResetSetting">重置默认设置</el-button>
-        <div class="dark-mode">
-          <p class="text">切换黑夜/白天模式</p>
-          <div class="switch">
-            <label class="switch">
-              <input type="checkbox"/>
-              <span class="slider"></span>
-            </label>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -44,14 +64,14 @@
 
 <script setup>
 import '../assets/css/common.css'
-import {TimerStore} from "../stores/Timer";
 import {ElNotification} from "element-plus";
 import * as SettingJS from "../utils/Setting";
 import {ref} from "vue";
+import {GlobalStore} from "../stores/Global";
+import {init} from "../utils/API";
 
-const props = defineProps(['text'])
 let lastChoice = ref([]);
-const timerStore = TimerStore()
+const globalStore = GlobalStore()
 const ColorSelector = async () => {
   ElNotification({
     title: '开始取色',
@@ -75,9 +95,10 @@ const ColorSelector = async () => {
 }
 
 const SaveSetting = () => {
-  SettingJS.Setting.progressBar.color = timerStore.progressColor
-  let flag = window.electronAPI.SaveSetting(JSON.stringify(SettingJS.Setting))
+  let flag = window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   if (flag) {
+    //加载渲染进程当中需要更新的设置
+    init(globalStore.Setting.netWork.host)
     ElNotification({
       title: '保存成功',
       type: 'success'
@@ -91,7 +112,7 @@ const SaveSetting = () => {
 }
 const ResetSetting = () => {
   let DefaultSetting = SettingJS.DefaultSetting
-  timerStore.progressColor = DefaultSetting.progressBar.color
+  globalStore.Setting = DefaultSetting
   let flag = window.electronAPI.SaveSetting(JSON.stringify(DefaultSetting))
   if (flag) {
     ElNotification({
@@ -114,6 +135,7 @@ const addChoiceList = (value) => {
   lastChoice.value.push(value)
 }
 
+
 </script>
 
 <style scoped>
@@ -121,7 +143,12 @@ const addChoiceList = (value) => {
   margin-right: 16px;
 }
 
-
+.colorSet {
+  @apply grid gap-1 grid-cols-2 grid-rows-3;
+}
+.operation {
+  @apply grid gap-1 grid-cols-4;
+}
 .text {
   margin-right: 10px;
 }

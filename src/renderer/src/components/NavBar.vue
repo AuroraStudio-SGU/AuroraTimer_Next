@@ -15,13 +15,12 @@
           </div>
         </label>
         <ul
-          class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+          class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 justify-between"
           tabindex="0"
         >
           <li>
-            <a class="justify-between">
+            <a>
               个人信息
-              <span class="badge">New</span>
             </a>
           </li>
           <li><a @click="jumpTo('Setting')">设置</a></li>
@@ -35,9 +34,15 @@
 import {getUrl} from "../utils/urlUtils";
 import LoaderTriangle from "./LoaderTriangle.vue";
 import {GlobalStore} from "../stores/Global";
+import {router} from "../utils/router";
 
 const globalStore = GlobalStore()
 
+const jumpTo = (local) => {
+  router.push({
+    name: local,
+  });
+};
 </script>
 
 

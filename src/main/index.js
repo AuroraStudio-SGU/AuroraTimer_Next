@@ -1,11 +1,12 @@
-import {app, BrowserWindow, clipboard, ipcMain, Menu, nativeImage, shell, Tray, session} from 'electron'
+import {app, BrowserWindow, clipboard, ipcMain, Menu, nativeImage, shell, Tray} from 'electron'
+// import {session} from 'electron'
 import {join} from 'path'
 
 import {is, optimizer} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
 import {getMousePoint, loadSetting, openBrowser, openFile, SaveSetting, windowOperate} from "./function";
-import * as SettingJS from "../renderer/src/utils/Setting";
+import {DefaultSetting} from "../renderer/src/utils/Setting";
 
 const {
   getColorHexRGB,
@@ -24,6 +25,7 @@ const Windows_Main_Height = 670
 let mainWindow;
 let loginWindow;
 let tray;
+let setting;
 
 function createLoginWindow() {
   return new BrowserWindow({
@@ -50,10 +52,6 @@ function login() {
   mainWindow.webContents.send('change-login-panel', 1)
   isLogin = true
   loginWindow.close()
-  // setTimeout(()=>{mainWindow.show()},200)
-  mainWindow.once('ready-to-show',()=>{
-    mainWindow.show()
-  })
   mainWindow.show()
 }
 
@@ -68,7 +66,7 @@ async function saveColorToClipboard() {
   return color;
 }
 
-function createWindow() {
+async function createWindow() {
   mainWindow = new BrowserWindow({
     width: Windows_Main_Width,
     height: Windows_Main_Height,
@@ -92,14 +90,14 @@ function createWindow() {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    console.log("开发模式")
+    await mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
     mainWindow.webContents.openDevTools()
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    await mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     //DEV setting
   }
   mainWindow.setMinimumSize(996, 635)
-
 }
 
 // This method will be called when Electron has finished
@@ -108,6 +106,12 @@ function createWindow() {
 app.whenReady().then(() => {
   // Set app user model id for windows
   app.setAppUserModelId('新·极光工作室打卡器')
+
+  //创建窗口
+  createWindow()
+  loginWindow = createLoginWindow()
+  //加载配置文件
+  LoadSetting()
 
   //设置开发扩展
   // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
@@ -118,6 +122,7 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
+
 
   // 设置系统托盘
   const iconImg = nativeImage.createFromPath(icon)
@@ -133,7 +138,7 @@ app.whenReady().then(() => {
     {label: 'Item3', type: 'radio', checked: true},
     {label: 'Item4', type: 'radio'}
   ])
-  tray.setToolTip('极光工作室打卡器.')
+  tray.setToolTip('极光工作室打卡器')
   tray.setContextMenu(contextMenu)
 
 
@@ -163,7 +168,7 @@ app.whenReady().then(() => {
 
   // 双向通信监听
   ipcMain.handle('save-color-to-clipboard', saveColorToClipboard)
-  ipcMain.handle('save-setting', (_event,value)=>{
+  ipcMain.handle('save-setting', (_event, value) => {
     return SaveSetting(value)
   })
   ipcMain.handle('load-setting', loadSetting)
@@ -174,12 +179,6 @@ app.whenReady().then(() => {
   ipcMain.on('login', login)
   ipcMain.on('open-browser', openBrowser)
 
-  //创建窗口
-  createWindow()
-  loginWindow = createLoginWindow()
-
-  //登录判断,开始加载配置文件
-  LoadSetting()
   //生产环境跳转
   if (app.isPackaged) {
     loginWindow.loadFile(join(__dirname, '../renderer/index.html'), {
@@ -192,7 +191,10 @@ app.whenReady().then(() => {
     loginWindow.loadURL(winUrl)
   }
   loginWindow.once('ready-to-show', () => {
-    loginWindow.show()
+    //登录判断,开始加载配置文件
+    mainWindow.webContents.send('setting-update', JSON.stringify(setting))
+    // loginWindow.show()
+    login();
   })
   loginWindow.on('close', () => {
     if (!isLogin) {
@@ -200,7 +202,7 @@ app.whenReady().then(() => {
     }
   })
   //主窗口监听事件
-  mainWindow.on('session-end',()=>{
+  mainWindow.on('session-end', () => {
     app.quit()
   })
 })
@@ -218,14 +220,11 @@ app.on('will-quit', () => {
   tray.destroy()
 })
 
-const LoadSetting = async () =>  {
+const LoadSetting = async () => {
   console.log("加载配置文件")
-  let setting = loadSetting()
-  if(setting){
-    SettingJS.Setting = setting
-  }else {
+  setting = loadSetting()
+  if (!setting) {
     console.error("配置文件加载失败,使用默认设置")
-    SettingJS.Setting = SettingJS.DefaultSetting
+    setting = DefaultSetting
   }
-  mainWindow.webContents.send('setting-update',JSON.stringify(SettingJS.Setting))
 }

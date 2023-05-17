@@ -31,6 +31,9 @@
           </el-select>
         </div>
         <div>
+          <el-button class="obj" plain type="success" @click="sendReq">请求测试</el-button>
+        </div>
+        <div>
           <span class="label-text">图表显示</span>
           <el-switch
             v-model="isShowTable"
@@ -143,6 +146,8 @@ import {
 import { ref } from "vue";
 import Plotly from "plotly.js-dist";
 import { router } from "../utils/router";
+import {getUrl} from "../utils/urlUtils";
+import * as API from "../utils/API"
 
 const plotlyContainer = ref(null);
 let testPage = ref("");
@@ -286,11 +291,33 @@ const sendMsgIn = () => {
   });
 };
 
+const sendReq = () => {
+  API.getCal("1+1")
+    .then((res)=>{
+    ElNotification({
+      title: "请求成功！",
+      message: "返回值:"+JSON.stringify(res.data),
+      type:'success'
+    });
+  })
+    .catch((message)=>{
+      ElNotification({
+        title: "请求失败！",
+        message,
+        type:"error"
+      });
+    })
+}
+
 const sendMsg = () => {
   const NOTIFICATION_TITLE = "一个标题";
   const NOTIFICATION_BODY = "您有一个好！";
-
-  new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY }).onclick =
+  console.log(getUrl('icon.png'))
+  let options = {
+    body:NOTIFICATION_BODY,
+    icon:getUrl('icon-sm.png')
+  }
+  new Notification(NOTIFICATION_TITLE,options).onclick =
     () => {
       ElNotification({
         title: "你点击了系统的通知提示",

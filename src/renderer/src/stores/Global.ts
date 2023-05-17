@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import {ref} from "vue";
-import {SettingFile} from "../utils/Setting";
-import {TimerStore} from "./Timer";
+import {DefaultSetting, SettingFile} from "../utils/Setting";
 const themes = [
   "light",
   "dark",
@@ -32,18 +31,17 @@ const themes = [
   "night",
   "coffee",
   "winter",
-];
-// 第一个参数是应用程序中 store 的唯一 id
+]; //主题列表
+
 export const GlobalStore = defineStore('main', {
-  // other options...
   state:()=>{
     return{
       loginPanel:ref(false),
       UserList:ref([]),
       UserInfo:ref({}),
-      Settings:ref({}),
       ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
       currentTheme:ref('valentine'),
+      Setting:ref(DefaultSetting),
       ThemeList:themes,
       lastMousePoint:false,
       AFKDetected:false,
@@ -58,9 +56,7 @@ export const GlobalStore = defineStore('main', {
       this.loginPanel = true
     },
     loadAllSetting(setting:SettingFile){
-      this.UserInfo = setting.userInfo
-      const timeStore = TimerStore()
-      timeStore.progressColor = setting.progressBar.color
+      this.Setting = setting
     },
     changeTheme(theme:string){
       this.currentTheme = theme

@@ -1,10 +1,9 @@
-import {BrowserWindow, dialog,shell,screen} from "electron";
+import {BrowserWindow, dialog,shell,screen,app} from "electron";
 import os from "node:os";
-import process from "node:process";
 import fs from 'fs'
 import {join} from 'path'
 import {checkAndMakeHomeDir, HomePath} from "../renderer/src/utils/LogUtil";
-import * as SettingJS from "../renderer/src/utils/Setting";
+import {DefaultSetting, SettingFile} from "../renderer/src/utils/Setting";
 
 
 let settingFilePath
@@ -41,7 +40,7 @@ export function windowOperate(event, op) {
 }
 
 export function loadSetting() {
-  let curSetting:SettingJS.SettingFile
+  let curSetting:SettingFile
   settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
   let buffer
   try{
@@ -51,7 +50,7 @@ export function loadSetting() {
       checkAndMakeHomeDir()
       try {
         //载入默认的用户信息和配置信息
-        fs.writeFileSync(settingFilePath, JSON.stringify(SettingJS.DefaultSetting,null,2))
+        fs.writeFileSync(settingFilePath, JSON.stringify(DefaultSetting,null,2))
         buffer = SettingObject
       } catch (e) {
         console.error("创建文件失败",e)
@@ -64,7 +63,9 @@ export function loadSetting() {
   if(buffer){
     //加载出设置内容
     curSetting = JSON.parse(buffer.toString())
-    console.log(curSetting)
+    if(!app.isPackaged){
+      console.log(curSetting)
+    }
     return curSetting
   }else return ''
 }

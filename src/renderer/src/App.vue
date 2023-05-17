@@ -68,6 +68,7 @@ import { GlobalStore } from "./stores/Global";
 import Love from "./components/Love.vue";
 import NavBar from "./components/NavBar.vue";
 import Star from "./components/Star.vue";
+import {init} from "./utils/API"
 //登录状态栏
 const loginPanel = ref(false);
 const globalStore = GlobalStore();
@@ -82,6 +83,7 @@ try {
     if (value) {
       console.log("从主进程加载配置文件");
       globalStore.loadAllSetting(JSON.parse(value));
+      init(globalStore.Setting.netWork.host)
     }
   });
 } catch (e) {

@@ -1,35 +1,7 @@
 import { defineStore } from 'pinia'
 import {ref} from "vue";
 import {SecondToString} from "../utils/TimeUtil";
-interface ProgressColor {
-  small:{
-    start:string,
-    end:string,
-  },
-  medium:{
-    start:string,
-    end:string,
-  },
-  big:{
-    start:string,
-    end:string,
-  }
-}
 
-const defaultColor:ProgressColor = {
-  small:{
-    start:'#fff1eb',
-    end:'#ace0f9',
-  },
-  medium:{
-    start:'#a8edea',
-    end:'#fed6e3',
-  },
-  big:{
-    start:'#a6c0fe',
-    end:'#f68084',
-  }
-}
 
 // 第一个参数是应用程序中 store 的唯一 id
 export const TimerStore = defineStore('timer', {
@@ -39,8 +11,7 @@ export const TimerStore = defineStore('timer', {
     size:ref(0),
     time:ref(0),
     isStarted:ref(false),
-    progressColor:ref(defaultColor),
-    timer:'',
+    timer:0,
   }),
   getters:{
     getPercent(state){

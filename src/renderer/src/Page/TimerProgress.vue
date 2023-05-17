@@ -44,24 +44,24 @@
           <svg>
             <defs>
               <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:timerStore.progressColor.small.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:timerStore.progressColor.small.end}" offset="100%" stop-opacity="1"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.small.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.small.end}" offset="100%" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:timerStore.progressColor.medium.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:timerStore.progressColor.medium.end}" offset="100%" stop-opacity="1"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.medium.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.medium.end}" offset="100%" stop-opacity="1"></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:timerStore.progressColor.big.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:timerStore.progressColor.big.end}" offset="100%" stop-opacity="0.9"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.big.start}" offset="0%" stop-opacity="0.8"></stop>
+                <stop :style="{stopColor:globalStore.Setting.progressBar.color.big.end}" offset="100%" stop-opacity="0.9"></stop>
               </linearGradient>
             </defs>
           </svg>
@@ -98,27 +98,22 @@
 import '../assets/css/common.css'
 import {onMounted, ref} from 'vue'
 import {TimerStore} from '../stores/Timer'
-import FlipClock from "../components/FlipClock.vue";
 import Countdown from "../components/Countdown.vue";
 import {GlobalStore} from "../stores/Global";
 import {Check, Close} from "@element-plus/icons-vue";
 
 const globalStore = GlobalStore()
 const timerStore = TimerStore()
-const flipClock = ref(null)
 const CountDown = ref(null)
 
 const startTimer = () => {
   CountDown.value.startTimer()
-  // flipClock.value.run()
 }
 const stopTimer = () => {
   CountDown.value.StopTimer()
-  // flipClock.value.StopTimer()
 }
 const clearTimer = () => {
   CountDown.value.clearTime()
-  // flipClock.value.clearTimer()
 }
 onMounted(() => {
 

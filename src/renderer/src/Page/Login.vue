@@ -1,5 +1,5 @@
 <template>
-  <div class="big-box bg-base-300" data-theme="cupcake">
+  <div class="big-box bg-base-300 font-semibold" data-theme="cupcake">
     <div class="container">
       <div class="welcome">
         <div class="pinkbox">
@@ -23,7 +23,7 @@
               <div class="checkbox">
                 <input id="remember" type="checkbox"/><label for="remember">Remember Me</label>
               </div>
-              <button class="buttom sumbit" @click="login()">登录</button>
+              <button class="buttom sumbit"  @click="login()">登录</button>
             </form>
           </div>
         </div>
@@ -32,8 +32,8 @@
           <p class="desc">Pick your perfect <span>bouquet</span></p>
           <img class="flower smaller"
                src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp"/>
-          <p class="account">已经有账号了?</p>
-          <button id="signin" class="button">登录</button>
+          <p class="account ">已经有账号了?</p>
+          <button id="signin -" class="button">登录</button>
         </div>
         <div class="rightbox">
           <h2 class="title"><span>Aurora</span>&<br>Studio</h2>

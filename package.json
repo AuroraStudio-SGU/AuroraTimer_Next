@@ -21,6 +21,7 @@
     "@electron-toolkit/preload": "^1.0.3",
     "@electron-toolkit/utils": "^1.0.2",
     "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
     "daisyui": "^2.51.6",
     "electron-color-picker": "^0.2.0",
     "electron-updater": "^5.3.0",
