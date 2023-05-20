@@ -1,13 +1,27 @@
-import {app, BrowserWindow, clipboard, ipcMain, Menu, nativeImage, shell, Tray} from 'electron'
+import {app, BrowserWindow, clipboard, dialog, ipcMain, Menu, nativeImage, shell, Tray} from 'electron'
 // import {session} from 'electron'
 import {join} from 'path'
+import {autoUpdater} from "electron-updater"
 
 import {is, optimizer} from '@electron-toolkit/utils'
 
 import icon from '../../resources/icon.png?asset'
-import {getMousePoint, loadSetting, openBrowser, openFile, SaveSetting, windowOperate} from "./function";
+import {
+  getMousePoint,
+  loadSetting,
+  openBrowser,
+  openFile,
+  SaveSetting,
+  SysNotification,
+  windowOperate
+} from "./function";
 import {DefaultSetting} from "../renderer/src/utils/Setting";
+import logger from "electron-log";
 
+autoUpdater.logger = logger
+logger.transports.file.maxSize = 1002430 // 10M
+logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
+logger.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
 const {
   getColorHexRGB,
   // for more control and customized checks
@@ -20,17 +34,21 @@ const {
 
 const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
-
+const iconImg = nativeImage.createFromPath(icon)
 
 let mainWindow;
 let loginWindow;
 let tray;
 let setting;
-
+let AdditionalData;
+let isLogin = false
+//设置updater
+autoUpdater.setFeedURL("http://localhost:9999/timer/")
 function createLoginWindow() {
   return new BrowserWindow({
     width: 1000,
     height: 600,
+    icon:icon,
     alwaysOnTop: false,//窗口一直保持在其他窗口前面
     frame: false,
     resizable: false,//用户不可以调整窗口
@@ -45,8 +63,6 @@ function createLoginWindow() {
   });
 }
 
-let isLogin = false
-
 function login() {
   console.log("登录成功")
   mainWindow.webContents.send('change-login-panel', 1)
@@ -54,7 +70,6 @@ function login() {
   loginWindow.close()
   mainWindow.show()
 }
-
 async function saveColorToClipboard() {
   // color may be '#0099ff' or '' (pick cancelled with ESC)
   const color = await getColorHexRGB().catch((error) => {
@@ -65,7 +80,6 @@ async function saveColorToClipboard() {
   color && clipboard.writeText(color)
   return color;
 }
-
 async function createWindow() {
   mainWindow = new BrowserWindow({
     width: Windows_Main_Width,
@@ -100,18 +114,38 @@ async function createWindow() {
   mainWindow.setMinimumSize(996, 635)
 }
 
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
   app.setAppUserModelId('新·极光工作室打卡器')
-
+  if (app.isPackaged) {
+    //检查更新
+    checkForUpdates()
+  }
   //创建窗口
   createWindow()
   loginWindow = createLoginWindow()
+  //多开检测
+  const gotTheLock = app.requestSingleInstanceLock(AdditionalData)
+  console.log("锁:" + gotTheLock)
+  //多开锁
+  if (!gotTheLock) {
+    app.quit()
+  } else {
+    app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+      // 输出从第二个实例中接收到的数据
+      AdditionalData = additionalData
+
+      // 有人试图运行第二个实例，我们应该关注我们的窗口
+      focusWindow()
+    })
+  }
   //加载配置文件
   LoadSetting()
+
 
   //设置开发扩展
   // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
@@ -125,7 +159,6 @@ app.whenReady().then(() => {
 
 
   // 设置系统托盘
-  const iconImg = nativeImage.createFromPath(icon)
   tray = new Tray(iconImg)
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -134,13 +167,10 @@ app.whenReady().then(() => {
         tray.destroy()
       }
     },
-    {label: 'Item2', type: 'radio'},
-    {label: 'Item3', type: 'radio', checked: true},
-    {label: 'Item4', type: 'radio'}
   ])
   tray.setToolTip('极光工作室打卡器')
   tray.setContextMenu(contextMenu)
-
+  tray.on('double-click', focusWindow)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
@@ -227,4 +257,74 @@ const LoadSetting = async () => {
     console.error("配置文件加载失败,使用默认设置")
     setting = DefaultSetting
   }
+}
+
+function focusWindow() {
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
+      mainWindow.center(); // 窗口居中
+    }
+    mainWindow.focus()
+  }
+}
+
+function checkForUpdates() {
+  logger.info('Set up event listeners...')
+  autoUpdater.on('checking-for-update', () => {
+    logger.info('Checking for update...')
+  })
+  autoUpdater.on('update-available', (info) => {
+    logger.info('Update available.')
+    SysNotification({
+      body:`发现有新版本${info.version},尝试下载`,
+      icon:iconImg
+    })
+  })
+  autoUpdater.on('update-not-available', (info) => {
+    logger.info('Update not available.')
+  })
+  autoUpdater.on('error', (err) => {
+    logger.error('Error in auto-updater.' + err)
+  })
+  autoUpdater.on('download-progress', (progressObj) => {
+    let msg = "Download speed: " + progressObj.bytesPerSecond
+    msg = msg + ' - Downloaded ' + progressObj.percent + '%'
+    msg = msg + ' (' + progressObj.transferred + "/" + progressObj.total + ')'
+    logger.info(msg)
+  })
+  autoUpdater.on('update-downloaded', (info) => {
+    logger.info('Update downloaded.')
+
+    // The update will automatically be installed the next time the
+    // app launches. If you want to, you can force the installation
+    // now:
+    const dialogOpts = {
+      type: 'info',
+      buttons: ['重启更新', '等下再说'],
+      title: '是否更新?',
+      message: process.platform === 'win32' ? info.releaseNotes : info.releaseName,
+      detail: `新版本(${info.version})已经下载完成,重启既可更新新版本!`
+    }
+
+    dialog.showMessageBox(dialogOpts).then((returnValue) => {
+      if (returnValue.response === 0) autoUpdater.quitAndInstall()
+    })
+  })
+
+  // More properties on autoUpdater, see https://www.electron.build/auto-update#AppUpdater
+  //autoUpdater.autoDownload = true
+  //autoUpdater.autoInstallOnAppQuit = true
+
+  // No debugging! Check main.log for details.
+  // Ready? Go!
+  logger.info('checkForUpdates() -- begin')
+  try {
+    //autoUpdater.setFeedURL('')
+    autoUpdater.checkForUpdates()
+    //autoUpdater.checkForUpdatesAndNotify()
+  } catch (error) {
+    logger.error(error)
+  }
+  logger.info('checkForUpdates() -- end')
 }

@@ -1,16 +1,15 @@
-import {BrowserWindow, dialog,shell,screen,app} from "electron";
+import {BrowserWindow, dialog,shell,screen,app,Notification} from "electron";
 import os from "node:os";
 import fs from 'fs'
 import {join} from 'path'
 import {checkAndMakeHomeDir, HomePath} from "../renderer/src/utils/LogUtil";
 import {DefaultSetting, SettingFile} from "../renderer/src/utils/Setting";
+import NotificationConstructorOptions = Electron.NotificationConstructorOptions;
 
 
 let settingFilePath
 
 let SettingObject
-
-let isMaximized = false
 
 export function windowOperate(event, op) {
   const webContents = event.sender
@@ -22,14 +21,12 @@ export function windowOperate(event, op) {
       console.log('最小化')
       break;
     case 'Max':
-      if (!isMaximized) {
+      if(win.isMaximized()){
+          win.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
+          win.center(); // 窗口居中
+        win.restore();
+      }else {
         win.maximize();
-        isMaximized = true
-      } else {
-        // win.restore()
-        win.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
-        win.center(); // 窗口居中
-        isMaximized = false
       }
       break;
     case 'Close':
@@ -107,5 +104,8 @@ export function openBrowser(event,URL:string) {
 
 export function getMousePoint() {
   return screen.getCursorScreenPoint()
+}
+export function SysNotification(options?:NotificationConstructorOptions) {
+  new Notification(options).show()
 }
 

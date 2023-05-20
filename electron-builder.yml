@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: auroratimer
+appId: com.aurora.daygoodtime.timer
+productName: AuroraTimer
 directories:
   buildResources: build
 files:
@@ -12,9 +12,10 @@ asarUnpack:
   - resources/**
 afterSign: build/notarize.js
 win:
-  executableName: auroratimer
+  executableName: AuroraTimer
+  icon: public/assets/favicon.ico
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${productName}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always

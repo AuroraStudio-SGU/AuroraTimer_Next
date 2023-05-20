@@ -20,6 +20,7 @@ import {TimerStore} from "../stores/Timer";
 import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
+import * as API from '../utils/API'
 
 let hour = ref('00')
 let min = ref('00')
@@ -60,6 +61,10 @@ const setUpTimer = () => {
     globalStore.isAFK = false
     let time = timeStore.time
     let nowTimeStr = SecondToTimeStr(time)
+    if(time % 300 === 0 && time!==0){
+      //尝试上传时间
+      // uploadTime() current disable
+    }
     if (time % 1800 === 0 && time!==0 && globalStore.AFKDetected) {
       window.electronAPI.getMousePoint().then((point) => {
         if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
@@ -79,13 +84,26 @@ const setUpTimer = () => {
             };
         }
         globalStore.lastMousePoint = point
-        timeStore.TimePlusPlus()
       })
     }
     hour.value = nowTimeStr.hour
     min.value = nowTimeStr.min
     timeStore.TimePlusPlus()
-    timeStore.timer = setTimeout(tickTask, 1000)
+    timeStore.timer = setTimeout(tickTask, 2000)
+  }
+}
+
+const uploadTime = () => {
+  const res = API.addTime(globalStore.Setting.userInfo.uid)
+  if(!res.success){
+    ElNotification({
+      title: "请求失败！",
+      message:res.msg,
+      type:"error"
+    });
+    return false;
+  }else {
+    return true;
   }
 }
 
