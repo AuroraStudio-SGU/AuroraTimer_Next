@@ -1,6 +1,6 @@
 <template>
   <div class="Retract-sidebar">
-    <div class="fixed left-8" style="transform: scale(1.3); top:51px;margin-top: 10vh;">
+    <div class="fixed left-8" style="transform: scale(1.3); top:50px;margin-top: 10vh;">
       <ul class="menu bg-base-100 p-2 rounded-box side-bar-self">
         <li>
           <a @click="jumpTo('Timer')">
@@ -80,7 +80,7 @@ const jumpTo = (local) => {
 }
 
 .side-bar-self {
-  height: 63vh;
+  height: 62vh;
 }
 
 

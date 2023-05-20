@@ -11,8 +11,8 @@
           <div
             class="circle-green"
             style="
-              width: 17px;
-              height: 17px;
+              width: 12px;
+              height: 12px;
               background-color: #65bc60;
               border-radius: 50%;
             "
@@ -21,8 +21,8 @@
           <div
             class="circle-yellow"
             style="
-              width: 17px;
-              height: 17px;
+              width: 12px;
+              height: 12px;
               background-color: #e7c168;
               border-radius: 50%;
             "
@@ -31,8 +31,8 @@
           <div
             class="circle-red"
             style="
-              width: 17px;
-              height: 17px;
+              width: 12px;
+              height: 12px;
               background-color: #e36f6c;
               border-radius: 50%;
             "
@@ -115,7 +115,7 @@ onBeforeMount(() => {
   margin: 5px 5px;
   height: 99vh;
   /* background-color: #eef2f5ee; */
-  border-radius: 20px 20px;
+  border-radius: 10px;
   box-shadow: 2px 2px 2px 1px rgba(77, 77, 77, 0.07);
   transform: scale(v-bind(plex));
   backdrop-filter: blur(10px);
@@ -123,14 +123,14 @@ onBeforeMount(() => {
 
 .app-box {
   display: flex;
-  border-radius: 20px;
+  border-radius: 10px;
   height: 97vh;
   padding: 110px 0 0 140px;
 }
 
 .drag-bar {
-  border-radius: 20px;
-  width: 86vw;
+  border-radius: 10px;
+  width: 120vw;
   height: 100%;
 
   -webkit-app-region: drag;
@@ -138,8 +138,8 @@ onBeforeMount(() => {
 
 .top-bar {
   @apply bg-base-200;
-  border-radius: 20px 20px 0 0;
-  height: 6vh;
+  border-radius: 10px 10px 0 0;
+  height: 5vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -151,7 +151,7 @@ onBeforeMount(() => {
   justify-content: space-around;
   padding: 5px 5px;
   border-radius: 20px;
-  width: 11vw;
+  width: 100px;
   /*display: flex;*/
   /*justify-content: flex-end;*/
 }

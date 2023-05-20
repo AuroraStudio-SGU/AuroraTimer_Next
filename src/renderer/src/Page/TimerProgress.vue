@@ -44,24 +44,62 @@
           <svg>
             <defs>
               <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.small.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.small.end}" offset="100%" stop-opacity="1"></stop>
+                <stop
+                  :style="{
+                    stopColor:
+                      globalStore.Setting.progressBar.color.small.start,
+                  }"
+                  offset="0%"
+                  stop-opacity="0.8"
+                ></stop>
+                <stop
+                  :style="{
+                    stopColor: globalStore.Setting.progressBar.color.small.end,
+                  }"
+                  offset="100%"
+                  stop-opacity="1"
+                ></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.medium.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.medium.end}" offset="100%" stop-opacity="1"></stop>
+                <stop
+                  :style="{
+                    stopColor:
+                      globalStore.Setting.progressBar.color.medium.start,
+                  }"
+                  offset="0%"
+                  stop-opacity="0.8"
+                ></stop>
+                <stop
+                  :style="{
+                    stopColor: globalStore.Setting.progressBar.color.medium.end,
+                  }"
+                  offset="100%"
+                  stop-opacity="1"
+                ></stop>
               </linearGradient>
             </defs>
           </svg>
           <svg>
             <defs>
               <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.big.start}" offset="0%" stop-opacity="0.8"></stop>
-                <stop :style="{stopColor:globalStore.Setting.progressBar.color.big.end}" offset="100%" stop-opacity="0.9"></stop>
+                <stop
+                  :style="{
+                    stopColor: globalStore.Setting.progressBar.color.big.start,
+                  }"
+                  offset="0%"
+                  stop-opacity="0.8"
+                ></stop>
+                <stop
+                  :style="{
+                    stopColor: globalStore.Setting.progressBar.color.big.end,
+                  }"
+                  offset="100%"
+                  stop-opacity="0.9"
+                ></stop>
               </linearGradient>
             </defs>
           </svg>
@@ -78,10 +116,12 @@
               style="margin-left: 24px"
             />
           </div>
-          <div class="time">已打卡：</div>
-          <div class="clock">
-<!--            <FlipClock ref="flipClock"></FlipClock>-->
-            <countdown ref="CountDown"></countdown>
+          <div class="flex">
+            <div class="time">已打卡：</div>
+            <div class="clock">
+              <!--            <FlipClock ref="flipClock"></FlipClock>-->
+              <countdown ref="CountDown"></countdown>
+            </div>
           </div>
         </div>
       </div>
@@ -95,29 +135,27 @@
 </template>
 
 <script lang="ts" setup>
-import '../assets/css/common.css'
-import {onMounted, ref} from 'vue'
-import {TimerStore} from '../stores/Timer'
+import "../assets/css/common.css";
+import { onMounted, ref } from "vue";
+import { TimerStore } from "../stores/Timer";
 import Countdown from "../components/Countdown.vue";
-import {GlobalStore} from "../stores/Global";
-import {Check, Close} from "@element-plus/icons-vue";
+import { GlobalStore } from "../stores/Global";
+import { Check, Close } from "@element-plus/icons-vue";
 
-const globalStore = GlobalStore()
-const timerStore = TimerStore()
-const CountDown = ref(null)
+const globalStore = GlobalStore();
+const timerStore = TimerStore();
+const CountDown = ref(null);
 
 const startTimer = () => {
-  CountDown.value.startTimer()
-}
+  CountDown.value.startTimer();
+};
 const stopTimer = () => {
-  CountDown.value.StopTimer()
-}
+  CountDown.value.StopTimer();
+};
 const clearTimer = () => {
-  CountDown.value.clearTime()
-}
-onMounted(() => {
-
-})
+  CountDown.value.clearTime();
+};
+onMounted(() => {});
 </script>
 
 
@@ -203,7 +241,6 @@ onMounted(() => {
   margin-left: 20px;
 }
 
-
 body {
   display: flex;
   justify-content: center;
@@ -240,7 +277,8 @@ body {
 }
 
 /* 时钟上的数字 */
-.clock .flip .digital::before, .clock .flip .digital::after {
+.clock .flip .digital::before,
+.clock .flip .digital::after {
   position: absolute;
   content: attr(data-number);
   left: 0;

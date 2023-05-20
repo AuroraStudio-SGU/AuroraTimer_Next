@@ -4,13 +4,13 @@
     <span class="countdown font-mono text-5xl">
       <span class="num-hour"></span>
     </span>
-      hours
+      分钟
     </div>
     <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
     <span class="countdown font-mono text-5xl">
       <span class="num-min"></span>
     </span>
-      min
+      秒
     </div>
   </div>
 </template>
