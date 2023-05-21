@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <div class="title">
+    <div class="Title">
       图标测试
     </div>
     <div class="icon-box">

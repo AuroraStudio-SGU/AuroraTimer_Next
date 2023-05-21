@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div ref="boxComponent" class="white-box">
-      <div class="title">
+      <div class="Title">
         工作室本周打卡情况
       </div>
       {{ tableHeight }}

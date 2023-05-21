@@ -8,7 +8,7 @@
   @apply h-5/6;
   @apply overflow-auto;
 }
-.title {
+.Title {
   @apply text-5xl font-semibold;
 }
 .menu{

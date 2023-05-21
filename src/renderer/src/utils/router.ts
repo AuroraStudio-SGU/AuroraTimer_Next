@@ -3,7 +3,7 @@
 // 我们后面再讨论嵌套路由。
 import Main from "../Page/Main.vue";
 import About from "../Page/Setting.vue";
-import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import TimerProgress from "../Page/TimerProgress.vue";
 import Rank from "../Page/Rank.vue";
 import Other from "../Page/Other.vue";
@@ -12,8 +12,9 @@ import Welcome from "../Page/Welcome.vue";
 import IconTest from "../Page/IconTest.vue";
 import Calculator from "../Page/Calculator.vue";
 import NewUI from "../Page/NewUI.vue";
-import ThemeTest from "../Page/ThemeTest.vue";
 import ThemeChange from "../Page/ThemeChange.vue";
+import Admin from "../Page/Admin.vue";
+import TextEditor from "../components/TextEditor.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
@@ -27,7 +28,7 @@ const routes = [
   {path: '/calculator', name: 'Calculator', component: Calculator},
   {path: '/newUI', name: 'NewUI', component: NewUI},
   {path: '/themes', name: 'Themes', component: ThemeChange},
-
+  {path: '/admin', name: 'Admin', component: Admin},
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

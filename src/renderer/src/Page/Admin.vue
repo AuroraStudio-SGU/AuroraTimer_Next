@@ -1,0 +1,51 @@
+<template>
+  <div class="menu">
+    <div class="white-box">
+      <div class="Title">管理员设置</div>
+      <div>
+        <label class="label">
+          <span>本周公告设置:</span>
+        </label>
+        <!--对话框触发元素-->
+        <label for="notice" class="btn">设置公告内容</label>
+        <input type="checkbox" id="notice" class="modal-toggle" />
+        <!--对话框内容-->
+        <div class="modal ">
+          <div class="modal-box relative overflow-hidden">
+            <label for="notice" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+            <div class="container">
+              <!--TODO editor-->
+              <TextEditor  data-twind-ignore></TextEditor>
+            </div>
+            <div class="modal-action">
+              <label for="notice" class="btn">保存</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import '../assets/css/scrollbar.css'
+import TextEditor from "../components/TextEditor.vue";
+
+</script>
+
+<style scoped>
+/*这里和组件内的样式冲突了，所以手动设置*/
+
+.modal-box {
+  max-width: 40rem;
+  max-height: 32rem;
+}
+.container {
+  width: fit-content;
+  @apply h-5/6 max-h-96 m-4 h-96;
+  min-height: 16rem;
+  position: relative;
+  top:1rem;
+  overflow-y: auto;
+}
+</style>

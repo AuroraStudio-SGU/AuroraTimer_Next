@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="title p-4">用来测试各种功能</div>
+      <div class="Title p-4">用来测试各种功能</div>
       <div class="between">
         <div>
           <el-button class="obj" plain type="success" @click="sendMsg">测试通知</el-button>

@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="title p-4">设置功能</div>
+      <div class="Title p-4">设置功能</div>
       <div class="color-setting p-4">
         <div class="colorSet">
           <div>

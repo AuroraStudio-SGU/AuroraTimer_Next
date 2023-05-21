@@ -3,7 +3,7 @@
     <!-- TODO 自动判断时间进行动画效果   -->
     <div class="white-box flex overflow-auto">
       <div class="welcome-box">
-        <div class="title">Good Morning, Goodnight</div>
+        <div class="Title">Good Morning, Goodnight</div>
         <div class="container-wrapper">
           <div class="container">
             <div class="circle-container">

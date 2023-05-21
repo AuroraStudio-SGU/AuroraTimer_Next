@@ -58,7 +58,13 @@
             </svg>
           </a>
         </li>
-        
+        <li>
+          <a @click="jumpTo('Admin')">
+            <svg class="slider-svg">
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#admin"></use>
+            </svg>
+          </a>
+        </li>
       </ul>
     </div>
   </div>
