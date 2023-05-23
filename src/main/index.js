@@ -1,5 +1,7 @@
+const startTime = new Date().getTime();
 import {app, BrowserWindow, clipboard, dialog, ipcMain, Menu, nativeImage, shell, Tray} from 'electron'
 // import {session} from 'electron'
+// 4.75
 import {join} from 'path'
 import {autoUpdater} from "electron-updater"
 
@@ -42,6 +44,7 @@ let tray;
 let setting;
 let AdditionalData;
 let isLogin = false
+let processTime;
 //设置updater
 autoUpdater.setFeedURL("http://localhost:9999/timer/")
 function createLoginWindow() {
@@ -65,7 +68,11 @@ function createLoginWindow() {
 
 function login() {
   console.log("登录成功")
-  mainWindow.webContents.send('change-login-panel', 1)
+  let param = {
+    startTime,
+    processTime,
+  }
+  mainWindow.webContents.send('change-login-panel', JSON.stringify(param))
   isLogin = true
   loginWindow.close()
   mainWindow.show()
@@ -90,7 +97,6 @@ async function createWindow() {
     transparent: true,
     resizable: true,
     webPreferences: {
-      devTools: true,
       preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
       // 设置内容安全策略
@@ -114,6 +120,9 @@ async function createWindow() {
   mainWindow.setMinimumSize(996, 635)
 }
 
+function mainLogger(event,value){
+  logger.info(value)
+}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -205,6 +214,7 @@ app.whenReady().then(() => {
   ipcMain.handle('get-mouse', getMousePoint)
   // 渲染层-主进程通信
   ipcMain.on('window-operate', windowOperate)
+  ipcMain.on('main-logger', mainLogger)
   ipcMain.on('open-file', openFile)
   ipcMain.on('login', login)
   ipcMain.on('open-browser', openBrowser)
@@ -220,6 +230,7 @@ app.whenReady().then(() => {
     const winUrl = 'http://localhost:5173/#/login';
     loginWindow.loadURL(winUrl)
   }
+  processTime = new Date().getTime() - startTime;
   loginWindow.once('ready-to-show', () => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
@@ -328,3 +339,5 @@ function checkForUpdates() {
   }
   logger.info('checkForUpdates() -- end')
 }
+
+

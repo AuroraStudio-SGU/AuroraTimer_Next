@@ -85,7 +85,7 @@ const customAlert = (info, type) => {
   overflow: hidden;
 }
 .TextArea {
-  height: 16rem !important;
+  height: 19rem !important;
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: content-box;

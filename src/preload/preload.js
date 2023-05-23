@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getMousePoint:(callback) => ipcRenderer.invoke('get-mouse', callback),
   //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
+  mainLogger: (callback) => ipcRenderer.send('main-logger', callback),
   openFile: (callback) => ipcRenderer.send('open-file', callback),
   login: (callback) => ipcRenderer.send('login', callback),
   openBrowser:(callback) => ipcRenderer.send('open-browser', callback),

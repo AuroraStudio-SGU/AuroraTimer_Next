@@ -48,8 +48,7 @@
       </div>
       <div class="app-box">
         <!-- 侧标栏显示 -->
-        <router-view></router-view
-        ><!-- 路由显示 -->
+        <router-view></router-view><!-- 路由显示 -->
       </div>
       <div class="love">
         <Love></Love>
@@ -63,21 +62,31 @@
 
 <script setup>
 import SliderBar from "./components/SliderBar.vue";
-import { onBeforeMount, ref } from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import { GlobalStore } from "./stores/Global";
 import Love from "./components/Love.vue";
 import NavBar from "./components/NavBar.vue";
 import Star from "./components/Star.vue";
 import {init} from "./utils/API"
+
 //登录状态栏
 const loginPanel = ref(false);
 const globalStore = GlobalStore();
 
 const themeList = [];
+let usingTime;
+let mainProcessTime;
 //主进程处理完毕,例如登录成功,通知主窗口进行渲染
 try {
   window.electronAPI.changeLoginPanel((_event, value) => {
     loginPanel.value = true;
+    let param = JSON.parse(value)
+    let currentTime = new Date().getTime();
+    let offsetTime = currentTime - param.startTime;
+    usingTime = "启动用时(ms):"+offsetTime;
+    mainProcessTime = "主程序用时(ms):"+param.processTime
+    window.electronAPI.mainLogger(usingTime);
+    window.electronAPI.mainLogger(mainProcessTime);
   });
   window.electronAPI.handleSetting((_event, value) => {
     if (value) {
@@ -102,6 +111,8 @@ onBeforeMount(() => {
     themeList.push(obj);
   });
 });
+
+
 </script>
 
 <style>

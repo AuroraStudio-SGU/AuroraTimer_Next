@@ -10,7 +10,7 @@
         <label for="notice" class="btn">设置公告内容</label>
         <input type="checkbox" id="notice" class="modal-toggle" />
         <!--对话框内容-->
-        <div class="modal ">
+        <div class="modal">
           <div class="modal-box relative overflow-hidden">
             <label for="notice" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
             <div class="container">
@@ -38,11 +38,12 @@ import TextEditor from "../components/TextEditor.vue";
 
 .modal-box {
   max-width: 40rem;
-  max-height: 32rem;
+  height: 36rem;
 }
 .container {
   width: fit-content;
-  @apply h-5/6 max-h-96 m-4 h-96;
+  @apply m-4;
+  height: 28rem;
   min-height: 16rem;
   position: relative;
   top:1rem;

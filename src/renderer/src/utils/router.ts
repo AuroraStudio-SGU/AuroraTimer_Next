@@ -14,7 +14,6 @@ import Calculator from "../Page/Calculator.vue";
 import NewUI from "../Page/NewUI.vue";
 import ThemeChange from "../Page/ThemeChange.vue";
 import Admin from "../Page/Admin.vue";
-import TextEditor from "../components/TextEditor.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
