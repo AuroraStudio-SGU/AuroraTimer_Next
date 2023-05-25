@@ -8,36 +8,9 @@
         <!-- 拖拽栏 -->
         <div class="window-bar">
           <!-- 红 绿 灯  -->
-          <div
-            class="circle-green"
-            style="
-              width: 12px;
-              height: 12px;
-              background-color: #65bc60;
-              border-radius: 50%;
-            "
-            @click="windowOperation('Min')"
-          ></div>
-          <div
-            class="circle-yellow"
-            style="
-              width: 12px;
-              height: 12px;
-              background-color: #e7c168;
-              border-radius: 50%;
-            "
-            @click="windowOperation('Max')"
-          ></div>
-          <div
-            class="circle-red"
-            style="
-              width: 12px;
-              height: 12px;
-              background-color: #e36f6c;
-              border-radius: 50%;
-            "
-            @click="windowOperation('Close')"
-          ></div>
+          <div class="circle-green" @click="windowOperation('Min')"></div>
+          <div class="circle-yellow" @click="windowOperation('Max')"></div>
+          <div class="circle-red" @click="windowOperation('Close')"></div>
         </div>
       </div>
       <div class="navBar">
@@ -48,13 +21,14 @@
       </div>
       <div class="app-box">
         <!-- 侧标栏显示 -->
-        <router-view></router-view><!-- 路由显示 -->
+        <router-view></router-view
+        ><!-- 路由显示 -->
       </div>
       <div class="love">
         <Love></Love>
       </div>
       <div class="star">
-          <star></star>
+        <star></star>
       </div>
     </div>
   </div>
@@ -62,12 +36,12 @@
 
 <script setup>
 import SliderBar from "./components/SliderBar.vue";
-import {onBeforeMount, onMounted, ref} from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { GlobalStore } from "./stores/Global";
 import Love from "./components/Love.vue";
 import NavBar from "./components/NavBar.vue";
 import Star from "./components/Star.vue";
-import {init} from "./utils/API"
+import { init } from "./utils/API";
 
 //登录状态栏
 const loginPanel = ref(false);
@@ -80,11 +54,11 @@ let mainProcessTime;
 try {
   window.electronAPI.changeLoginPanel((_event, value) => {
     loginPanel.value = true;
-    let param = JSON.parse(value)
+    let param = JSON.parse(value);
     let currentTime = new Date().getTime();
     let offsetTime = currentTime - param.startTime;
-    usingTime = "启动用时(ms):"+offsetTime;
-    mainProcessTime = "主程序用时(ms):"+param.processTime
+    usingTime = "启动用时(ms):" + offsetTime;
+    mainProcessTime = "主程序用时(ms):" + param.processTime;
     window.electronAPI.mainLogger(usingTime);
     window.electronAPI.mainLogger(mainProcessTime);
   });
@@ -92,7 +66,7 @@ try {
     if (value) {
       console.log("从主进程加载配置文件");
       globalStore.loadAllSetting(JSON.parse(value));
-      init(globalStore.Setting.netWork.host)
+      init(globalStore.Setting.netWork.host);
     }
   });
 } catch (e) {
@@ -111,14 +85,18 @@ onBeforeMount(() => {
     themeList.push(obj);
   });
 });
-
-
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css?family=Sanchez");
 * {
   margin: 0;
   padding: 0;
+  font-family: "Sanchez", "MyFont";
+}
+@font-face {
+  font-family: "MyFont"; /*字体名称*/
+  src: url("./assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
 }
 
 .main {
@@ -175,12 +153,49 @@ onBeforeMount(() => {
   left: 400px;
 }
 
-
 /* star */
 .star {
   position: absolute;
   bottom: 9px;
   left: 200px;
   transform: scale(0.9);
+}
+
+.circle-green:hover {
+  background-color: #2dcc72;
+ transform: scale(1.2);
+}
+.circle-red:hover {
+  background-color: #ea6759;
+  transform: scale(1.2);
+}
+.circle-yellow:hover {
+  background-color: #ffcc00;
+  transform: scale(1.2);
+}
+.circle-green {
+  width: 14px;
+  height: 14px;
+  background-color: #62d995;
+  border-radius: 50%;
+  transition: color 0.4s ease;
+  transition: transform 0.4s ease;
+}
+
+.circle-yellow {
+  width: 14px;
+  height: 14px;
+  background-color: #ffd941;
+  border-radius: 50%;
+  transition: color 0.4s ease;
+  transition: transform 0.4s ease;
+}
+.circle-red {
+  width: 14px;
+  height: 14px;
+  background-color: #ef887d;
+  border-radius: 50%;
+  transition: color 0.4s ease;
+  transition: transform 0.4s ease;
 }
 </style>

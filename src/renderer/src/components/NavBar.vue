@@ -6,9 +6,10 @@
       <div v-if="!globalStore.isAFK" class="badge font-semibold">打卡中</div>
     </div>
 
-    <div class="flex-none gap-2">
+    <div class="flex-none gap-2 font-f">
       <LoaderTriangle></LoaderTriangle>
-      <div class="dropdown dropdown-end">
+    </div>
+    <div class="dropdown dropdown-end">
         <label class="btn btn-ghost btn-circle" :class="{'avatar online': !globalStore.isAFK, 'avatar offline': globalStore.isAFK}" tabindex="0">
           <div class="w-10 rounded-full">
             <img :src="getUrl('profile.jpg')"/>
@@ -26,7 +27,6 @@
           <li><a @click="jumpTo('Setting')">设置</a></li>
         </ul>
       </div>
-    </div>
   </div>
 </template>
 
