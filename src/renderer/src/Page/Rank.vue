@@ -4,11 +4,10 @@
       <div class="Title">
         工作室本周打卡情况
       </div>
-      {{ tableHeight }}
       <el-table
-        :border="true"
         :data="UserList"
-        :default-sort="{ prop: 'WeekTime', order: 'descending' }"
+        :default-sort="{ prop: 'weekTime', order: 'descending' }"
+        v-loading="Loading"
       >
         <el-table-column label="姓名" prop="name"/>
         <el-table-column
@@ -19,25 +18,25 @@
         >
           <template #default="scope">
             <el-tag disable-transitions>
-              {{ scope.row.uid.substring(0, 2) }} 级
+              {{ scope.row.id.substring(0, 2) }} 级
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column :formatter="TimeFormatter" label="该学期打卡时长" prop="TotalTime" sortable/>
-        <el-table-column :formatter="TimeFormatter" label="本周打卡时长" prop="WeekTime" sortable/>
-        <el-table-column label="职位" prop="job" width="60px">
-          <template #default="{ row }">
-            <!-- 使用自定义列模板 -->
-            <template v-if="row.job === 'normal'">
-              <el-icon>
-                <UserFilled/>
-              </el-icon>
-            </template>
-            <template v-else>
-              {{ row.job }}
-            </template>
-          </template>
-        </el-table-column>
+        <el-table-column :formatter="TimeFormatter" label="该学期打卡时长" prop="totalTime" sortable/>
+        <el-table-column :formatter="TimeFormatter" label="本周打卡时长" prop="weekTime" sortable/>
+<!--        <el-table-column label="职位" prop="job" width="60px">-->
+<!--          <template #default="{ row }">-->
+<!--            &lt;!&ndash; 使用自定义列模板 &ndash;&gt;-->
+<!--            <template v-if="row.job === 'normal'">-->
+<!--              <el-icon>-->
+<!--                <UserFilled/>-->
+<!--              </el-icon>-->
+<!--            </template>-->
+<!--            <template v-else>-->
+<!--              {{ row.job }}-->
+<!--            </template>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
     </div>
   </div>
@@ -47,9 +46,17 @@
 <script lang="ts" setup>
 import {UserFilled} from '@element-plus/icons-vue'
 import {formatSecondTime} from "../utils/TimeUtil";
-import {User, UserList} from '../utils/offlineData'
 import {nextTick, onBeforeMount, onMounted, ref, watchEffect} from "vue";
 import '../assets/css/common.css'
+import {getRank} from "../utils/API";
+import {ElNotification} from "element-plus";
+
+interface UserTime {
+  id:string,
+  name:string,
+  totalTime:number,
+  weekTime:number,
+}
 
 
 const boxComponent = ref(null)
@@ -57,33 +64,48 @@ const isLoaded = ref(false)
 
 let tableHeight = ref(0)
 let tableWidth = ref(0)
-let GradeList: string[] = []
-let GradeFilters = []
+let GradeList = ref([])
+let GradeFilters = ref([])
+let Loading = ref(true)
+let UserList = ref<UserTime[]>()
+let lastXWeek = 0;
 
-onBeforeMount(() => {
+const filterHandler = (
+  value: string,
+  row: UserTime
+) => {
+  return row.id.substring(0, 2) === value
+}
+onBeforeMount(async ()=>{
+  //获取排行列表
+  await getRank(lastXWeek)
+    .then(res=>{
+      let r = res.data
+      UserList.value = r.data
+    })
+    .catch(res=>{
+      ElNotification({
+        title: "请求失败！",
+        message:res.msg,
+        type:"error"
+      });
+    })
   //在加载前获取所有成员的年级列表
-  UserList.forEach(user => {
-    let g = user.uid.substring(0, 2)
-    let index = GradeList.indexOf(g)
+  UserList.value.forEach(user => {
+    let g = user.id.substring(0, 2)
+    let index = GradeList.value.indexOf(g)
     if (index == -1)
-      GradeList.push(g)
+      GradeList.value.push(g)
   })
-  GradeList.forEach(i => {
+  GradeList.value.forEach(i => {
     let obj = {
       text: i + '级',
       value: i
     }
-    GradeFilters.push(obj)
+    GradeFilters.value.push(obj)
   })
-  // console.log("年级列表:", GradeFilters)
+  Loading.value = false;
 })
-const filterHandler = (
-  value: string,
-  row: User
-) => {
-  return row.uid.substring(0, 2) === value
-}
-
 
 onMounted(async () => {
   await nextTick()
@@ -112,10 +134,20 @@ const TimeFormatter = (row, colum) => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "WenKai-B"; /*字体名称*/
+  src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
+}
 :deep(.el-table) {
+  --el-table-border-color : hsl(var(--ac) / var(--tw-text-opacity));
   --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
-  --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
-  --el-table-row-hover-bg-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
-  --el-table-header-bg-color: hsl(var(--p) / var(--tw-bg-opacity));
+  --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+  //--el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity));
+  --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+}
+:deep(.cell) {
+  font-family: "Sanchez", "WenKai-B",serif;
+  font-weight: 700;
+  color : hsla(var(--bc) / var(--tw-text-opacity, 1));
 }
 </style>

@@ -1,30 +1,32 @@
 <template>
-  <div class="big-box bg-base-300 font-semibold" data-theme="cupcake">
+  <div class="big-box bg-base-300 font-semibold" data-theme="cupcake" >
     <div class="container">
       <div class="welcome">
         <div class="pinkbox">
           <!-- 注册 -->
           <div class="signup nodisplay">
             <h1 class="font-bold">注册</h1>
-            <form autocomplete="off">
-              <input placeholder="Username" type="text">
-              <input placeholder="Email" type="email">
-              <input placeholder="Password" type="password">
-              <input placeholder="Confirm Password" type="password">
-              <button class="button submit">注册</button>
-            </form>
+            <div class="Form">
+              <input type="text" placeholder="学号" v-model="id" />
+              <input type="text" placeholder="姓名" v-model="name" />
+              <input type="text" placeholder="密码" v-model="password" />
+              <input type="text" placeholder="确认密码" v-model="confirmPsw" />
+              <button class="btn btn-accent sumbit" @click="register">注册</button>
+            </div>
           </div>
           <!-- 登录 -->
           <div class="signin">
             <h1 class="font-bold">登录</h1>
-            <form autocomplete="off" class="more-padding">
-              <input placeholder="Username" type="text">
-              <input placeholder="Password" type="password">
-              <div class="checkbox">
-                <input id="remember" type="checkbox"/><label for="remember">Remember Me</label>
+            <div class="more-padding Form">
+              <input placeholder="学号" type="text" v-model="id">
+              <input placeholder="密码" type="password" v-model="password">
+              <div class="Checkbox">
+                <input id="remember" type="checkbox" checked="checked" class="checkbox checkbox-primary" />
+                <label for="remember" class="cursor-pointer">自动登录
+              </label>
               </div>
-              <button class="buttom sumbit"  @click="login()">登录</button>
-            </form>
+              <button class="btn btn-accent sumbit" @click="login">登录</button>
+            </div>
           </div>
         </div>
         <div class="leftbox">
@@ -33,7 +35,7 @@
           <img class="flower smaller"
                src="https://hbimg.huabanimg.com/c09305167a883e60179a45374df73252304001359acca-W3qbYm_fw658/format/webp"/>
           <p class="account ">已经有账号了?</p>
-          <button id="signin -" class="button">登录</button>
+          <button id="signin" class="button">登录</button>
         </div>
         <div class="rightbox">
           <h2 class="title"><span>Aurora</span>&<br>Studio</h2>
@@ -46,13 +48,27 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import {onMounted} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import $ from 'jquery';
+import {ElNotification} from "element-plus";
+import * as API from "../utils/API";
+import {GlobalStore} from "../stores/Global";
+import {init} from "../utils/API";
 
+const globalStore = GlobalStore()
+
+onBeforeMount(()=>{
+  window.electronAPI.handleSetting((_event, value) => {
+    if (value) {
+      console.log("从主进程加载配置文件");
+      globalStore.loadAllSetting(JSON.parse(value));
+      init(globalStore.Setting.netWork.host);
+    }
+  });
+})
 
 onMounted(() => {
   $('#signup').click(function () {
@@ -60,7 +76,6 @@ onMounted(() => {
     $('.signin').addClass('nodisplay');
     $('.signup').removeClass('nodisplay');
   });
-
   $('#signin').click(function () {
     $('.pinkbox').css('transform', 'translateX(0%)');
     $('.signup').addClass('nodisplay');
@@ -68,14 +83,80 @@ onMounted(() => {
   });
 })
 
-const login = () => {
+let id = ref('')
+let name = ref('')
+let password = ref('')
+let confirmPsw = ref('')
+
+const login = async () => {
   console.log("登录操作")
+  if(password.value!==confirmPsw.value){
+    ElNotification({
+      title: "密码需要和确认密码一致！",
+      type:"error"
+    });
+    return;
+  }
+  const user = {
+    id:id.value,
+    name:name.value,
+    password:password.value,
+  }
+  let loginUser;
+  await API.login(user)
+    .then(res=>{
+      let r = res.data
+      loginUser = r.data
+    })
+    .catch(e=>{
+      console.error(e)
+      ElNotification({
+        title: "登录失败！",
+        message:e,
+        type:"error",
+      });
+    })
+  console.log(loginUser)
   window.electronAPI.login()
+}
+
+const register = async () => {
+  const user = {
+    id:id.value,
+    name:name.value,
+    password:password.value,
+  }
+  let registerUser;
+  await API.register(user)
+    .then(res=>{
+      let r = res.data
+      registerUser = r.data
+      $('.pinkbox').css('transform', 'translateX(0%)');
+      $('.signup').addClass('nodisplay');
+      $('.signin').removeClass('nodisplay');
+    })
+    .catch(e=>{
+      console.error(e)
+      ElNotification({
+        title: "注册失败！",
+        message:e,
+        type:"error",
+      });
+    })
+  console.log(registerUser)
 }
 </script>
 
 <style scoped>
-
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "WenKai-B", "Sanchez",serif;
+}
+@font-face {
+  font-family: "WenKai-B"; /*字体名称*/
+  src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
+}
 
 /* 容器的样式 */
 .container {
@@ -84,6 +165,12 @@ const login = () => {
   height: 400px;
   position: relative;
 
+}
+label {
+  font-family: "Open Sans", sans-serif;
+  @apply text-primary-content;
+  font-size: 0.8em;
+  letter-spacing: 1px;
 }
 
 .welcome {
@@ -209,14 +296,12 @@ button:hover {
 .button {
   margin-top: 3%;
   @apply bg-base-200 text-primary-content;
-
-
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 600;
 }
 
 /* 表单样式 */
-form {
+.Form {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -239,7 +324,6 @@ form {
   margin-top: 25px;
   padding: 12px;
   @apply border-primary-content;
-
 }
 
 .sumbit:hover {
@@ -276,14 +360,7 @@ input:focus::placeholder {
   opacity: 0;
 }
 
-label {
-  font-family: "Open Sans", sans-serif;
-  @apply text-primary-content;
-  font-size: 0.8em;
-  letter-spacing: 1px;
-}
-
-.checkbox {
+.Checkbox {
   display: inline;
   white-space: nowrap;
   position: relative;
@@ -294,11 +371,6 @@ label {
 input[type=checkbox] {
   width: 15px;
   @apply bg-primary;
-}
-
-.checkbox input[type=checkbox]:checked + label {
-  @apply text-primary-content;
-  transition: 0.5s all ease;
 }
 
 .big-box {

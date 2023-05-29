@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import {ref} from "vue";
 import {DefaultSetting, SettingFile} from "../utils/Setting";
 const themes = [
+  "Earth",
   "light",
   "dark",
   "cupcake",

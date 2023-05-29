@@ -14,6 +14,7 @@ import Calculator from "../Page/Calculator.vue";
 import NewUI from "../Page/NewUI.vue";
 import ThemeChange from "../Page/ThemeChange.vue";
 import Admin from "../Page/Admin.vue";
+import Information from "../Page/Information.vue";
 
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
@@ -28,6 +29,7 @@ const routes = [
   {path: '/newUI', name: 'NewUI', component: NewUI},
   {path: '/themes', name: 'Themes', component: ThemeChange},
   {path: '/admin', name: 'Admin', component: Admin},
+  {path: '/user/info', name: 'Info', component: Information},
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

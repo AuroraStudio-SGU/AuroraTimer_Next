@@ -15,10 +15,10 @@
             <label for="notice" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
             <div class="container">
               <!--TODO editor-->
-              <TextEditor  data-twind-ignore></TextEditor>
+              <TextEditor data-twind-ignore ref="textEditor"></TextEditor>
             </div>
             <div class="modal-action">
-              <label for="notice" class="btn">保存</label>
+              <label for="notice" class="btn" @click="uploadNotice">保存</label>
             </div>
           </div>
         </div>
@@ -30,7 +30,12 @@
 <script setup>
 import '../assets/css/scrollbar.css'
 import TextEditor from "../components/TextEditor.vue";
+import {ref} from "vue";
 
+const textEditor = ref(null)
+const uploadNotice = () => {
+  console.log(textEditor.value.valueHtml)
+}
 </script>
 
 <style scoped>

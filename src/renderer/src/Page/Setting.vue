@@ -66,7 +66,7 @@
 import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import * as SettingJS from "../utils/Setting";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {init} from "../utils/API";
 

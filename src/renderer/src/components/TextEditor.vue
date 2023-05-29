@@ -76,7 +76,9 @@ const handleBlur = (editor) => {
 const customAlert = (info, type) => {
   alert(`【自定义提示】${type} - ${info}`);
 };
-
+defineExpose({
+  valueHtml
+})
 </script>
 
 <style scoped>

@@ -9,7 +9,7 @@
   @apply overflow-auto;
 }
 .Title {
-  @apply text-5xl font-semibold;
+  @apply text-5xl font-semibold p-2;
 }
 .menu{
   height: 100%;

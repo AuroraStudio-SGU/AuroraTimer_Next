@@ -4,11 +4,17 @@
     <span class="countdown font-mono text-5xl">
       <span class="num-hour"></span>
     </span>
-      分钟
+      小时
     </div>
     <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
     <span class="countdown font-mono text-5xl">
       <span class="num-min"></span>
+    </span>
+      分
+    </div>
+    <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+    <span class="countdown font-mono text-5xl">
+      <span class="num-second"></span>
     </span>
       秒
     </div>
@@ -24,6 +30,7 @@ import * as API from '../utils/API'
 
 let hour = ref('00')
 let min = ref('00')
+let second = ref('00')
 let timer = null
 const timeStore = TimerStore()
 const globalStore = GlobalStore()
@@ -42,6 +49,7 @@ const StopTimer = async () => {
 const clearTime = () => {
   hour.value = '00'
   min.value = '00'
+  second.value = '00'
   timeStore.time = 0
 }
 
@@ -51,9 +59,12 @@ const SecondToTimeStr = (second) => {
   if (hour > 99) hour = '99' //不会真的有人能99+把
   let min = Math.floor((second % 3600) / 60)
   if (min < 10) min = '0' + min
+  let seconds = Math.floor(second % 60)
+  if (seconds < 10) seconds = '0' + seconds
   return {
     hour:String(hour),
-    min:String(min)
+    min:String(min),
+    second:String(seconds),
   }
 }
 const setUpTimer = () => {
@@ -88,23 +99,32 @@ const setUpTimer = () => {
     }
     hour.value = nowTimeStr.hour
     min.value = nowTimeStr.min
+    second.value = nowTimeStr.second
     timeStore.TimePlusPlus()
-    timeStore.timer = setTimeout(tickTask, 2000)
+    timeStore.timer = setTimeout(tickTask, 1000)
   }
 }
 
-const uploadTime = () => {
-  const res = API.addTime(globalStore.Setting.userInfo.uid)
-  if(!res.success){
-    ElNotification({
-      title: "请求失败！",
-      message:res.msg,
-      type:"error"
-    });
-    return false;
-  }else {
-    return true;
-  }
+const uploadTime = async () => {
+  await API.addTime(globalStore.Setting.userInfo.uid)
+    .then(res=>{
+      if(res.code==="200") return true
+      else {
+        ElNotification({
+          title: "请求失败！",
+          message:res.msg,
+          type:"error"
+        });
+      }
+    })
+    .catch(res=>{
+      ElNotification({
+        title: "请求失败！",
+        message:res.msg,
+        type:"error"
+      });
+    })
+
 }
 
 onMounted(() => {
@@ -136,5 +156,8 @@ defineExpose({
 
 .num-min {
   --value: v-bind(min)
+}
+.num-second {
+  --value: v-bind(second)
 }
 </style>

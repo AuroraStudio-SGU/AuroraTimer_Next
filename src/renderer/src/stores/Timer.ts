@@ -31,7 +31,7 @@ export const TimerStore = defineStore('timer', {
   },
   actions:{
     TimePlusPlus(){
-      this.time+=60;
+      this.time+=1;
     },
     clearTime(){
       this.time = 0;

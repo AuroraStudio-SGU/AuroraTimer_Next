@@ -20,7 +20,7 @@
           tabindex="0"
         >
           <li>
-            <a>
+            <a @click="jumpTo('Info')">
               个人信息
             </a>
           </li>

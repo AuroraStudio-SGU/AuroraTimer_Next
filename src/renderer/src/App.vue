@@ -92,10 +92,10 @@ onBeforeMount(() => {
 * {
   margin: 0;
   padding: 0;
-  font-family: "Sanchez", "MyFont";
+  font-family: "Sanchez", "WenKai-B",serif;
 }
 @font-face {
-  font-family: "MyFont"; /*字体名称*/
+  font-family: "WenKai-B"; /*字体名称*/
   src: url("./assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
 }
 

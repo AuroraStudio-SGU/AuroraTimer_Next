@@ -1,5 +1,5 @@
 const startTime = new Date().getTime();
-import {app, BrowserWindow, clipboard, dialog, ipcMain, Menu, nativeImage, shell, Tray} from 'electron'
+import {app, BrowserWindow, clipboard, dialog, ipcMain, Menu, nativeImage, shell, Tray ,globalShortcut} from 'electron'
 // import {session} from 'electron'
 // 4.75
 import {join} from 'path'
@@ -101,6 +101,12 @@ async function createWindow() {
       sandbox: false,
       // 设置内容安全策略
       webSecurity: true,
+      devTools:{
+        enabled: true,
+        hotkeys: {
+          devTools: 'F12'
+        }
+      },
     },
   })
   mainWindow.webContents.setWindowOpenHandler((details) => {
@@ -155,6 +161,13 @@ app.whenReady().then(() => {
   //加载配置文件
   LoadSetting()
 
+  //重新设置F12→F9
+  globalShortcut.register("F9",()=>{
+    let window = BrowserWindow.getFocusedWindow();
+    if(window){
+      window.webContents.toggleDevTools();
+    }
+  })
 
   //设置开发扩展
   // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
@@ -234,8 +247,8 @@ app.whenReady().then(() => {
   loginWindow.once('ready-to-show', () => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
-    // loginWindow.show()
-    login();
+    loginWindow.webContents.send('setting-update', JSON.stringify(setting))
+    loginWindow.show()
   })
   loginWindow.on('close', () => {
     if (!isLogin) {
