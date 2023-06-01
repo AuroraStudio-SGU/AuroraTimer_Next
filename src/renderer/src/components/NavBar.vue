@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar bg-base-100 get-topup fixed">
+  <div class="navbar bg-base-100 get-topup ">
     <div class="flex-1">
       <a class="btn btn-ghost normal-case text-3xl rounded-box">Aurora</a><!--打算在这里显示版本信息(或者测试用途)-->
       <div v-if="globalStore.isAFK" class="badge font-semibold">挂机中</div>
@@ -49,11 +49,12 @@ const jumpTo = (local) => {
 
 <style scoped>
 .get-topup {
-  z-index: 99;
-  /* border-radius: 20px; */
   @apply rounded-box;
-  top: 55px;
+  /* top: 55px;
   left: 140px;
-  width: 83vw;
+  width: 85%; 
+  */
+  width: 100%;
+  height: 100%;
 }
 </style>

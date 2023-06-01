@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <div class="white-box h-5/6 overflow-auto">
+    <div class="white-box overflow-auto">
       <div ref="ThemeBox" class="ThemeSelector-container"
            style="user-select: none">
         <div

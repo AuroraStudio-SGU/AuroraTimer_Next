@@ -13,22 +13,27 @@
           <div class="circle-red" @click="windowOperation('Close')"></div>
         </div>
       </div>
-      <div class="navBar">
-        <NavBar></NavBar>
-      </div>
-      <div class="sliderBar">
-        <SliderBar></SliderBar>
-      </div>
-      <div class="app-box">
-        <!-- 侧标栏显示 -->
-        <router-view></router-view
-        ><!-- 路由显示 -->
-      </div>
-      <div class="love">
-        <Love></Love>
-      </div>
-      <div class="star">
-        <star></star>
+      <div class="some-change">
+        <div class="sliderBar">
+          <SliderBar></SliderBar>
+        </div>
+        <div class="top-bottom">
+          <div class="navBar">
+            <NavBar></NavBar>
+          </div>
+          <div class="app-box">
+            <!-- 侧标栏显示 -->
+            <router-view></router-view
+            ><!-- 路由显示 -->
+          </div>
+        </div>
+
+        <div class="love">
+          <Love></Love>
+        </div>
+        <div class="star">
+          <star></star>
+        </div>
       </div>
     </div>
   </div>
@@ -92,7 +97,7 @@ onBeforeMount(() => {
 * {
   margin: 0;
   padding: 0;
-  font-family: "Sanchez", "WenKai-B",serif;
+  font-family: "Sanchez", "WenKai-B", serif;
 }
 @font-face {
   font-family: "WenKai-B"; /*字体名称*/
@@ -110,12 +115,7 @@ onBeforeMount(() => {
   backdrop-filter: blur(10px);
 }
 
-.app-box {
-  display: flex;
-  border-radius: 10px;
-  height: 97vh;
-  padding: 110px 0 0 140px;
-}
+
 
 .drag-bar {
   border-radius: 10px;
@@ -163,7 +163,7 @@ onBeforeMount(() => {
 
 .circle-green:hover {
   background-color: #2dcc72;
- transform: scale(1.2);
+  transform: scale(1.2);
 }
 .circle-red:hover {
   background-color: #ea6759;
@@ -197,5 +197,42 @@ onBeforeMount(() => {
   border-radius: 50%;
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
+}
+.some-change {
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  padding: 20px 35px 93px 35px;
+  height: 100%;
+}
+
+.top-bottom {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+}
+
+.app-box {
+  display: flex;
+  border-radius: 10px;
+  height: 85%;
+  
+  /* padding: 110px 0 0 140px; */
+}
+.navBar {
+  /* padding: 24px 1000px 0 140px; */
+  position: relative;
+  
+  
+
+}
+
+.sliderBar {
+  height: 100%;
+  margin-right: 35px;
+  width: 100px;
 }
 </style>

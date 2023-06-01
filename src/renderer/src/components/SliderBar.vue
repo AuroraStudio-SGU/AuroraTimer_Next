@@ -1,8 +1,8 @@
 <template>
-  <div class="Retract-sidebar">
-    <div class="fixed left-8" style="transform: scale(1.3); top:50px;margin-top: 10vh;">
-      <ul class="menu bg-base-100 p-2 rounded-box side-bar-self">
-        <li>
+  <div class="Retract-sidebar " style="width: 100%; height: 100% ;">
+    <div  style="height: 100%;width: 100%; ">
+      <ul class="menu bg-base-100 p-2 rounded-box side-bar-self shadow-md">
+        <li class="fugai">
           <a @click="jumpTo('Timer')">
             <svg class="slider-svg">
               <use xlink:href="../assets/svg/SliderBarIcons.svg#time"></use>
@@ -37,13 +37,13 @@
             </svg>
           </a>
         </li>
-        <li>
+        <!-- <li>
           <a @click="jumpTo('Welcome')">
             <svg class="slider-svg">
               <use xlink:href="../assets/svg/SliderBarIcons.svg#checked"></use>
             </svg>
           </a>
-        </li>
+        </li> -->
         <li>
           <a @click="jumpTo('NewUI')">
             <svg class="slider-svg">
@@ -86,7 +86,16 @@ const jumpTo = (local) => {
 }
 
 .side-bar-self {
-  height: 62vh;
+  width: 100%;
+  height: 100%;
+  
+}
+li {
+  transform: scale(1.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 

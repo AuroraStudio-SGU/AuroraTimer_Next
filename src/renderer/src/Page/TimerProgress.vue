@@ -116,8 +116,8 @@
               style="margin-left: 24px"
             />
           </div>
-          <div class="flex">
-            <div class="time">已打卡：</div>
+          <div class="flex flex-col items-center">
+            <div class="time">已打卡</div>
             <div class="clock">
               <!--            <FlipClock ref="flipClock"></FlipClock>-->
               <countdown ref="CountDown"></countdown>
@@ -125,10 +125,29 @@
           </div>
         </div>
       </div>
-      <div class="btns">
+      <!-- <div class="btns">
         <button class="btn btn-success" @click="startTimer">开始计时</button>
         <button class="btn btn-error" @click="stopTimer">停止计时</button>
         <button class="btn btn-warning" @click="clearTimer">清除计时</button>
+      </div> -->
+      <div class="stats shadow-md flex " style="margin-top: 10px;">
+        <div class="stat place-items-center">
+          <div class="stat-title">累计打卡</div>
+          <div class="stat-value">18.5H</div>
+          <div class="stat-desc">周一到周日</div>
+        </div>
+
+        <div class="stat place-items-center">
+          <div class="stat-title">成员名</div>
+          <div class="stat-value text-secondary">黄梓聪</div>
+          <div class="stat-desc text-secondary">21125041018</div>
+        </div>
+
+        <div class="stat place-items-center">
+          <div class="stat-title">本周值日</div>
+          <div class="stat-value">陈典灿 欧润丰</div>
+          <div class="stat-desc"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -161,7 +180,8 @@ onMounted(() => {});
 
 <style scoped>
 .between {
-  @apply flex space-x-4 items-center;
+  @apply flex space-x-4 items-center justify-between;
+  margin-top: 10px;
 }
 .btns {
   @apply p-8;
@@ -169,7 +189,7 @@ onMounted(() => {});
 }
 
 .progress1 {
-  margin-left: 5px;
+  margin-left: 30px;
   position: relative;
 }
 
@@ -212,7 +232,7 @@ onMounted(() => {});
 }
 
 :deep(.bigCircle path:first-child) {
-  stroke: #eef2f5;
+  stroke: #b5b8ba35;
 }
 
 :deep(.littleCircle) svg > path:nth-child(2) {
@@ -235,10 +255,13 @@ onMounted(() => {});
 .time {
   font-size: 50px;
   font-weight: 600;
+  margin-bottom: 10px;
 }
 
 .container {
   margin-left: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
@@ -367,5 +390,9 @@ body {
     -webkit-transform: rotateX(0);
     transform: rotateX(0);
   }
+}
+.swtich {
+  position: absolute;
+  top: 20px;
 }
 </style>
