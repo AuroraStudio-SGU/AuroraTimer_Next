@@ -167,7 +167,11 @@ const timerStore = TimerStore();
 const CountDown = ref(null);
 
 const startTimer = () => {
-  CountDown.value.startTimer();
+  if(timerStore.isStarted){
+    CountDown.value.StopTimer();
+  }else {
+    CountDown.value.StartTimer();
+  }
 };
 const stopTimer = () => {
   CountDown.value.StopTimer();

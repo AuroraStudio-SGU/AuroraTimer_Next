@@ -41,6 +41,9 @@ export const TimerStore = defineStore('timer', {
     },
     CloseTimer(){
       this.isStarted = false
+    },
+    ChangeTime(time:number){
+      this.time = time;
     }
   }
 })

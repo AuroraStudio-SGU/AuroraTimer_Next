@@ -248,7 +248,8 @@ app.whenReady().then(() => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
     loginWindow.webContents.send('setting-update', JSON.stringify(setting))
-    loginWindow.show()
+    // loginWindow.show()
+    login()
   })
   loginWindow.on('close', () => {
     if (!isLogin) {
