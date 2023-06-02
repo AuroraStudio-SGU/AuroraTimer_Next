@@ -15,6 +15,7 @@
               <use xlink:href="../assets/svg/SliderBarIcons.svg#home"></use>
             </svg>
           </a>
+          
         </li>
         <li>
           <a @click="jumpTo('Rank')">
@@ -66,6 +67,7 @@
           </a>
         </li>
       </ul>
+      
     </div>
   </div>
 </template>
@@ -88,14 +90,15 @@ const jumpTo = (local) => {
 .side-bar-self {
   width: 100%;
   height: 100%;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 li {
   transform: scale(1.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
 }
 
 

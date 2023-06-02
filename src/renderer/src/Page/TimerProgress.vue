@@ -1,6 +1,6 @@
 <template>
   <div class="menu">
-    <div class="white-box">
+    <div class="white-box space-change">
       <div class="between">
         <div class="progress1">
           <div class="little">
@@ -117,7 +117,7 @@
             />
           </div>
           <div class="flex flex-col items-center">
-            <div class="time">已打卡</div>
+            <div class="time">已计时</div>
             <div class="clock">
               <!--            <FlipClock ref="flipClock"></FlipClock>-->
               <countdown ref="CountDown"></countdown>
@@ -132,8 +132,8 @@
       </div> -->
       <div class="stats shadow-md flex " style="margin-top: 10px;">
         <div class="stat place-items-center">
-          <div class="stat-title">累计打卡</div>
-          <div class="stat-value">18.5H</div>
+          <div class="stat-title">本周计时</div>
+          <div class="stat-value">18H</div>
           <div class="stat-desc">周一到周日</div>
         </div>
 
@@ -149,6 +149,7 @@
           <div class="stat-desc"></div>
         </div>
       </div>
+      <button class="btn btn-success" style="position: absolute;right: 200px;" @click="startTimer">计时(测试用)</button>
     </div>
   </div>
 </template>
@@ -394,5 +395,10 @@ body {
 .swtich {
   position: absolute;
   top: 20px;
+}
+.space-change {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 </style>
