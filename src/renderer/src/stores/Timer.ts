@@ -11,7 +11,7 @@ export const TimerStore = defineStore('timer', {
     size:ref(0),
     time:ref(0),
     isStarted:ref(false),
-    timer:0,
+    timer:{} as Worker,
   }),
   getters:{
     getPercent(state){

@@ -35,11 +35,11 @@ let timer = null
 const timeStore = TimerStore()
 const globalStore = GlobalStore()
 let tickTask
-let timerWorker = new Worker(new URL('../utils/Timer.js',import.meta.url).href)
 
 try{
-  timerWorker.onmessage = (event) => {
+  timeStore.timer.onmessage = (event) => {
     timeStore.TimePlusPlus();
+    console.log("++")
     let time = timeStore.time
     let nowTimeStr = SecondToTimeStr(time)
     hour.value = nowTimeStr.hour;
@@ -50,13 +50,13 @@ try{
 const StartTimer = () => {
   if(!timeStore.isStarted){
     timeStore.OpenTimer()
-    timerWorker.postMessage('start')
+    timeStore.timer.postMessage('start')
   }
 }
 const StopTimer = () => {
   if(timeStore.isStarted){
     timeStore.CloseTimer()
-    timerWorker.postMessage('stop')
+    timeStore.timer.postMessage('stop')
   }
 }
 
@@ -66,10 +66,6 @@ const startTimer = () => {
     timeStore.OpenTimer()
     tickTask();
   }
-}
-const stopTimer = async () => {
-  window.clearTimeout(timeStore.timer)
-  timeStore.CloseTimer()
 }
 const clearTime = () => {
   hour.value = '00'
@@ -153,11 +149,19 @@ const uploadTime = async () => {
 }
 
 onMounted(() => {
+  if(!(timeStore.timer instanceof Worker)){
+    timeStore.timer = new Worker(new URL('../utils/Timer.js',import.meta.url).href)
+  }
   let time = timeStore.time
   let nowTimeStr = SecondToTimeStr(time)
   hour.value = nowTimeStr.hour;
   min.value = nowTimeStr.min;
   second.value = nowTimeStr.second;
+  if(timeStore.isStarted){
+    timeStore.timer.postMessage('stop')
+    timeStore.timer.postMessage('start')
+
+  }
   window.electronAPI.getMousePoint().then((point) => {
     globalStore.lastMousePoint = point;
   })

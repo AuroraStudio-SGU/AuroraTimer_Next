@@ -274,7 +274,7 @@ const handleChange = (index) => {
   }
 };
 onMounted(() => {
-  handleChange(globalStore.ThemeList.indexOf(globalStore.currentTheme));
+  // handleChange(globalStore.ThemeList.indexOf(globalStore.currentTheme));
 });
 </script>
 
@@ -389,7 +389,7 @@ body {
   display: grid;
   height: 100vh;
   place-items: center;
-  
+
 }
 
 .leaderboard {

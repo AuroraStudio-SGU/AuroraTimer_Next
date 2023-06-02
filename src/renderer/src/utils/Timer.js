@@ -1,5 +1,4 @@
 let timePlex = 1;
-let init = false
 let tickTask
 let timer
 
@@ -12,7 +11,8 @@ self.onmessage = (event) => {
 }
 
 function StartTimer() {
-  if(!init) initTs();
+  clearTimeout(timer)
+  initTs();
   tickTask();
 }
 function StopTimer() {
@@ -20,10 +20,8 @@ function StopTimer() {
 }
 
 const initTs = ()=>{
-  if(init) return;
   tickTask = ()=>{
     self.postMessage(timePlex)
     timer = setTimeout(tickTask, 1000);
   }
-  init = true
 }
