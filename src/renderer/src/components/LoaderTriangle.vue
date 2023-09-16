@@ -1,59 +1,121 @@
 <template>
-<div class="loader"> 
-  <span id="one"></span>
-  <span id="two"></span>
-  <span id="three"></span>
-</div>
+  <div class="loader">
+    <div class="loader-inner">
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+      <div class="loader-line-wrap">
+        <div class="loader-line"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 </script>
 
 <style scoped>
-.loader {
-  display: flex;
-  gap: 10px;
+.loader-inner {
+  width: 100px;
+  height: 60px;
+  margin: auto;
+  position: absolute;
+  inset: 0;
 }
 
-.loader span {
-  height: 20px;
-  width: 20px;
-  background-image: linear-gradient(to right , #333 , #233,#222,#122,#112,#111,#011,#001,#000);
-  border-radius: 50%;
-  animation-name: animar;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-  box-shadow: 20px 20px 18px #666666,
-             -20px -20px 18px #ffffff;
+.loader-line-wrap {
+  animation: spin 2000ms cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  width: 100px;
+  height: 50px;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  transform-origin: 50% 100%;
 }
 
-#one {
-  animation-delay: 1s;
+.loader-line {
+  border: 4px solid transparent;
+  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  position: absolute;
+  inset: 0;
 }
 
-#two {
-  animation-delay: 2s;
+.loader-line-wrap:nth-child(1) {
+  animation-delay: -50ms;
 }
 
-#three {
-  animation-delay: 3s;
+.loader-line-wrap:nth-child(2) {
+  animation-delay: -100ms;
 }
 
-@keyframes animar {
-  0% {
-    transform: scale(1);
-  }
+.loader-line-wrap:nth-child(3) {
+  animation-delay: -150ms;
+}
 
-  33% {
-    transform: scale(.3);
-  }
+.loader-line-wrap:nth-child(4) {
+  animation-delay: -200ms;
+}
 
-  66% {
-    transform: scale(1);
+.loader-line-wrap:nth-child(5) {
+  animation-delay: -250ms;
+}
+
+.loader-line-wrap:nth-child(1) .loader-line {
+  border-color: #eb4747;
+  height: 90px;
+  width: 90px;
+  top: 7px;
+}
+
+.loader-line-wrap:nth-child(2) .loader-line {
+  border-color: #ebeb47;
+  height: 76px;
+  width: 76px;
+  top: 14px;
+}
+
+.loader-line-wrap:nth-child(3) .loader-line {
+  border-color: #47eb47;
+  height: 62px;
+  width: 62px;
+  top: 21px;
+}
+
+.loader-line-wrap:nth-child(4) .loader-line {
+  border-color: #47ebeb;
+  height: 48px;
+  width: 48px;
+  top: 28px;
+}
+
+.loader-line-wrap:nth-child(5) .loader-line {
+  border-color: #4747eb;
+  height: 34px;
+  width: 34px;
+  top: 35px;
+}
+
+@keyframes spin {
+  0%,
+  15% {
+    transform: rotate(0);
   }
 
   100% {
-    transform: scale(1);
+    transform: rotate(360deg);
   }
 }
 </style>

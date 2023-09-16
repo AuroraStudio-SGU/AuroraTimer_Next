@@ -12,6 +12,7 @@ export const TimerStore = defineStore('timer', {
     time:ref(0),
     isStarted:ref(false),
     timer:{} as Worker,
+    AfkLimit:ref(1800)//挂机时间检测阈值,单位为秒,且实际阈值为这里的两倍!
   }),
   getters:{
     getPercent(state){

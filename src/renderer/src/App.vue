@@ -23,8 +23,8 @@
           </div>
           <div class="app-box">
             <!-- 侧标栏显示 -->
-            <router-view></router-view
-            ><!-- 路由显示 -->
+            <router-view></router-view>
+            <!-- 路由显示 -->
           </div>
         </div>
 
@@ -41,16 +41,18 @@
 
 <script setup>
 import SliderBar from "./components/SliderBar.vue";
-import { onBeforeMount, onMounted, ref } from "vue";
-import { GlobalStore } from "./stores/Global";
+import {onBeforeMount, ref} from "vue";
+import {GlobalStore} from "./stores/Global";
 import Love from "./components/Love.vue";
 import NavBar from "./components/NavBar.vue";
 import Star from "./components/Star.vue";
-import { init } from "./utils/API";
+import {init} from "./api/API";
 
 //登录状态栏
 const loginPanel = ref(false);
 const globalStore = GlobalStore();
+
+const name = ref('nmame')
 
 const themeList = [];
 let usingTime;
@@ -74,6 +76,17 @@ try {
       init(globalStore.Setting.netWork.host);
     }
   });
+  window.electronAPI.OnDateFromMain((_event, value) => {
+    console.log("从主进程加载数据");
+    if (value) {
+      if (value.type === "UserInfo") {
+        globalStore.setUserInfo(value.data)
+      }
+      if(value.type === "Setting"){
+        globalStore.Setting = value.data
+      }
+    }
+  })
 } catch (e) {
   console.error(e);
 }
@@ -94,11 +107,13 @@ onBeforeMount(() => {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Sanchez");
+
 * {
   margin: 0;
   padding: 0;
   font-family: "Sanchez", "WenKai-B", serif;
 }
+
 @font-face {
   font-family: "WenKai-B"; /*字体名称*/
   src: url("./assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
@@ -114,7 +129,6 @@ onBeforeMount(() => {
   transform: scale(v-bind(plex));
   backdrop-filter: blur(10px);
 }
-
 
 
 .drag-bar {
@@ -165,14 +179,17 @@ onBeforeMount(() => {
   background-color: #2dcc72;
   transform: scale(1.2);
 }
+
 .circle-red:hover {
   background-color: #ea6759;
   transform: scale(1.2);
 }
+
 .circle-yellow:hover {
   background-color: #ffcc00;
   transform: scale(1.2);
 }
+
 .circle-green {
   width: 14px;
   height: 14px;
@@ -190,6 +207,7 @@ onBeforeMount(() => {
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
 }
+
 .circle-red {
   width: 14px;
   height: 14px;
@@ -198,6 +216,7 @@ onBeforeMount(() => {
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
 }
+
 .some-change {
   padding-right: 10px;
   display: flex;
@@ -212,21 +231,21 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+
 }
 
 .app-box {
   display: flex;
   border-radius: 10px;
   height: 85%;
-  
+
   /* padding: 110px 0 0 140px; */
 }
+
 .navBar {
   /* padding: 24px 1000px 0 140px; */
   position: relative;
-  
-  
+
 
 }
 

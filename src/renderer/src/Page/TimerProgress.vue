@@ -105,31 +105,14 @@
           </svg>
         </div>
         <div class="container">
-          <div class="swtich">
-            <span class="label-text">挂机检测</span>
-            <el-switch
-              v-model="globalStore.AFKDetected"
-              :active-icon="Check"
-              :inactive-icon="Close"
-              class="mt-2"
-              inline-prompt
-              style="margin-left: 24px"
-            />
-          </div>
           <div class="flex flex-col items-center">
             <div class="time">已计时</div>
             <div class="clock">
-              <!--            <FlipClock ref="flipClock"></FlipClock>-->
-              <countdown ref="CountDown"></countdown>
+              <countdown  ref="CountDown"></countdown>
             </div>
           </div>
         </div>
       </div>
-      <!-- <div class="btns">
-        <button class="btn btn-success" @click="startTimer">开始计时</button>
-        <button class="btn btn-error" @click="stopTimer">停止计时</button>
-        <button class="btn btn-warning" @click="clearTimer">清除计时</button>
-      </div> -->
       <div class="stats shadow-md flex " style="margin-top: 10px;">
         <div class="stat place-items-center">
           <div class="stat-title">本周计时</div>
@@ -188,11 +171,6 @@ onMounted(() => {});
   @apply flex space-x-4 items-center justify-between;
   margin-top: 10px;
 }
-.btns {
-  @apply p-8;
-  @apply grid grid-cols-3 space-x-12;
-}
-
 .progress1 {
   margin-left: 30px;
   position: relative;
@@ -260,7 +238,7 @@ onMounted(() => {});
 .time {
   font-size: 50px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
 }
 
 .container {
@@ -395,10 +373,6 @@ body {
     -webkit-transform: rotateX(0);
     transform: rotateX(0);
   }
-}
-.swtich {
-  position: absolute;
-  top: 20px;
 }
 .space-change {
   display: flex;

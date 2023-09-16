@@ -20,7 +20,7 @@
     </div>
 
     <div class="flex-none gap-2 font-f">
-      <LoaderTriangle></LoaderTriangle>
+<!--      <LoaderTriangle></LoaderTriangle>-->
     </div>
     <div class="dropdown dropdown-end">
       <label
@@ -36,7 +36,7 @@
         </div>
       </label>
       <ul
-        class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+        class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52 z-10"
         tabindex="0"
       >
         <li>
@@ -70,7 +70,7 @@ const jumpTo = (local) => {
   @apply rounded-box;
   /* top: 55px;
   left: 140px;
-  width: 85%; 
+  width: 85%;
   */
   width: 100%;
   height: 100%;

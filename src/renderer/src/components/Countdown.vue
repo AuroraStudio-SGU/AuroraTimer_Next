@@ -26,7 +26,7 @@ import {TimerStore} from "../stores/Timer";
 import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
-import * as API from '../utils/API'
+import * as API from '../api/API'
 
 let hour = ref('00')
 let min = ref('00')
@@ -34,13 +34,39 @@ let second = ref('00')
 let timer = null
 const timeStore = TimerStore()
 const globalStore = GlobalStore()
-let tickTask
+const afkLimit = 10;
 
 try{
+  //Timer 返回函数。
   timeStore.timer.onmessage = (event) => {
     timeStore.TimePlusPlus();
-    console.log("++")
     let time = timeStore.time
+    //挂机检测
+    if (time % timeStore.AfkLimit === 0 && time!==0 && globalStore.AFKDetected) {
+      window.electronAPI.getMousePoint().then((point) => {
+        if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
+          StopTimer()
+          globalStore.isAFK = true
+          //TODO 提示用户是否正在挂机
+          const NOTIFICATION_TITLE = "你是不是正在挂机？";
+          const NOTIFICATION_BODY =
+            "点我恢复计时！";
+          new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
+            () => {
+              StartTimer();
+              ElNotification({
+                title: '重新恢复计时',
+                type: 'success'
+              })
+            };
+        }
+        globalStore.lastMousePoint = point
+      })
+    }
+    //尝试加时
+    if(time % 300 === 0 && time!==0){
+      API.addTime(globalStore.UserInfo.id,300)
+    }
     let nowTimeStr = SecondToTimeStr(time)
     hour.value = nowTimeStr.hour;
     min.value = nowTimeStr.min;
@@ -61,12 +87,6 @@ const StopTimer = () => {
 }
 
 
-const startTimer = () => {
-  if (!timeStore.isStarted) {
-    timeStore.OpenTimer()
-    tickTask();
-  }
-}
 const clearTime = () => {
   hour.value = '00'
   min.value = '00'
@@ -88,65 +108,7 @@ const SecondToTimeStr = (second) => {
     second:String(seconds),
   }
 }
-const setUpTimer = () => {
-  tickTask = () => {
-    globalStore.isAFK = false
-    let time = timeStore.time
-    let nowTimeStr = SecondToTimeStr(time)
-    if(time % 300 === 0 && time!==0){
-      //尝试上传时间
-      // uploadTime() current disable
-    }
-    if (time % 1800 === 0 && time!==0 && globalStore.AFKDetected) {
-      window.electronAPI.getMousePoint().then((point) => {
-        if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
-          StopTimer()
-          globalStore.isAFK = true
-          //TODO 提示用户是否正在挂机
-          const NOTIFICATION_TITLE = "你是不是正在挂机？";
-          const NOTIFICATION_BODY =
-            "点我恢复计时！";
-          new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-            () => {
-              tickTask();
-              ElNotification({
-                title: '重新恢复计时',
-                type: 'success'
-              })
-            };
-        }
-        globalStore.lastMousePoint = point
-      })
-    }
-    hour.value = nowTimeStr.hour
-    min.value = nowTimeStr.min
-    second.value = nowTimeStr.second
-    timeStore.TimePlusPlus()
-    timeStore.timer = setTimeout(tickTask, 1000)
-  }
-}
 
-const uploadTime = async () => {
-  await API.addTime(globalStore.Setting.userInfo.uid)
-    .then(res=>{
-      if(res.code==="200") return true
-      else {
-        ElNotification({
-          title: "请求失败！",
-          message:res.msg,
-          type:"error"
-        });
-      }
-    })
-    .catch(res=>{
-      ElNotification({
-        title: "请求失败！",
-        message:res.msg,
-        type:"error"
-      });
-    })
-
-}
 
 onMounted(() => {
   if(!(timeStore.timer instanceof Worker)){

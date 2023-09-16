@@ -37,7 +37,7 @@ const props = defineProps({
 })
 
 // 内容 HTML
-const valueHtml = ref('<p>hello</p>')
+const valueHtml = ref('<holder>')
 
 // 模拟 ajax 异步获取内容
 onMounted(() => {
@@ -58,20 +58,19 @@ onBeforeUnmount(() => {
 
 // 编辑器回调函数
 const handleCreated = (editor) => {
-  console.log('created', editor);
   editorRef.value = editor; // 记录 editor 实例，重要！
 };
 const handleChange = (editor) => {
-  // console.log('change:', editor.getHtml());
+  console.log('change:', editor.getHtml());
 };
 const handleDestroyed = (editor) => {
-  console.log('destroyed', editor);
+  // console.log('destroyed', editor);
 };
 const handleFocus = (editor) => {
-  console.log('focus', editor);
+  // console.log('focus', editor);
 };
 const handleBlur = (editor) => {
-  console.log('blur', editor);
+  // console.log('blur', editor);
 };
 const customAlert = (info, type) => {
   alert(`【自定义提示】${type} - ${info}`);

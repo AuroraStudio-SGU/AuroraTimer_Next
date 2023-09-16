@@ -1,13 +1,13 @@
 const startTime = new Date().getTime();
-import {app, BrowserWindow, clipboard, dialog, ipcMain, Menu, nativeImage, shell, Tray ,globalShortcut} from 'electron'
-// import {session} from 'electron'
+import {app, BrowserWindow, clipboard, dialog,session , ipcMain, Menu, nativeImage, shell, Tray ,globalShortcut} from 'electron'
 // 4.75
 import {join} from 'path'
 import {autoUpdater} from "electron-updater"
 
 import {is, optimizer} from '@electron-toolkit/utils'
-
 import icon from '../../resources/icon.png?asset'
+import {loginByToken,init} from "../renderer/src/api/API";
+
 import {
   getMousePoint,
   loadSetting,
@@ -37,6 +37,9 @@ const {
 const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
 const iconImg = nativeImage.createFromPath(icon)
+const UpdateServerURL = "http://localhost:9999/timer/"
+const offlineMode = false
+
 
 let mainWindow;
 let loginWindow;
@@ -46,7 +49,7 @@ let AdditionalData;
 let isLogin = false
 let processTime;
 //设置updater
-autoUpdater.setFeedURL("http://localhost:9999/timer/")
+autoUpdater.setFeedURL(UpdateServerURL)
 function createLoginWindow() {
   return new BrowserWindow({
     width: 1000,
@@ -136,6 +139,13 @@ function mainLogger(event,value){
 app.whenReady().then(() => {
   // Set app user model id for windows
   app.setAppUserModelId('新·极光工作室打卡器')
+
+  //设置开发扩展
+  const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
+  session.defaultSession.loadExtension(devToolPath)
+
+
+
   if (app.isPackaged) {
     //检查更新
     checkForUpdates()
@@ -145,7 +155,6 @@ app.whenReady().then(() => {
   loginWindow = createLoginWindow()
   //多开检测
   const gotTheLock = app.requestSingleInstanceLock(AdditionalData)
-  console.log("锁:" + gotTheLock)
   //多开锁
   if (!gotTheLock) {
     app.quit()
@@ -161,6 +170,9 @@ app.whenReady().then(() => {
   //加载配置文件
   LoadSetting()
 
+
+
+
   //重新设置F12→F9
   globalShortcut.register("F9",()=>{
     let window = BrowserWindow.getFocusedWindow();
@@ -169,9 +181,7 @@ app.whenReady().then(() => {
     }
   })
 
-  //设置开发扩展
-  // const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
-  // session.defaultSession.loadExtension(devToolPath)
+
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -231,6 +241,10 @@ app.whenReady().then(() => {
   ipcMain.on('open-file', openFile)
   ipcMain.on('login', login)
   ipcMain.on('open-browser', openBrowser)
+  ipcMain.on('send-data-toMain', (_event,value)=> pushSharedDataToMainWindow(value))
+
+  //加载API实例
+  init(setting.netWork.host)
 
   //生产环境跳转
   if (app.isPackaged) {
@@ -248,8 +262,42 @@ app.whenReady().then(() => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
     loginWindow.webContents.send('setting-update', JSON.stringify(setting))
-    // loginWindow.show()
-    login()
+    //是否以离线模式强制进入，当然也是为了方便开发测试
+    if(offlineMode){
+      login()
+    }else {
+      if(setting.autoLogin){
+        loginByToken(setting.userInfo.Token)
+          .then((Response)=>{
+          if(Response.success){
+            let result = Response.data
+            setting.userInfo = {
+              uid:result.id,
+              name:result.name,
+              WeekTime:result.currentWeekTime,
+              isAdmin:result.admin,
+              Token:result.token,
+            }
+            SaveSetting(JSON.stringify(setting))
+            pushSharedDataToMainWindow({
+              type:"UserInfo",
+              data:result
+            })
+            login()
+          }else {
+            logger.warn("自动登录失败,重新进入手动登录"+"失败原因:"+Response.msg);
+            loginWindow.show()
+          }
+        })
+          .catch((error)=>{
+            logger.warn("自动登录失败,重新进入手动登录"+"失败原因:"+error);
+            loginWindow.show()
+          })
+      }else {
+        loginWindow.show()
+      }
+    }
+
   })
   loginWindow.on('close', () => {
     if (!isLogin) {
@@ -287,8 +335,7 @@ const LoadSetting = async () => {
 function focusWindow() {
   if (mainWindow) {
     if (mainWindow.isMaximized()) {
-      mainWindow.setContentSize(1000, 670); //重新设置窗口客户端的宽高值（例如网页界面），这里win.setSize(x,y)并不生效。
-      mainWindow.center(); // 窗口居中
+      mainWindow.setFullScreen(false)
     }
     mainWindow.focus()
   }
@@ -354,4 +401,6 @@ function checkForUpdates() {
   logger.info('checkForUpdates() -- end')
 }
 
-
+function pushSharedDataToMainWindow(obj) {
+    mainWindow.webContents.send('receive-data',obj)
+}

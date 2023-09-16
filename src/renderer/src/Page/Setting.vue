@@ -68,7 +68,7 @@ import {ElNotification} from "element-plus";
 import * as SettingJS from "../utils/Setting";
 import {onMounted, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
-import {init} from "../utils/API";
+import {init} from "../api/API";
 
 let lastChoice = ref([]);
 const globalStore = GlobalStore()

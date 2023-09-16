@@ -21,9 +21,10 @@
               <input placeholder="学号" type="text" v-model="id">
               <input placeholder="密码" type="password" v-model="password">
               <div class="Checkbox">
-                <input id="remember" type="checkbox" checked="checked" class="checkbox checkbox-primary" />
-                <label for="remember" class="cursor-pointer">自动登录
-              </label>
+                <label class="label cursor-pointer">
+                  <span class="label-text">自动登录</span>
+                  <input type="checkbox" checked="checked" class="checkbox" v-model="AutoLogin" />
+                </label>
               </div>
               <button class="btn btn-accent sumbit" @click="login">登录</button>
             </div>
@@ -54,11 +55,12 @@
 import {onBeforeMount, onMounted, ref} from "vue";
 import $ from 'jquery';
 import {ElNotification} from "element-plus";
-import * as API from "../utils/API";
+import * as API from "../api/API";
 import {GlobalStore} from "../stores/Global";
-import {init} from "../utils/API";
+import {init} from "../api/API";
 
 const globalStore = GlobalStore()
+let AutoLogin = ref(false)
 
 onBeforeMount(()=>{
   window.electronAPI.handleSetting((_event, value) => {
@@ -90,33 +92,34 @@ let confirmPsw = ref('')
 
 const login = async () => {
   console.log("登录操作")
-  if(password.value!==confirmPsw.value){
-    ElNotification({
-      title: "密码需要和确认密码一致！",
-      type:"error"
-    });
-    return;
-  }
+  globalStore.Setting.autoLogin = AutoLogin.value
   const user = {
     id:id.value,
     name:name.value,
     password:password.value,
   }
-  let loginUser;
-  await API.login(user)
-    .then(res=>{
-      let r = res.data
-      loginUser = r.data
-    })
-    .catch(e=>{
-      console.error(e)
-      ElNotification({
-        title: "登录失败！",
-        message:e,
-        type:"error",
-      });
-    })
-  console.log(loginUser)
+  let Response = await API.login(user)
+  if(!Response.success){
+    ElNotification({
+      title: "登录失败！",
+      message:Response.msg,
+      type:"error",
+    });
+  }
+  let result = Response.data
+  window.electronAPI.pushDataToMain({
+    type:"UserInfo",
+    data:result
+  })
+  globalStore.setUserInfo(result)
+  globalStore.Setting.userInfo = {
+    uid:result.id,
+    name:result.name,
+    WeekTime:result.currentWeekTime,
+    isAdmin:result.admin,
+    Token:result.token,
+  }
+  window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   window.electronAPI.login()
 }
 
@@ -126,24 +129,29 @@ const register = async () => {
     name:name.value,
     password:password.value,
   }
-  let registerUser;
-  await API.register(user)
-    .then(res=>{
-      let r = res.data
-      registerUser = r.data
-      $('.pinkbox').css('transform', 'translateX(0%)');
-      $('.signup').addClass('nodisplay');
-      $('.signin').removeClass('nodisplay');
-    })
-    .catch(e=>{
-      console.error(e)
-      ElNotification({
-        title: "注册失败！",
-        message:e,
-        type:"error",
-      });
-    })
-  console.log(registerUser)
+  if(password.value!==confirmPsw.value){
+    ElNotification({
+      title: "密码需要和确认密码一致！",
+      type:"error"
+    });
+    return;
+  }
+  let Response = await API.register(user)
+  if(!Response.success){
+    console.error(Response.msg)
+    ElNotification({
+      title: "注册失败！",
+      message:Response.msg,
+      type:"error",
+    });
+    return;
+  }
+  //TODO register success
+  console.log(Response.data)
+  $('.pinkbox').css('transform', 'translateX(0%)');
+  $('.signup').addClass('nodisplay');
+  $('.signin').removeClass('nodisplay');
+
 }
 </script>
 
@@ -166,7 +174,7 @@ const register = async () => {
   position: relative;
 
 }
-label {
+.label-mod {
   font-family: "Open Sans", sans-serif;
   @apply text-primary-content;
   font-size: 0.8em;
@@ -254,7 +262,7 @@ p {
   text-align: center;
 }
 
-span {
+.span {
   @apply text-primary;
 }
 
@@ -333,7 +341,6 @@ button:hover {
 
 input {
   @apply bg-primary;
-  width: 65%;
   @apply text-primary-content font-bold;
   border: none;
   border-bottom: 1px solid rgba(246, 246, 246, 0.5);
@@ -364,13 +371,7 @@ input:focus::placeholder {
   display: inline;
   white-space: nowrap;
   position: relative;
-  left: -52px;
   top: 25px;
-}
-
-input[type=checkbox] {
-  width: 15px;
-  @apply bg-primary;
 }
 
 .big-box {

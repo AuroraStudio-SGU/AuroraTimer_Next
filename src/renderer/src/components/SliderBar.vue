@@ -15,7 +15,7 @@
               <use xlink:href="../assets/svg/SliderBarIcons.svg#home"></use>
             </svg>
           </a>
-          
+
         </li>
         <li>
           <a @click="jumpTo('Rank')">
@@ -46,7 +46,7 @@
           </a>
         </li> -->
         <li>
-          <a @click="jumpTo('NewUI')">
+          <a @click="jumpTo('LeaderBoard')">
             <svg class="slider-svg">
               <use xlink:href="../assets/svg/SliderBarIcons.svg#info"></use>
             </svg>
@@ -67,7 +67,7 @@
           </a>
         </li>
       </ul>
-      
+
     </div>
   </div>
 </template>

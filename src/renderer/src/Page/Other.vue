@@ -134,7 +134,7 @@
 </template>
 
 
-<script setup>
+<script lang="ts" setup>
 import { Check, Close } from "@element-plus/icons-vue";
 import "../assets/css/common.css";
 import { ElNotification } from "element-plus";
@@ -147,7 +147,7 @@ import { ref } from "vue";
 import Plotly from "plotly.js-dist";
 import { router } from "../utils/router";
 import {getUrl} from "../utils/urlUtils";
-import * as API from "../utils/API"
+import * as API from "../api/API"
 
 const plotlyContainer = ref(null);
 let testPage = ref("");
@@ -292,21 +292,20 @@ const sendMsgIn = () => {
 };
 
 const sendReq = () => {
-  API.getCal("1+1")
-    .then((res)=>{
+  let apiRes:APIResponse = API.getPing()
+  if(!apiRes.success){
+    ElNotification({
+      title: "请求失败！",
+      message:apiRes.msg,
+      type:"error"
+    });
+  }else {
     ElNotification({
       title: "请求成功！",
-      message: "返回值:"+JSON.stringify(res.data),
+      message: "返回值:"+JSON.stringify(apiRes.data),
       type:'success'
     });
-  })
-    .catch((message)=>{
-      ElNotification({
-        title: "请求失败！",
-        message,
-        type:"error"
-      });
-    })
+  }
 }
 
 const sendMsg = () => {

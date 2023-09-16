@@ -3,7 +3,8 @@ export interface SettingFile{
     uid: string,
     name: string,
     WeekTime: number,
-    isAdmin: boolean
+    isAdmin: boolean,
+    Token:string,
   },
   progressBar:{
     color:{
@@ -23,14 +24,17 @@ export interface SettingFile{
   },
   netWork:{
     host:string,
-  }
+  },
+  version:string,
+  autoLogin:boolean,
 }
 export const DefaultSetting:SettingFile={
   userInfo:{
     uid: '21125023044',
     name: 'DAY',
     WeekTime: 960000,
-    isAdmin: true
+    isAdmin: true,
+    Token: 'why u thing there will have default token?'
   },
   progressBar:{
     color:{
@@ -49,6 +53,8 @@ export const DefaultSetting:SettingFile={
     }
   },
   netWork:{
-    host:"http://43.138.237.251:8001",
-  }
+    host:"http://localhost:8084",
+  },
+  version:"0.0.1",
+  autoLogin:false,
 }

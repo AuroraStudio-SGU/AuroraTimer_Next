@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import {ref} from "vue";
 import {DefaultSetting, SettingFile} from "../utils/Setting";
+import {getRank} from "../api/API";
+import {error} from "electron-log";
 const themes = [
   "Earth",
   "light",
@@ -38,7 +40,7 @@ export const GlobalStore = defineStore('main', {
   state:()=>{
     return{
       loginPanel:ref(false),
-      UserList:ref([]),
+      UserRankList:ref([]),//排行榜缓存
       UserInfo:ref({}),
       ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
       currentTheme:ref('valentine'),
@@ -50,7 +52,9 @@ export const GlobalStore = defineStore('main', {
     }
   },
   getters:{
-
+    getUserInfo(state):UserInfo{
+      return state.UserInfo
+    }
   },
   actions:{
     changeLoginPanel(){
@@ -61,6 +65,24 @@ export const GlobalStore = defineStore('main', {
     },
     changeTheme(theme:string){
       this.currentTheme = theme
+    },
+    setUserInfo(user){
+      this.UserInfo = user
+    },
+    async getUserRankList(isRefresh:boolean,index?:number){
+      if(this.UserRankList.length==0 || isRefresh){
+        //获取新Rank
+        if(index==undefined) index = 0;
+        let Response = await getRank(index);
+        if(Response.success){
+          this.UserRankList.value = Response.data
+          return Response.data;
+        }else {
+          return null
+        }
+      }else {
+        return this.UserRankList
+      }
     }
   }
 })
