@@ -32,4 +32,3 @@ interface UserInfo {
   major:string,
   token:string,
 }
-

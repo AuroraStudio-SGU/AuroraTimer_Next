@@ -4,14 +4,17 @@ let instance: AxiosInstance;
 
 const HTTP_OK = 200;
 
-export function init(baseUrl: string) {
+export function init(baseUrl: string,token?:string) {
   instance = axios.create({
     baseURL: baseUrl,
     timeout: 10000,
+    headers:{
+      "token": token,
+    },
   });
 }
 
-function processResponse(RawResp:AxiosResponse):APIResponse {
+async function processResponse(RawResp:AxiosResponse):APIResponse {
   let apiResp: APIResponse = {
     success: true,
     msg: null,
@@ -29,12 +32,13 @@ function processResponse(RawResp:AxiosResponse):APIResponse {
     apiResp.msg = "System return not 200 code,current code :" + Res.code
     return apiResp;
   }
+
   apiResp.msg = "操作成功"
   apiResp.data = Res.data
   return apiResp;
 }
 
-async function doGet(url: string,token?:string): APIResponse {
+async function doGet(url: string,token?:string):APIResponse {
   let apiResp: APIResponse = {
     success: true,
     msg: null,
@@ -42,7 +46,7 @@ async function doGet(url: string,token?:string): APIResponse {
   }
   try{
     let RawResp: AxiosResponse = await instance.get(url,{headers:{"token":token}})
-    return processResponse(RawResp);
+    return await processResponse(RawResp);
   }catch (e) {
     apiResp.success = false;
     apiResp.msg = e;
@@ -67,7 +71,7 @@ async function doPost(url:string,Obj:object,token?:string):APIResponse {
 }
 
 
-export function getPing() {
+export async function getPing() {
   return doGet('/ping')
 }
 
@@ -90,14 +94,29 @@ export async function loginByToken(token:string){
   return doGet('/user/loginByToken/'+token)
 }
 
-export async function setDuty(wed:string,sun:string,token:string) {
+export async function setDuty(wed:string,sun:string) {
   let obj = {
     wed,
     sun,
   }
   return doPost('/admin/setDuty',obj);
 }
+export async function getDuty() {
+  return doGet('/getDustList')
+}
 
-export async function setReduceTime(uid:string,time:number,token:string){
-  return doGet('/admin/setReduceTime/'+uid+'/'+time)
+export async function setReduceTime(uid:string,time:number){
+  return doGet('/admin/setUserReduceTime/'+uid+'/'+time)
+}
+
+export async function setTargetTime(hours:number){
+  return doGet('/admin/setTargetTime/'+hours)
+}
+
+export async function getTargetTime(){
+  return doGet('/getTargetTime')
+}
+
+export async function getNotice(){
+  return doGet('/admin/getNotice')
 }

@@ -57,6 +57,7 @@ const handleChange = (index) => {
     changeLock = false
     ThemeBox.value.children[index].classList.add("outline")
     globalStore.changeTheme(globalStore.ThemeList[index])
+    window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
     if (index !== lastChoice && lastChoice !== -1)
       ThemeBox.value.children[lastChoice].classList.remove("outline")
     lastChoice = index
@@ -64,7 +65,7 @@ const handleChange = (index) => {
   }
 }
 onMounted(() => {
-  handleChange(globalStore.ThemeList.indexOf(globalStore.currentTheme))
+  handleChange(globalStore.ThemeList.indexOf(globalStore.getCurrentTheme))
 })
 </script>
 

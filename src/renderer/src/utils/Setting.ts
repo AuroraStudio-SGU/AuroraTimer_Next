@@ -26,7 +26,9 @@ export interface SettingFile{
     host:string,
   },
   version:string,
+  skin:string,
   autoLogin:boolean,
+  OpenAtStart:boolean,
 }
 export const DefaultSetting:SettingFile={
   userInfo:{
@@ -56,5 +58,7 @@ export const DefaultSetting:SettingFile={
     host:"http://localhost:8084",
   },
   version:"0.0.1",
+  skin:"valentine",
   autoLogin:false,
+  OpenAtStart:false,
 }

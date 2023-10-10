@@ -1,7 +1,7 @@
 // 2. 定义一些路由
 // 每个路由都需要映射到一个组件。
 // 我们后面再讨论嵌套路由。
-import Main from "../Page/Main.vue";
+import Notice from "../Page/Notice.vue";
 import About from "../Page/Setting.vue";
 import {createRouter, createWebHashHistory} from "vue-router";
 import TimerProgress from "../Page/TimerProgress.vue";
@@ -9,8 +9,6 @@ import Rank from "../Page/Rank.vue";
 import Other from "../Page/Other.vue";
 import Login from "../Page/Login.vue";
 import Welcome from "../Page/Welcome.vue";
-import IconTest from "../Page/IconTest.vue";
-import Calculator from "../Page/Calculator.vue";
 import LeaderBoard from "../Page/LeaderBoard.vue";
 import ThemeChange from "../Page/ThemeChange.vue";
 import Admin from "../Page/Admin.vue";
@@ -19,13 +17,11 @@ import Information from "../Page/Information.vue";
 const routes = [
   {path: '/', name: 'Timer', component: TimerProgress},
   {path: '/setting', name: 'Setting', component: About, props: true},
-  {path: '/main', name: 'Main', component: Main},
+  {path: '/Notice', name: 'Notice', component: Notice},
   {path: '/rank', name: 'Rank', component: Rank},
   {path: '/other', name: 'Other', component: Other},
   {path: '/Login', name: 'Login', component: Login},
   {path: '/welcome', name: 'Welcome', component: Welcome},
-  {path: '/icontest', name: 'IconTest', component: IconTest},
-  {path: '/calculator', name: 'Calculator', component: Calculator},
   {path: '/leaderboard', name: 'LeaderBoard', component: LeaderBoard},
   {path: '/themes', name: 'Themes', component: ThemeChange},
   {path: '/admin', name: 'Admin', component: Admin},

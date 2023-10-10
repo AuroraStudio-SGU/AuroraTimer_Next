@@ -41,20 +41,23 @@
       </div>
       <div class="text-center mt-2">
         <h3 class="text-2xl text-slate-700 font-bold leading-normal mb-1">
-          黄梓聪
+          {{ globalStore.getUserInfo.name }}
         </h3>
         <div class="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
           <i class="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i
           >物联网工程
         </div>
       </div>
-      
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { getUrl } from '../utils/urlUtils';
+import {GlobalStore} from "../stores/Global";
+
+const globalStore = GlobalStore()
 
 </script>
 

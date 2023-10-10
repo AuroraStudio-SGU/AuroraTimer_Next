@@ -61,7 +61,7 @@ const handleCreated = (editor) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
 };
 const handleChange = (editor) => {
-  console.log('change:', editor.getHtml());
+  // console.log('change:', editor.getHtml());
 };
 const handleDestroyed = (editor) => {
   // console.log('destroyed', editor);

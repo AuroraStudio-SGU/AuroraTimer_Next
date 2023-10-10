@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div v-if="loginPanel" :data-theme="globalStore.currentTheme" class="main">
+    <div v-if="loginPanel" :data-theme="globalStore.getCurrentTheme" class="main">
       <div class="top-bar">
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
@@ -17,7 +17,7 @@
         <div class="sliderBar">
           <SliderBar></SliderBar>
         </div>
-        <div class="top-bottom">
+        <div class="top-bottom" >
           <div class="navBar">
             <NavBar></NavBar>
           </div>

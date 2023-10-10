@@ -38,7 +38,7 @@ const afkLimit = 10;
 
 try{
   //Timer 返回函数。
-  timeStore.timer.onmessage = (event) => {
+  timeStore.timer.onmessage = async (event) => {
     timeStore.TimePlusPlus();
     let time = timeStore.time
     //挂机检测
@@ -65,7 +65,7 @@ try{
     }
     //尝试加时
     if(time % 300 === 0 && time!==0){
-      API.addTime(globalStore.UserInfo.id,300)
+      await API.addTime(globalStore.UserInfo.id,300)
     }
     let nowTimeStr = SecondToTimeStr(time)
     hour.value = nowTimeStr.hour;

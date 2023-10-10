@@ -1,8 +1,15 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import {ref} from "vue";
 import {DefaultSetting, SettingFile} from "../utils/Setting";
-import {getRank} from "../api/API";
-import {error} from "electron-log";
+import {getDuty, getRank, getTargetTime} from "../api/API";
+import {isSameWeek} from "../utils/DateUtils";
+
+interface DutyList {
+  wed: string,
+  sun: string,
+  createTime: Date
+}
+
 const themes = [
   "Earth",
   "light",
@@ -37,52 +44,85 @@ const themes = [
 ]; //主题列表
 
 export const GlobalStore = defineStore('main', {
-  state:()=>{
-    return{
-      loginPanel:ref(false),
-      UserRankList:ref([]),//排行榜缓存
-      UserInfo:ref({}),
-      ProjectLink:'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
-      currentTheme:ref('valentine'),
-      Setting:ref(DefaultSetting),
-      ThemeList:themes,
-      lastMousePoint:false,
-      AFKDetected:false,
-      isAFK:ref(false),
+  state: () => {
+    return {
+      loginPanel: ref(false),
+      UserRankList: ref([]),//排行榜缓存
+      UserInfo: ref<UserInfo>({}),
+      ProjectLink: 'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
+      Setting: ref(DefaultSetting),
+      ThemeList: themes,
+      lastMousePoint: false,
+      AFKDetected: false,
+      isAFK: ref(false),
+      DutyList: ref<DutyList>({}),
+      TargetTime: ref(-1)
     }
   },
-  getters:{
-    getUserInfo(state):UserInfo{
+  getters: {
+    getUserInfo(state): UserInfo {
       return state.UserInfo
+    },
+    getUserToken(state): string {
+      return state.UserInfo.token
+    },
+    getCurrentTheme(state):string{
+      return state.Setting.skin
     }
   },
-  actions:{
-    changeLoginPanel(){
+  actions: {
+    changeLoginPanel() {
       this.loginPanel = true
     },
-    loadAllSetting(setting:SettingFile){
+    loadAllSetting(setting: SettingFile) {
       this.Setting = setting
     },
-    changeTheme(theme:string){
-      this.currentTheme = theme
+    changeTheme(theme: string) {
+      this.Setting.skin = theme
     },
-    setUserInfo(user){
+    setUserInfo(user) {
       this.UserInfo = user
     },
-    async getUserRankList(isRefresh:boolean,index?:number){
-      if(this.UserRankList.length==0 || isRefresh){
+    async getUserRankList(isRefresh: boolean, index?: number) {
+      if (this.UserRankList.length == 0 || isRefresh) {
         //获取新Rank
-        if(index==undefined) index = 0;
+        if (index == undefined) index = 0;
         let Response = await getRank(index);
-        if(Response.success){
+        if (Response.success) {
           this.UserRankList.value = Response.data
           return Response.data;
-        }else {
+        } else {
           return null
         }
-      }else {
+      } else {
         return this.UserRankList
       }
+    },
+    async getDutyList(): Promise<DutyList> {
+      if (this.DutyList.wed == undefined || isSameWeek(this.DutyList.createTime, new Date())) {
+        let result = await getDuty()
+        if (result.success) {
+          this.DutyList.wed = result.data.wednesday
+          this.DutyList.sun = result.data.sunday
+          this.DutyList.createTime = new Date(result.data.createTime)
+          return this.DutyList;
+        }
+      } else {
+        return this.DutyList
+      }
+    },
+    async getTargetTime() {
+      if (this.TargetTime === -1) {
+        let res = await getTargetTime()
+
+        if (res.success) {
+          if(res.data !=null){
+            this.TargetTime = res.data;
+          }
+        }
+      }
+      return this.TargetTime;
     }
   }
 })
+

@@ -16,6 +16,9 @@
           </div>
         </div>
       </div>
+<!--      <div class="container">-->
+<!--        <div class="item" v-for="item in items" :key="item.id">{{item.name}}111</div>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -28,16 +31,30 @@ import {AdminStore} from "../stores/Admin";
 
 const adminStore = AdminStore()
 const noticeContext = ref(null)
-
-onMounted(()=>{
+function isNotEmptyStr(s) {
+  return typeof s == 'string' && s.length > 0;
+}
+onMounted(async ()=>{
   if(adminStore.noticeHTML!=null){
-      noticeContext.value.innerHTML = adminStore.noticeHTML
+      let notice = await adminStore.getNotice()
+      if(notice==null || isNotEmptyStr(notice)){
+        noticeContext.value.innerHTML = `<p> 负责人还没写公告呢~ </p>`
+      }else {
+        noticeContext.value.innerHTML = notice
+      }
   }
 })
 
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+}
 
+.item {
+  margin: 0 10px;
+}
 
 </style>

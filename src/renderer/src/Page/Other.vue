@@ -291,8 +291,8 @@ const sendMsgIn = () => {
   });
 };
 
-const sendReq = () => {
-  let apiRes:APIResponse = API.getPing()
+const sendReq = async () => {
+  let apiRes:APIResponse = await API.getPing()
   if(!apiRes.success){
     ElNotification({
       title: "请求失败！",

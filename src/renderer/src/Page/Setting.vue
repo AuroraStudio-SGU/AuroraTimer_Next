@@ -45,13 +45,12 @@
         />
       </div>
       <div class="dark-mode p-4">
-        <p class="text">切换黑夜/白天模式(无功能)</p>
-        <div class="switch">
-          <label class="switch">
-            <input type="checkbox"/>
-            <span class="slider"></span>
-          </label>
-        </div>
+        <p class="text">开机自启:</p>
+        <label class="swap">
+          <input type="checkbox" v-model="globalStore.Setting.OpenAtStart"/>
+          <span class="swap-on">✔️</span>
+          <span class="swap-off">❌</span>
+        </label>
       </div>
       <div class="operation p-4">
         <el-button plain type="success" @click="ColorSelector">想自己取个色？</el-button>
@@ -66,7 +65,7 @@
 import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import * as SettingJS from "../utils/Setting";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {init} from "../api/API";
 
@@ -126,7 +125,6 @@ const ResetSetting = () => {
     })
   }
 }
-
 const addChoiceList = (value) => {
   if (!value) return
   if (lastChoice.value.length >= 20) {
@@ -146,9 +144,11 @@ const addChoiceList = (value) => {
 .colorSet {
   @apply grid gap-1 grid-cols-2 grid-rows-3;
 }
+
 .operation {
   @apply grid gap-1 grid-cols-4;
 }
+
 .text {
   margin-right: 10px;
 }

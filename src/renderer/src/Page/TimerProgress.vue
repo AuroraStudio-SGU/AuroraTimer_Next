@@ -108,28 +108,28 @@
           <div class="flex flex-col items-center">
             <div class="time">已计时</div>
             <div class="clock">
-              <countdown  ref="CountDown"></countdown>
+              <countdown ref="CountDown"></countdown>
             </div>
           </div>
         </div>
       </div>
-      <div class="stats shadow-md flex " style="margin-top: 10px;">
+      <div class="stats shadow-md flex " style="margin-top: 15px;">
         <div class="stat place-items-center">
           <div class="stat-title">本周计时</div>
-          <div class="stat-value">18H</div>
+          <div class="stat-value">{{TargetTime}}H</div>
           <div class="stat-desc">周一到周日</div>
         </div>
 
         <div class="stat place-items-center">
           <div class="stat-title">成员名</div>
-          <div class="stat-value text-secondary">黄梓聪</div>
-          <div class="stat-desc text-secondary">21125041018</div>
+          <div class="stat-value text-secondary">{{ globalStore.getUserInfo.name }}</div>
+          <div class="stat-desc text-secondary">{{ globalStore.getUserInfo.id }}</div>
         </div>
 
         <div class="stat place-items-center">
           <div class="stat-title">本周值日</div>
-          <div class="stat-value">陈典灿 欧润丰</div>
-          <div class="stat-desc"></div>
+          <div class="stat-desc">周三 周日</div>
+          <div class="stat-value">{{ DutyList.wed }} {{ DutyList.sun }}</div>
         </div>
       </div>
       <button class="btn btn-success" style="position: absolute;right: 200px;" @click="startTimer">计时(测试用)</button>
@@ -139,20 +139,19 @@
 
 <script lang="ts" setup>
 import "../assets/css/common.css";
-import { onMounted, ref } from "vue";
-import { TimerStore } from "../stores/Timer";
+import {onBeforeMount, onMounted, ref, toRaw} from "vue";
+import {TimerStore} from "../stores/Timer";
 import Countdown from "../components/Countdown.vue";
-import { GlobalStore } from "../stores/Global";
-import { Check, Close } from "@element-plus/icons-vue";
+import {GlobalStore} from "../stores/Global";
 
 const globalStore = GlobalStore();
 const timerStore = TimerStore();
 const CountDown = ref(null);
 
 const startTimer = () => {
-  if(timerStore.isStarted){
+  if (timerStore.isStarted) {
     CountDown.value.StopTimer();
-  }else {
+  } else {
     CountDown.value.StartTimer();
   }
 };
@@ -162,7 +161,30 @@ const stopTimer = () => {
 const clearTimer = () => {
   CountDown.value.clearTime();
 };
-onMounted(() => {});
+
+const DutyList = ref(
+  {
+    wed: '暂未公布',
+    sun: '暂未公布',
+    createTime: new Date(),
+  }
+)
+const TargetTime = ref(18)
+
+onBeforeMount(async () => {
+  try {
+    let dutyList = toRaw(await globalStore.getDutyList())
+    DutyList.value.wed = dutyList.wed
+    DutyList.value.sun = dutyList.sun
+    DutyList.value.createTime = dutyList.createTime
+    let res = await globalStore.getTargetTime()
+    TargetTime.value = toRaw(res).targetTime
+  } catch (e) {}
+})
+
+onMounted(async () => {
+
+});
 </script>
 
 
@@ -171,6 +193,7 @@ onMounted(() => {});
   @apply flex space-x-4 items-center justify-between;
   margin-top: 10px;
 }
+
 .progress1 {
   margin-left: 30px;
   position: relative;
@@ -374,6 +397,7 @@ body {
     transform: rotateX(0);
   }
 }
+
 .space-change {
   display: flex;
   flex-direction: column;

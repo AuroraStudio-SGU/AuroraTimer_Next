@@ -10,7 +10,7 @@
           </a>
         </li>
         <li>
-          <a @click="jumpTo('Main')">
+          <a @click="jumpTo('Notice')">
             <svg class="slider-svg">
               <use xlink:href="../assets/svg/SliderBarIcons.svg#home"></use>
             </svg>

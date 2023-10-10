@@ -37,9 +37,11 @@ import {nextTick, onBeforeMount, onMounted, ref} from "vue";
 import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import {GlobalStore} from "../stores/Global";
+import {TimerStore} from "../stores/Timer";
 
 
 const globalStore = GlobalStore()
+const timerStore = TimerStore()
 
 const boxComponent = ref(null)
 const isLoaded = ref(false)
@@ -68,6 +70,7 @@ onBeforeMount(async () => {
     return;
   }
   UserList.value = res
+  timerStore.setUserTimeList(UserList.value)
   //在加载前获取所有成员的年级列表
   UserList.value.forEach(user => {
     let g = user.id.substring(0, 2)

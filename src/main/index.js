@@ -133,16 +133,21 @@ function mainLogger(event,value){
   logger.info(value)
 }
 
+
+const enableDevTool = true;
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  app.setAppUserModelId('新·极光工作室打卡器')
+  app.setAppUserModelId('New·AuroraTimer')
 
   //设置开发扩展
-  const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_1`
-  session.defaultSession.loadExtension(devToolPath)
+  if(enableDevTool){
+    const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0`
+    session.defaultSession.loadExtension(devToolPath)
+  }
+
 
 
 
@@ -226,7 +231,7 @@ app.whenReady().then(() => {
       color && clipboard.writeText(color)
     }
   }
-  //截图功能设置
+
 
   // 双向通信监听
   ipcMain.handle('save-color-to-clipboard', saveColorToClipboard)
@@ -244,7 +249,15 @@ app.whenReady().then(() => {
   ipcMain.on('send-data-toMain', (_event,value)=> pushSharedDataToMainWindow(value))
 
   //加载API实例
-  init(setting.netWork.host)
+  init(setting.netWork.host,setting.userInfo.Token)
+
+  //设置自启选项
+  if(app.isPackaged){
+    app.setLoginItemSettings({
+      openAtLogin:setting.OpenAtStart,
+      openAsHidden:true
+    })
+  }
 
   //生产环境跳转
   if (app.isPackaged) {
