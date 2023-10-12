@@ -5,11 +5,9 @@ import {getNotice, getTargetTime} from "../api/API";
 
 export const AdminStore = defineStore('admin', {
   // other options...
-  state: () => {
-    return {
-      noticeHTML:ref(''),
-    }
-  },
+  state: () => ({
+    noticeHTML:null as string,
+  }),
   getters: {},
   actions: {
     async getNotice():Promise<string>{

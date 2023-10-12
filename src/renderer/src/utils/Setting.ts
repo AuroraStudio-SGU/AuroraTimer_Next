@@ -1,10 +1,11 @@
 export interface SettingFile{
   userInfo:{
-    uid: string,
+    id: string,
     name: string,
     WeekTime: number,
     isAdmin: boolean,
     Token:string,
+    major:string,
   },
   progressBar:{
     color:{
@@ -32,11 +33,12 @@ export interface SettingFile{
 }
 export const DefaultSetting:SettingFile={
   userInfo:{
-    uid: '21125023044',
+    id: '21125023044',
     name: 'DAY',
-    WeekTime: 960000,
+    WeekTime: 0,
     isAdmin: true,
-    Token: 'why u thing there will have default token?'
+    Token: 'why u thing there will have default token?',
+    major: 'major',
   },
   progressBar:{
     color:{

@@ -182,9 +182,6 @@ onBeforeMount(async () => {
   } catch (e) {}
 })
 
-onMounted(async () => {
-
-});
 </script>
 
 

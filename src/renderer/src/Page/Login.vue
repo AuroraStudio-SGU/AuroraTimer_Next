@@ -1,5 +1,5 @@
 <template>
-  <div class="big-box bg-base-300 font-semibold" data-theme="cupcake" >
+  <div class="big-box bg-base-300 font-semibold" data-theme="cupcake">
     <div class="container">
       <div class="welcome">
         <div class="pinkbox">
@@ -7,10 +7,10 @@
           <div class="signup nodisplay">
             <h1 class="font-bold">注册</h1>
             <div class="Form">
-              <input type="text" placeholder="学号" v-model="id" />
-              <input type="text" placeholder="姓名" v-model="name" />
-              <input type="text" placeholder="密码" v-model="password" />
-              <input type="text" placeholder="确认密码" v-model="confirmPsw" />
+              <input type="text" placeholder="学号" v-model="id"/>
+              <input type="text" placeholder="姓名" v-model="name"/>
+              <input type="text" placeholder="密码" v-model="password"/>
+              <input type="text" placeholder="确认密码" v-model="confirmPsw"/>
               <button class="btn btn-accent sumbit" @click="register">注册</button>
             </div>
           </div>
@@ -23,7 +23,7 @@
               <div class="Checkbox">
                 <label class="label cursor-pointer">
                   <span class="label-text">自动登录</span>
-                  <input type="checkbox" checked="checked" class="checkbox" v-model="AutoLogin" />
+                  <input type="checkbox" checked="checked" class="checkbox" v-model="AutoLogin"/>
                 </label>
               </div>
               <button class="btn btn-accent sumbit" @click="login">登录</button>
@@ -56,13 +56,13 @@ import {onBeforeMount, onMounted, ref} from "vue";
 import $ from 'jquery';
 import {ElNotification} from "element-plus";
 import * as API from "../api/API";
-import {GlobalStore} from "../stores/Global";
 import {init} from "../api/API";
+import {GlobalStore} from "../stores/Global";
 
 const globalStore = GlobalStore()
 let AutoLogin = ref(false)
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   window.electronAPI.handleSetting((_event, value) => {
     if (value) {
       console.log("从主进程加载配置文件");
@@ -94,55 +94,57 @@ const login = async () => {
   console.log("登录操作")
   globalStore.Setting.autoLogin = AutoLogin.value
   const user = {
-    id:id.value,
-    name:name.value,
-    password:password.value,
+    id: id.value,
+    name: name.value,
+    password: password.value,
   }
   let Response = await API.login(user)
-  if(!Response.success){
+  if (!Response.success) {
     ElNotification({
       title: "登录失败！",
-      message:Response.msg,
-      type:"error",
+      message: Response.msg,
+      type: "error",
     });
   }
   let result = Response.data
-  window.electronAPI.pushDataToMain({
-    type:"UserInfo",
-    data:result
-  })
-  globalStore.setUserInfo(result)
-  globalStore.Setting.userInfo = {
-    uid:result.id,
-    name:result.name,
-    WeekTime:result.currentWeekTime,
-    isAdmin:result.admin,
-    Token:result.token,
+  //TODO more userInformation
+  let userInfo = {
+    id: result.id,
+    name: result.name,
+    WeekTime: result.currentWeekTime,
+    isAdmin: result.admin,
+    Token: result.token,
+    major: 'major',
   }
+  window.electronAPI.pushDataToMain({
+    type: "UserInfo",
+    data: userInfo
+  })
+  globalStore.Setting.userInfo = userInfo
   window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   window.electronAPI.login()
 }
 
 const register = async () => {
   const user = {
-    id:id.value,
-    name:name.value,
-    password:password.value,
+    id: id.value,
+    name: name.value,
+    password: password.value,
   }
-  if(password.value!==confirmPsw.value){
+  if (password.value !== confirmPsw.value) {
     ElNotification({
       title: "密码需要和确认密码一致！",
-      type:"error"
+      type: "error"
     });
     return;
   }
   let Response = await API.register(user)
-  if(!Response.success){
+  if (!Response.success) {
     console.error(Response.msg)
     ElNotification({
       title: "注册失败！",
-      message:Response.msg,
-      type:"error",
+      message: Response.msg,
+      type: "error",
     });
     return;
   }
@@ -159,8 +161,9 @@ const register = async () => {
 * {
   margin: 0;
   padding: 0;
-  font-family: "WenKai-B", "Sanchez",serif;
+  font-family: "WenKai-B", "Sanchez", serif;
 }
+
 @font-face {
   font-family: "WenKai-B"; /*字体名称*/
   src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
@@ -174,6 +177,7 @@ const register = async () => {
   position: relative;
 
 }
+
 .label-mod {
   font-family: "Open Sans", sans-serif;
   @apply text-primary-content;

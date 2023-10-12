@@ -1,20 +1,20 @@
 import {defineStore} from 'pinia'
-import {ref} from "vue";
 import {SecondToString} from "../utils/TimeUtil";
 import {GlobalStore} from "./Global";
+import {UserTime} from "../api/interfaces/Schema";
 
 
 // 第一个参数是应用程序中 store 的唯一 id
 export const TimerStore = defineStore('timer', {
     // other options...
     state: () => ({
-        percent: ref(0),
-        size: ref(0),
-        time: ref(0),
-        isStarted: ref(false),
+        percent: 0,
+        size: 0,
+        time: 0,
+        isStarted: false,
         timer: {} as Worker,
-        AfkLimit: ref(1800),//挂机时间检测阈值,单位为秒,且实际阈值为这里的两倍!
-        UserRankList: ref<UserTime[]>(),
+        AfkLimit: 1800,//挂机时间检测阈值,单位为秒,且实际阈值为这里的两倍!
+        UserRankList: [] as UserTime[],
     }),
     getters: {
         getPercent(state) {
@@ -30,11 +30,21 @@ export const TimerStore = defineStore('timer', {
                 middle: percentage - 100 < 0 ? 0 : percentage - 100 > 100 ? 100 : percentage - 100,
                 little: percentage - 200 < 0 ? 0 : percentage - 200 > 100 ? 100 : percentage - 200,
             }
-        }
+        },
+        getTime(state) {
+            const globalStore = GlobalStore()
+            return globalStore.Setting.userInfo.WeekTime
+        },
     },
     actions: {
         TimePlusPlus() {
+            const globalStore = GlobalStore()
             this.time += 1;
+            globalStore.Setting.userInfo.WeekTime += 1;
+        },
+        setTimeFromServer(time: number) {
+            const globalStore = GlobalStore()
+            globalStore.Setting.userInfo.WeekTime = time;
         },
         clearTime() {
             this.time = 0;

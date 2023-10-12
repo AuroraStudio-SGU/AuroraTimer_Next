@@ -1,4 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
+import {APIResponse, User} from "./interfaces/Schema";
 
 let instance: AxiosInstance;
 
@@ -14,7 +15,7 @@ export function init(baseUrl: string,token?:string) {
   });
 }
 
-async function processResponse(RawResp:AxiosResponse):APIResponse {
+async function processResponse(RawResp:AxiosResponse):Promise<APIResponse> {
   let apiResp: APIResponse = {
     success: true,
     msg: null,
@@ -38,7 +39,7 @@ async function processResponse(RawResp:AxiosResponse):APIResponse {
   return apiResp;
 }
 
-async function doGet(url: string,token?:string):APIResponse {
+async function doGet(url: string,token?:string):Promise<APIResponse> {
   let apiResp: APIResponse = {
     success: true,
     msg: null,
@@ -54,7 +55,7 @@ async function doGet(url: string,token?:string):APIResponse {
   }
 
 }
-async function doPost(url:string,Obj:object,token?:string):APIResponse {
+async function doPost(url:string,Obj:object,token?:string):Promise<APIResponse> {
   let apiResp: APIResponse = {
     success: true,
     msg: null,
@@ -75,8 +76,8 @@ export async function getPing() {
   return doGet('/ping')
 }
 
-export async function addTime(id: string,time:number) {
-  return doGet('/timer/addTime/' + id + '/'+time);
+export async function addTime(id: string) {
+  return doGet('/timer/addTime/' + id);
 }
 
 export async function getRank(lastXWeek: number) {

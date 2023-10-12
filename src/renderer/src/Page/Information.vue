@@ -1,15 +1,20 @@
 <template>
   <div
-    class="relative   break-words bg-base-100 w-full  shadow-lg rounded-xl " style="transform: scale(1);"
+    class="break-words bg-base-100 w-full  shadow-lg rounded-xl " style="transform: scale(1);"
   >
     <div class="px-6">
       <div class="flex flex-wrap justify-center">
         <div class="w-full flex justify-center">
-          <div class="relative">
-            <img
-              :src="getUrl('profile.jpg')"
-              class="shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]"
-            />
+          <div class="relative" @mouseenter="handleMoveIn" @mouseout="handleMoveOut">
+<!--              <div class="avatar-box">-->
+<!--                <img-->
+<!--                    :src="getUrl('profile.jpg')"-->
+<!--                    class="shadow-xl rounded-full align-middle border-none  max-w-[150px]"-->
+<!--                />-->
+<!--              </div>-->
+              <div class="colbox" v-show="moveIn">
+                1231331
+              </div>
           </div>
         </div>
         <div class="w-full text-center mt-20">
@@ -19,16 +24,8 @@
                 class="text-xl font-bold block uppercase tracking-wide text-slate-700"
                 >前端</span
               >
-              <span class="text-sm text-slate-400">职位</span>
-            </div>
-            <div class="p-3 text-center">
-              <span
-                class="text-xl font-bold block uppercase tracking-wide text-slate-700"
-                >web开发</span
-              >
               <span class="text-sm text-slate-400">方向</span>
             </div>
-
             <div class="p-3 text-center">
               <span
                 class="text-xl font-bold block uppercase tracking-wide text-slate-700"
@@ -56,10 +53,43 @@
 <script setup>
 import { getUrl } from '../utils/urlUtils';
 import {GlobalStore} from "../stores/Global";
+import {ref} from "vue";
 
 const globalStore = GlobalStore()
+
+let moveIn = ref(false)
+
+const handleMoveIn = () => {
+  console.log("move in")
+  moveIn.value=true;
+}
+const handleMoveOut = () => {
+  console.log("move out")
+  moveIn.value=false;
+}
 
 </script>
 
 <style scoped>
+.relative {
+  width: 150px;
+  height: 150px;
+  background: #4c3f6d;
+  position: relative;
+}
+.avatar-box{
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  left: 0;
+  top: 0;
+}
+.colbox {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 150px;
+  background: rgba(222,170,186,100%);
+}
 </style>

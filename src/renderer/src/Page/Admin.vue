@@ -7,10 +7,12 @@
           <span>本周公告设置:</span>
         </label>
         <!--公告设置触发元素-->
-        <button class="btn" onclick="notice.showModal()">设置公告内容📢</button>
-        <button class="btn" onclick="duty.showModal()">设置值日🧹</button>
-        <button class="btn" onclick="targetTime.showModal()">设置目标时长⏰</button>
-        <button class="btn" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+        <div class="button-items">
+          <button class="btn" onclick="notice.showModal()">设置公告内容📢</button>
+          <button class="btn" onclick="duty.showModal()">设置值日🧹</button>
+          <button class="btn" onclick="targetTime.showModal()">设置目标时长⏰</button>
+          <button class="btn" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+        </div>
         <!--公告设置页面-->
         <dialog id="notice" class="modal">
           <div class="modal-box-notice modal-box relative overflow-hidden">
@@ -248,6 +250,11 @@ const handleReduceTime = async () => {
 }
 .modal-select-size{
   height: 32rem;
+}
+.button-items{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 </style>

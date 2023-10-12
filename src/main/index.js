@@ -144,7 +144,7 @@ app.whenReady().then(() => {
 
   //设置开发扩展
   if(enableDevTool){
-    const devToolPath = `C:\\Users\\Time\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\nhdogjmejiglipccpnnnanhbledajbpd\\6.5.0_0`
+    const devToolPath = `D:\\DEV\\electron\\AuroraTimer_Next\\VuePlugins`
     session.defaultSession.loadExtension(devToolPath)
   }
 
@@ -248,8 +248,7 @@ app.whenReady().then(() => {
   ipcMain.on('open-browser', openBrowser)
   ipcMain.on('send-data-toMain', (_event,value)=> pushSharedDataToMainWindow(value))
 
-  //加载API实例
-  init(setting.netWork.host,setting.userInfo.Token)
+
 
   //设置自启选项
   if(app.isPackaged){
@@ -270,7 +269,9 @@ app.whenReady().then(() => {
     const winUrl = 'http://localhost:5173/#/login';
     loginWindow.loadURL(winUrl)
   }
-  processTime = new Date().getTime() - startTime;
+
+  //加载API实例
+  init(setting.netWork.host,setting.userInfo.Token)
   loginWindow.once('ready-to-show', () => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
@@ -284,12 +285,13 @@ app.whenReady().then(() => {
           .then((Response)=>{
           if(Response.success){
             let result = Response.data
+            console.log(result)
             setting.userInfo = {
-              uid:result.id,
+              id:result.id,
               name:result.name,
               WeekTime:result.currentWeekTime,
-              isAdmin:result.admin,
-              Token:result.token,
+              "isAdmin":result.admin,
+              "Token":result.token,
             }
             SaveSetting(JSON.stringify(setting))
             pushSharedDataToMainWindow({
@@ -321,6 +323,7 @@ app.whenReady().then(() => {
   mainWindow.on('session-end', () => {
     app.quit()
   })
+  processTime = new Date().getTime() - startTime;
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

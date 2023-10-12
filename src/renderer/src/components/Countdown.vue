@@ -31,18 +31,17 @@ import * as API from '../api/API'
 let hour = ref('00')
 let min = ref('00')
 let second = ref('00')
-let timer = null
 const timeStore = TimerStore()
 const globalStore = GlobalStore()
-const afkLimit = 10;
 
-try{
+try {
   //Timer 返回函数。
   timeStore.timer.onmessage = async (event) => {
     timeStore.TimePlusPlus();
     let time = timeStore.time
+    console.log("当前打卡时间:"+time)
     //挂机检测
-    if (time % timeStore.AfkLimit === 0 && time!==0 && globalStore.AFKDetected) {
+    if (time % timeStore.AfkLimit === 0 && time !== 0 && globalStore.AFKDetected) {
       window.electronAPI.getMousePoint().then((point) => {
         if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
           StopTimer()
@@ -50,37 +49,47 @@ try{
           //TODO 提示用户是否正在挂机
           const NOTIFICATION_TITLE = "你是不是正在挂机？";
           const NOTIFICATION_BODY =
-            "点我恢复计时！";
+              "点我恢复计时！";
           new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-            () => {
-              StartTimer();
-              ElNotification({
-                title: '重新恢复计时',
-                type: 'success'
-              })
-            };
+              () => {
+                StartTimer();
+                ElNotification({
+                  title: '重新恢复计时',
+                  type: 'success'
+                })
+              };
         }
         globalStore.lastMousePoint = point
       })
     }
     //尝试加时
-    if(time % 300 === 0 && time!==0){
-      await API.addTime(globalStore.UserInfo.id,300)
+    if (time % 300 === 0 && time !== 0) {
+      let res = await API.addTime(globalStore.Setting.userInfo.id);
+      if(res.success){
+        if(typeof (res.data) == 'number'){
+          timeStore.setTimeFromServer(res.data)
+        }
+      }
+    }
+    //尝试保存计时记录
+    if (time % 60 === 0 && time !== 0) {
+      window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
     }
     let nowTimeStr = SecondToTimeStr(time)
     hour.value = nowTimeStr.hour;
     min.value = nowTimeStr.min;
     second.value = nowTimeStr.second;
   }
-}catch (e) {}
+} catch (e) {
+}
 const StartTimer = () => {
-  if(!timeStore.isStarted){
+  if (!timeStore.isStarted) {
     timeStore.OpenTimer()
     timeStore.timer.postMessage('start')
   }
 }
 const StopTimer = () => {
-  if(timeStore.isStarted){
+  if (timeStore.isStarted) {
     timeStore.CloseTimer()
     timeStore.timer.postMessage('stop')
   }
@@ -103,23 +112,23 @@ const SecondToTimeStr = (second) => {
   let seconds = Math.floor(second % 60)
   if (seconds < 10) seconds = '0' + seconds
   return {
-    hour:String(hour),
-    min:String(min),
-    second:String(seconds),
+    hour: String(hour),
+    min: String(min),
+    second: String(seconds),
   }
 }
 
 
 onMounted(() => {
-  if(!(timeStore.timer instanceof Worker)){
-    timeStore.timer = new Worker(new URL('../utils/Timer.js',import.meta.url).href)
+  if (!(timeStore.timer instanceof Worker)) {
+    timeStore.timer = new Worker(new URL('../utils/Timer.js', import.meta.url).href)
   }
   let time = timeStore.time
   let nowTimeStr = SecondToTimeStr(time)
   hour.value = nowTimeStr.hour;
   min.value = nowTimeStr.min;
   second.value = nowTimeStr.second;
-  if(timeStore.isStarted){
+  if (timeStore.isStarted) {
     timeStore.timer.postMessage('stop')
     timeStore.timer.postMessage('start')
 
@@ -144,6 +153,7 @@ defineExpose({
 .num-min {
   --value: v-bind(min)
 }
+
 .num-second {
   --value: v-bind(second)
 }

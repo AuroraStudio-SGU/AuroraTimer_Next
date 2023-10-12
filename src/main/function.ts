@@ -39,7 +39,7 @@ export function windowOperate(event, op) {
   }
 }
 
-export function loadSetting() {
+export function loadSetting():SettingFile {
   let curSetting:SettingFile
   settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
   let buffer
@@ -63,11 +63,9 @@ export function loadSetting() {
   if(buffer){
     //加载出设置内容
     curSetting = JSON.parse(buffer.toString())
-    if(!app.isPackaged){
-      console.log(curSetting)
-    }
+    console.log("已经加载配置文件")
     return curSetting
-  }else return ''
+  }else return DefaultSetting
 }
 
 export function SaveSetting(setting):boolean {

@@ -1,8 +1,15 @@
 <template>
   <div class="menu">
     <div ref="boxComponent" class="white-box-rank">
-      <div class="Title">
-        工作室本周打卡情况
+      <div class="header">
+        <div class="Title">
+          工作室本周打卡情况
+        </div>
+        <div class="join">
+          <button class="join-item btn" @click="handlePageChange(true)">«</button>
+          <button class="join-item btn">{{ WeekIndex[lastXWeek].name }}</button>
+          <button class="join-item btn" @click="handlePageChange(false)">»</button>
+        </div>
       </div>
       <el-table
         :data="UserList"
@@ -38,7 +45,13 @@ import '../assets/css/common.css'
 import {ElNotification} from "element-plus";
 import {GlobalStore} from "../stores/Global";
 import {TimerStore} from "../stores/Timer";
+import {UserTime} from "../api/interfaces/Schema";
+import {intToRoman} from "../utils/NumberUtil";
 
+interface Week {
+    index:number,
+    name:string,
+}
 
 const globalStore = GlobalStore()
 const timerStore = TimerStore()
@@ -50,7 +63,8 @@ let GradeList = ref([])
 let GradeFilters = ref([])
 let Loading = ref(true)
 let UserList = ref<UserTime[]>()
-let lastXWeek = 0;
+let WeekIndex = ref<Week[]>([])
+let lastXWeek = ref(0);
 
 const filterHandler = (
   value: string,
@@ -59,8 +73,54 @@ const filterHandler = (
   return row.id.substring(0, 2) === value
 }
 onBeforeMount(async () => {
+  await loadWeekList();
+  await loadRankList();
+})
+
+onMounted(async () => {
+  await nextTick()
+  isLoaded.value = true
+})
+const GradeFormatter = (row, colum) => {
+  return row.uid.substring(0, 2)
+}
+
+const TimeFormatter = (row, colum) => {
+  return formatSecondTime(row[colum.property])
+}
+
+const handlePageChange = (state:boolean) => {
+  if(state){
+    //to last week
+    if(lastXWeek.value===99){return;}
+    lastXWeek.value++;
+  }else {
+    //to next week
+    if(lastXWeek.value===0){return}
+    lastXWeek.value--;
+  }
+}
+
+
+const max_week_size = 100;
+const loadWeekList = async () =>{
+  for (let i = 0; i < max_week_size ; i++) {
+      let str = "本周";
+      if(i===0){
+        str = "本周";
+      }else {
+        str = "上" + intToRoman(i) + '周'
+      }
+      let week:Week = {
+        index:i,
+        name:str
+      }
+      WeekIndex.value[i] = week;
+  }
+}
+const loadRankList = async () => {
   //获取排行列表
-  let res = await globalStore.getUserRankList(true, lastXWeek)
+  let res = await globalStore.getUserRankList(true, lastXWeek.value)
   if (!res) {
     ElNotification({
       title: "请求失败！",
@@ -86,18 +146,6 @@ onBeforeMount(async () => {
     GradeFilters.value.push(obj)
   })
   Loading.value = false;
-})
-
-onMounted(async () => {
-  await nextTick()
-  isLoaded.value = true
-})
-const GradeFormatter = (row, colum) => {
-  return row.uid.substring(0, 2)
-}
-
-const TimeFormatter = (row, colum) => {
-  return formatSecondTime(row[colum.property])
 }
 
 //
@@ -120,17 +168,23 @@ const TimeFormatter = (row, colum) => {
   src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
 }
 
+//--el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity)); --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+//--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
+
 :deep(.el-table) {
   --el-table-border-color: hsl(var(--ac) / var(--tw-text-opacity));
   --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
   --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
-//--el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity)); --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
-//--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
 }
 
 :deep(.cell) {
   font-family: "Sanchez", "WenKai-B", serif;
   font-weight: 700;
   color: hsla(var(--bc) / var(--tw-text-opacity, 1));
+}
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
