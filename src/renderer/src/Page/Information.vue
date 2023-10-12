@@ -1,24 +1,29 @@
 <template>
   <div
-    class="break-words bg-base-100 w-full  shadow-lg rounded-xl " style="transform: scale(1);"
+    class="break-words bg-base-100 w-full shadow-lg rounded-xl"
+    style="transform: scale(1)"
   >
-    <div class="px-6">
+    <div class="top-white"></div>
+    <div>
       <div class="flex flex-wrap justify-center">
-        <div class="w-full flex justify-center">
-          <div class="relative" @mouseenter="handleMoveIn" @mouseout="handleMoveOut">
-<!--              <div class="avatar-box">-->
-<!--                <img-->
-<!--                    :src="getUrl('profile.jpg')"-->
-<!--                    class="shadow-xl rounded-full align-middle border-none  max-w-[150px]"-->
-<!--                />-->
-<!--              </div>-->
-              <div class="colbox" v-show="moveIn">
-                1231331
-              </div>
+        <div class="secondary"></div>
+        <div class="w-full flex justify-center absolute">
+          <div
+            class="relative"
+            @mouseenter="handleMoveIn"
+            @mouseleave="handleMoveOut"
+          >
+            <div class="avatar-box">
+              <img
+                :src="getUrl('profile.jpg')"
+                class="shadow-xl rounded-full align-middle border-4 border-base-100 max-w-[150px]"
+              />
+            </div>
+            <div class="colbox" v-show="moveIn">点击修改头像</div>
           </div>
         </div>
-        <div class="w-full text-center mt-20">
-          <div class="flex justify-center lg:pt-4 pt-8 pb-0">
+        <div class="w-full text-center mt-5">
+          <div class="flex justify-center lg:pt-4 pb-0 pt-14">
             <div class="p-3 text-center">
               <span
                 class="text-xl font-bold block uppercase tracking-wide text-slate-700"
@@ -45,51 +50,67 @@
           >物联网工程
         </div>
       </div>
-
+    </div>
+    <div class="button-group flex justify-center items-center" >
+      <button class="btn btn-outline btn-primary" style="margin-right: 30px;">编辑个人信息</button>
+      <button class="btn btn-outline btn-primary">退 出 登 录</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { getUrl } from '../utils/urlUtils';
-import {GlobalStore} from "../stores/Global";
-import {ref} from "vue";
+import { getUrl } from "../utils/urlUtils";
+import { GlobalStore } from "../stores/Global";
+import { ref } from "vue";
 
-const globalStore = GlobalStore()
+const globalStore = GlobalStore();
 
-let moveIn = ref(false)
+let moveIn = ref(false);
 
 const handleMoveIn = () => {
-  console.log("move in")
-  moveIn.value=true;
-}
+  console.log("move in");
+  moveIn.value = true;
+};
 const handleMoveOut = () => {
-  console.log("move out")
-  moveIn.value=false;
-}
-
+  console.log("move out");
+  moveIn.value = false;
+};
 </script>
 
 <style scoped>
 .relative {
   width: 150px;
   height: 150px;
-  background: #4c3f6d;
-  position: relative;
 }
-.avatar-box{
+.avatar-box {
   position: absolute;
   width: 150px;
   height: 150px;
-  left: 0;
-  top: 0;
 }
 .colbox {
   position: absolute;
-  left: 0;
-  top: 0;
   width: 150px;
   height: 150px;
-  background: rgba(222,170,186,100%);
+  background: rgba(86, 86, 86, 0.5);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 150px;
+  color: aliceblue;
 }
+.secondary {
+  @apply bg-accent;
+  width: 100%;
+  height: 75px;
+}
+.top-white {
+  @apply bg-accent;
+  width: 100%;
+  height: 40px;
+  border-radius: 10px 10px 0 0;
+}
+
+/* .button-group {
+  display: flex;
+  align-items: center;
+} */
 </style>
