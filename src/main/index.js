@@ -271,7 +271,7 @@ app.whenReady().then(() => {
   }
 
   //加载API实例
-  init(setting.netWork.host,setting.userInfo.Token)
+  init(setting.netWork.host,setting.userInfo.token)
   loginWindow.once('ready-to-show', () => {
     //登录判断,开始加载配置文件
     mainWindow.webContents.send('setting-update', JSON.stringify(setting))
@@ -281,7 +281,7 @@ app.whenReady().then(() => {
       login()
     }else {
       if(setting.autoLogin){
-        loginByToken(setting.userInfo.Token)
+        loginByToken(setting.userInfo.token)
           .then((Response)=>{
           if(Response.success){
             let result = Response.data
@@ -289,9 +289,9 @@ app.whenReady().then(() => {
             setting.userInfo = {
               id:result.id,
               name:result.name,
-              WeekTime:result.currentWeekTime,
+              "WeekTime":result.currentWeekTime,
               "isAdmin":result.admin,
-              "Token":result.token,
+              token:result.token,
             }
             SaveSetting(JSON.stringify(setting))
             pushSharedDataToMainWindow({

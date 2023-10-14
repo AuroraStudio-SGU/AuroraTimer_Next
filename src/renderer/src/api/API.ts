@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import {APIResponse, User} from "./interfaces/Schema";
+import {APIResponse, Notice, User} from "./interfaces/Schema";
 
 let instance: AxiosInstance;
 
@@ -120,4 +120,26 @@ export async function getTargetTime(){
 
 export async function getNotice(){
   return doGet('/admin/getNotice')
+}
+
+export async function createNotice(notice:Notice){
+  return doPost('/admin/uploadNotice',notice);
+}
+export async function getTop3(){
+  return doGet('/timer/top3');
+}
+export async function getLast3(){
+  return doGet('/timer/last3');
+}
+
+export async function updateAvatar(byte:ArrayBuffer,id:string){
+  return doPost('/user/uploadAvatar/'+id,byte)
+}
+
+export async function getAvatarById(id:string){
+  return doGet('/user/avatar/'+id);
+}
+
+export async function checkAdmin() {
+  return doGet('/admin/test');
 }

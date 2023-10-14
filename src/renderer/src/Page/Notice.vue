@@ -20,30 +20,30 @@
       <div class="about-guys">处刑榜</div>
       <div class="align">
         <div class="card">
-          <div class="photo"><img :src="getUrl('keli.jpg')" alt="" /></div>
-          <h1>打卡时长不达标(0h)</h1>
-          <h2>欧润丰</h2>
+          <div class="photo"><img :src="getUrl('keli.jpg')" alt=""/></div>
+          <h2>{{ Last3[0].name }}</h2>
         </div>
         <div class="card">
-          <div class="photo"><img :src="getUrl('caos.jpg')" alt="" /></div>
-          <h1>打卡时长不达标(4h)</h1>
-          <h2>欧润丰</h2>
+          <div class="photo"><img :src="getUrl('caos.jpg')" alt=""/></div>
+          <h2>{{ Last3[1].name }}</h2>
         </div>
         <div class="card">
-          <div class="photo"><img :src="getUrl('hutao.jpg')" alt="" /></div>
-          <h1>打卡时长不达标(7h)</h1>
-          <h2>欧润丰</h2>
+          <div class="photo"><img :src="getUrl('hutao.jpg')" alt=""/></div>
+          <h2>{{ Last3[2].name }}</h2>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import "../assets/css/common.css";
-import { getUrl } from "../utils/urlUtils";
-import { onMounted, ref } from "vue";
-import { AdminStore } from "../stores/Admin";
+import {AdminStore} from "../stores/Admin";
+import {onBeforeMount, ref, toRaw} from "vue";
+import {getUrl} from "../utils/urlUtils";
+import {UserTime} from "../api/interfaces/Schema";
+import {getLast3} from "../api/API";
+import {ElNotification} from "element-plus";
 
 const adminStore = AdminStore();
 const noticeContext = ref(null);
@@ -51,15 +51,37 @@ const noticeContext = ref(null);
 function isNotEmptyStr(s) {
   return typeof s == "string" && s.length > 0;
 }
+let empty:UserTime={
+  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,
+}
+let Last3s = [
+  empty,empty,empty
+]
+let Last3 = ref<UserTime[]>(Last3s);
 
-onMounted(async () => {
-  let notice = await adminStore.getNotice();
-  if (notice == null || isNotEmptyStr(notice)) {
-    notice = `<p> 负责人还没写公告呢~ </p>`;
-    noticeContext.value.innerHTML = notice;
+
+const loadLast3 = async () => {
+  let res = await getLast3()
+  if (!res.success) {
+    ElNotification({
+      title: "请求失败！",
+      message: "系统异常",
+      type: "error"
+    });
   } else {
-    noticeContext.value.innerHTML = notice;
+    Last3.value = res.data;
   }
+}
+
+onBeforeMount(async () => {
+  let notice = toRaw(await adminStore.getNotice());
+  console.log(notice)
+  if (notice == null || !isNotEmptyStr(notice.notice)) {
+    noticeContext.value.innerHTML = `<p> 负责人还没写公告呢~ </p>`
+  } else {
+    noticeContext.value.innerHTML = notice.notice
+  }
+  await loadLast3();
 });
 </script>
 
@@ -83,6 +105,7 @@ onMounted(async () => {
   font-size: xx-large;
 
 }
+
 .card {
   position: relative;
   width: 200px;
@@ -100,11 +123,13 @@ onMounted(async () => {
   /* 这个属性兼容性差 */
   /* flex-shrink: 0; */
 }
+
 .card .photo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .card .photo {
   width: 100%;
   height: 100%;
@@ -116,6 +141,7 @@ onMounted(async () => {
   overflow: hidden;
   transition: 0.5s;
 }
+
 .card:hover .photo {
   top: 30px;
   width: 120px;
@@ -123,14 +149,17 @@ onMounted(async () => {
   border-radius: 50%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
+
 .card h1 {
   position: absolute;
   top: 370px;
   transition: 0.5s;
 }
+
 .card:hover h1 {
   top: 170px;
 }
+
 /* 这里加个黑色的透明的渐变背景，可以更好的看清楚名字 */
 .card .photo::before {
   content: "";
@@ -139,6 +168,7 @@ onMounted(async () => {
   width: 100%;
   background: linear-gradient(to bottom, transparent 50%, #222);
 }
+
 .card h2 {
   margin-top: 220px;
   width: 80%;
@@ -148,6 +178,7 @@ onMounted(async () => {
   margin-bottom: 20px;
   padding-bottom: 20px;
 }
+
 .card p {
   width: 90%;
   /* 文本段落的第一行缩进 */
@@ -156,6 +187,7 @@ onMounted(async () => {
   margin-bottom: 15px;
   line-height: 30px;
 }
+
 .card a {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
@@ -164,6 +196,7 @@ onMounted(async () => {
   padding: 8px 32px;
   border-radius: 8px;
 }
+
 .card a:hover {
   color: #fff;
   background-color: rgba(255, 255, 255, 0.2);

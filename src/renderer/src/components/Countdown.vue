@@ -39,7 +39,6 @@ try {
   timeStore.timer.onmessage = async (event) => {
     timeStore.TimePlusPlus();
     let time = timeStore.time
-    console.log("当前打卡时间:"+time)
     //挂机检测
     if (time % timeStore.AfkLimit === 0 && time !== 0 && globalStore.AFKDetected) {
       window.electronAPI.getMousePoint().then((point) => {
@@ -49,31 +48,29 @@ try {
           //TODO 提示用户是否正在挂机
           const NOTIFICATION_TITLE = "你是不是正在挂机？";
           const NOTIFICATION_BODY =
-              "点我恢复计时！";
+            "点我恢复计时！";
           new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-              () => {
-                StartTimer();
-                ElNotification({
-                  title: '重新恢复计时',
-                  type: 'success'
-                })
-              };
+            () => {
+              StartTimer();
+              ElNotification({
+                title: '重新恢复计时',
+                type: 'success'
+              })
+            };
         }
         globalStore.lastMousePoint = point
       })
     }
-    //尝试加时
-    if (time % 300 === 0 && time !== 0) {
-      let res = await API.addTime(globalStore.Setting.userInfo.id);
-      if(res.success){
-        if(typeof (res.data) == 'number'){
-          timeStore.setTimeFromServer(res.data)
-        }
-      }
-    }
-    //尝试保存计时记录
+    //尝试加时 尝试保存计时记录
     if (time % 60 === 0 && time !== 0) {
       window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
+      API.addTime(globalStore.Setting.userInfo.id).then((res) => {
+        if (res.success) {
+          if (typeof (res.data) == 'number') {
+            timeStore.setTimeFromServer(res.data)
+          }
+        }
+      })
     }
     let nowTimeStr = SecondToTimeStr(time)
     hour.value = nowTimeStr.hour;

@@ -57,7 +57,6 @@ const globalStore = GlobalStore()
 const timerStore = TimerStore()
 
 const boxComponent = ref(null)
-const isLoaded = ref(false)
 
 let GradeList = ref([])
 let GradeFilters = ref([])
@@ -79,7 +78,6 @@ onBeforeMount(async () => {
 
 onMounted(async () => {
   await nextTick()
-  isLoaded.value = true
 })
 const GradeFormatter = (row, colum) => {
   return row.uid.substring(0, 2)
@@ -89,7 +87,8 @@ const TimeFormatter = (row, colum) => {
   return formatSecondTime(row[colum.property])
 }
 
-const handlePageChange = (state:boolean) => {
+const handlePageChange = async (state:boolean) => {
+  if(Loading.value) return;
   if(state){
     //to last week
     if(lastXWeek.value===99){return;}
@@ -99,6 +98,7 @@ const handlePageChange = (state:boolean) => {
     if(lastXWeek.value===0){return}
     lastXWeek.value--;
   }
+  await loadRankList();
 }
 
 
@@ -119,6 +119,7 @@ const loadWeekList = async () =>{
   }
 }
 const loadRankList = async () => {
+  Loading.value = true
   //获取排行列表
   let res = await globalStore.getUserRankList(true, lastXWeek.value)
   if (!res) {
@@ -168,13 +169,14 @@ const loadRankList = async () => {
   src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
 }
 
-//--el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity)); --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
-//--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
+
 
 :deep(.el-table) {
   --el-table-border-color: hsl(var(--ac) / var(--tw-text-opacity));
   --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
   --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+//--el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity)); --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+//--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
 }
 
 :deep(.cell) {

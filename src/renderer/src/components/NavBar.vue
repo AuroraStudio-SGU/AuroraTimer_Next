@@ -11,7 +11,7 @@
         挂机中
       </div>
       <div
-        v-if="!globalStore.isAFK"
+        v-else
         class="badge font-semibold"
         style="margin-left: 10px"
       >

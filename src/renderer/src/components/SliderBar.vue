@@ -73,9 +73,31 @@
 </template>
 <script setup>
 import {router} from "../utils/router";
+import {ElNotification} from "element-plus";
+import {checkAdmin} from "../api/API";
 
-const jumpTo = (local) => {
-  router.push({
+const jumpTo = async (local) => {
+  if(local==='Admin'){
+    //check permission
+    let permission = true;
+    try{
+      let res = await checkAdmin();
+      if(!res.success){
+        permission = false;
+      }
+    }catch (e) {
+      permission = false;
+    }
+    if(!permission){
+      ElNotification({
+        title: "这里是管理员页面！",
+        message: '403 forbidden',
+        type: "error",
+      });
+      return
+    }
+  }
+  await router.push({
     name: local,
   });
 };

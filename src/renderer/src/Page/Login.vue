@@ -51,13 +51,15 @@
   </div>
 </template>
 
-<script setup>
-import {onBeforeMount, onMounted, ref} from "vue";
+<script setup lang="ts">
+import {onBeforeMount, onMounted, ref, toRaw} from "vue";
 import $ from 'jquery';
 import {ElNotification} from "element-plus";
 import * as API from "../api/API";
 import {init} from "../api/API";
 import {GlobalStore} from "../stores/Global";
+import {md5} from "js-md5";
+import {UserInfo} from "../api/interfaces/Schema";
 
 const globalStore = GlobalStore()
 let AutoLogin = ref(false)
@@ -96,7 +98,7 @@ const login = async () => {
   const user = {
     id: id.value,
     name: name.value,
-    password: password.value,
+    password: md5(password.value),
   }
   let Response = await API.login(user)
   if (!Response.success) {
@@ -105,23 +107,20 @@ const login = async () => {
       message: Response.msg,
       type: "error",
     });
+    return;
   }
   let result = Response.data
   //TODO more userInformation
-  let userInfo = {
-    id: result.id,
-    name: result.name,
-    WeekTime: result.currentWeekTime,
-    isAdmin: result.admin,
-    Token: result.token,
-    major: 'major',
+  let userInfo: UserInfo = {
+    WeekTime: result.currentWeekTime, avatar: result.avatar, grade: result.grade,
+    id: result.id, isAdmin: result.admin, major: result.major, name: result.major, token: result.token, work_group: result.work_group
   }
   window.electronAPI.pushDataToMain({
     type: "UserInfo",
     data: userInfo
-  })
-  globalStore.Setting.userInfo = userInfo
-  window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
+  });
+  globalStore.Setting.userInfo = userInfo;
+  window.electronAPI.SaveSetting(JSON.stringify(toRaw(globalStore.Setting)))
   window.electronAPI.login()
 }
 
@@ -140,7 +139,6 @@ const register = async () => {
   }
   let Response = await API.register(user)
   if (!Response.success) {
-    console.error(Response.msg)
     ElNotification({
       title: "注册失败！",
       message: Response.msg,

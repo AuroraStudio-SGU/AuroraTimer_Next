@@ -56,7 +56,7 @@ export const GlobalStore = defineStore('main', {
             return state.Setting.userInfo
         },
         getUserToken(state): string {
-            return state.Setting.userInfo.Token
+            return state.Setting.userInfo.token
         },
         getCurrentTheme(state): string {
             return state.Setting.skin

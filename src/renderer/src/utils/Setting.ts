@@ -2,10 +2,13 @@ export interface SettingFile{
   userInfo:{
     id: string,
     name: string,
+    avatar:string,
     WeekTime: number,
     isAdmin: boolean,
-    Token:string,
+    token:string,
     major:string,
+    grade:string,
+    work_group:string,
   },
   progressBar:{
     color:{
@@ -37,8 +40,11 @@ export const DefaultSetting:SettingFile={
     name: 'DAY',
     WeekTime: 0,
     isAdmin: true,
-    Token: 'why u thing there will have default token?',
+    token: 'why u thing there will have default token?',
     major: 'major',
+    avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+    grade:'21级',
+    work_group:'Web组'
   },
   progressBar:{
     color:{

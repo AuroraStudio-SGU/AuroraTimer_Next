@@ -36,11 +36,20 @@ export interface UserInfo {
   name: string,
   WeekTime: number,
   isAdmin: boolean,
-  Token:string,
+  token:string,
   major:string,
+  grade:string,
+  work_group:string,
+  avatar:string,
 }
 export interface DutyList {
   wed: string,
   sun: string,
   createTime: Date
+}
+export interface Notice{
+  user_id:string,
+  notice_id:string | null,
+  notice:string,
+  updateTime:Date
 }

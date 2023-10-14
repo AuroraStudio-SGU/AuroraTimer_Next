@@ -56,10 +56,10 @@
             <p class="py-4">设置打卡时长要求，以最新的数据为准</p>
             <el-select v-model="targetTime" clearable placeholder="⏰⏰⏰⏰" :teleported="false">
               <el-option
-                v-for="item in TargetTimeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                  v-for="item in TargetTimeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
               />
             </el-select>
             <div class="modal-action">
@@ -70,7 +70,7 @@
             </div>
           </div>
         </dialog>
-        <!--减时设置页面-->
+        <!--设置减时页面-->
         <dialog id="reduceTime" class="modal modal-bottom sm:modal-middle">
           <div class="modal-box">
             <h3 class="font-bold text-lg">设置减时⏳</h3>
@@ -101,10 +101,11 @@ import '../assets/css/scrollbar.css'
 import {onBeforeMount, ref} from "vue";
 import {AdminStore} from "../stores/Admin";
 import {ElNotification} from "element-plus";
-import {setDuty, setReduceTime, setTargetTime} from '../api/API'
+import {setDuty, setReduceTime, setTargetTime, createNotice} from '../api/API'
 import {GlobalStore} from "../stores/Global";
 import TextEditor from "../components/TextEditor.vue";
 import {TimerStore} from "../stores/Timer";
+import {Notice} from "../api/interfaces/Schema";
 
 const textEditor = ref(null)
 const adminStore = AdminStore()
@@ -116,32 +117,61 @@ function isNotEmptyStr(s) {
   return typeof s == 'string' && s.length > 0;
 }
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   let start = 12;
   let end = 48;
   let step = 0.5;
-  for (let i = start; i < end; i+=step) {
+  for (let i = start; i < end; i += step) {
     let time = {
-      label:i+'H',
-      value:i
+      label: i + 'H',
+      value: i
     }
     TargetTimeOptions.value.push(time)
   }
 })
 
-const uploadNotice = () => {
-  console.log(textEditor.value.valueHtml)
-  adminStore.noticeHTML = textEditor.value.valueHtml
+const uploadNotice = async () => {
+  if (isNotEmptyStr(textEditor.value.valueHtml)) {
+    let notice:Notice = {
+      user_id:globalStore.Setting.userInfo.id,
+      context:textEditor.value.valueHtml,
+      notice_id:null,
+    }
+    let res = await createNotice(notice);
+    if (!res.success) {
+      ElNotification({
+        title: "系统错误!",
+        message: res.msg,
+        type: "error",
+      });
+    } else {
+      ElNotification({
+        title: "设置成功!",
+        type: "success",
+      });
+    }
+  } else {
+    ElNotification({
+      title: "参数错误!",
+      message: "公告内容为空",
+      type: "error",
+    });
+  }
 }
 
 const TargetTimeOptions = ref([])
 
 const targetTime = ref('')
-const handleTargetUpload = async ()=>{
-  if(targetTime.value === ""){
-    return ;
+const handleTargetUpload = async () => {
+  let time = Number(targetTime.value)
+  if (isNaN(time)) {
+    ElNotification({
+      title: "参数错误",
+      message: "请填一个数字",
+      type: "error",
+    });
   }
-  let res = await setTargetTime(targetTime.value)
+  let res = await setTargetTime(time)
   if (!res.success) {
     ElNotification({
       title: "系统错误!",
@@ -155,9 +185,6 @@ const handleTargetUpload = async ()=>{
     });
   }
 }
-
-
-
 
 
 let WedPerson = ref('')
@@ -190,7 +217,7 @@ let ReduceTime = ref(100.5)
 let ReducePerson = ref('陈典灿')
 
 const handleReduceTime = async () => {
-  if(!isNotEmptyStr(ReducePerson.value)){
+  if (!isNotEmptyStr(ReducePerson.value)) {
     ElNotification({
       title: "参数错误!",
       message: "你填了人名了吗？",
@@ -199,15 +226,15 @@ const handleReduceTime = async () => {
     return
   }
   let hours = Number(ReduceTime.value)
-  if(isNaN(hours)){
+  if (isNaN(hours)) {
     ElNotification({
       title: "参数错误!",
       message: "请填一个正确的数字",
       type: "error",
     });
-  }else {
+  } else {
     let uid = await timerStore.getUidFormName(ReducePerson.value);
-    if(uid === null){
+    if (uid === null) {
       ElNotification({
         title: "参数错误!",
         message: "该成员并不存在",
@@ -215,7 +242,7 @@ const handleReduceTime = async () => {
       });
       return
     }
-    let res = await setReduceTime(uid,hours*3600);
+    let res = await setReduceTime(uid, hours * 3600);
     if (!res.success) {
       ElNotification({
         title: "系统错误!",
@@ -248,10 +275,12 @@ const handleReduceTime = async () => {
   top: 1rem;
   overflow-y: auto;
 }
-.modal-select-size{
+
+.modal-select-size {
   height: 32rem;
 }
-.button-items{
+
+.button-items {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -18,7 +18,6 @@
                     <div class="star-group-4"></div>
                   </div>
                 </div>
-
                 <!-- 云彩 -->
                 <div class="cloud cloud-1"></div>
                 <div class="cloud cloud-2"></div>
@@ -30,7 +29,6 @@
                 <div class="bird bird-2"></div>
                 <div class="bird bird-3"></div>
               </div>
-
               <!-- 山川 -->
               <div class="mountains">
                 <div class="mountain-back">
@@ -45,18 +43,15 @@
                   <div class="mountain-top-1"></div>
                 </div>
               </div>
-
               <!-- 太阳 -->
               <div class="sun-container">
                 <div class="sun"></div>
               </div>
-
               <!-- 海洋 -->
               <div class="ocean">
                 <div class="boat"></div>
                 <div class="ocean-night">
                   <div class="moon"></div>
-
                   <!-- 山川 -->
                   <div class="mountains mountains-bottom">
                     <div class="mountain-back">
