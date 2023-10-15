@@ -13,4 +13,3 @@ app.use(createPinia())
     .use(router)
     .use(ElementPlus, {locale: zhCn,})
     .mount('#app')
-//inject pinia

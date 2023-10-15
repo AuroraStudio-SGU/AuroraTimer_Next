@@ -1,7 +1,7 @@
 <template>
   <div
-    class="break-words bg-base-100 w-full shadow-lg rounded-xl"
-    style="transform: scale(1)"
+      class="break-words bg-base-100 w-full shadow-lg rounded-xl"
+      style="transform: scale(1)"
   >
     <div class="top-white"></div>
     <div>
@@ -9,14 +9,14 @@
         <div class="secondary"></div>
         <div class="w-full flex justify-center absolute">
           <div
-            class="relative"
-            @mouseenter="handleMoveIn"
-            @mouseleave="handleMoveOut"
+              class="relative"
+              @mouseenter="handleMoveIn"
+              @mouseleave="handleMoveOut"
           >
             <div class="avatar-box">
               <img
-                :src="getUrl('profile.jpg')"
-                class="shadow-xl rounded-full align-middle border-4 border-base-100 max-w-[150px]"
+                  :src="UserInformation.avatar+'?'+RandomNumber"
+                  class="shadow-xl rounded-full align-middle border-4 border-base-100 w-fit object-contain"
               />
             </div>
             <div class="colbox" v-show="moveIn" onclick="avatarUpload.showModal()">点击修改头像</div>
@@ -26,15 +26,15 @@
           <div class="flex justify-center lg:pt-4 pb-0 pt-14">
             <div class="p-3 text-center">
               <span
-                class="text-xl font-bold block uppercase tracking-wide text-slate-700"
-              >前端</span
+                  class="text-xl font-bold block uppercase tracking-wide text-slate-700"
+              >{{ UserInformation.work_group }}</span
               >
               <span class="text-sm text-slate-400">方向</span>
             </div>
             <div class="p-3 text-center">
               <span
-                class="text-xl font-bold block uppercase tracking-wide text-slate-700"
-              >21级</span
+                  class="text-xl font-bold block uppercase tracking-wide text-slate-700"
+              >{{ UserInformation.grade }}</span
               >
               <span class="text-sm text-slate-400">年级</span>
             </div>
@@ -47,7 +47,7 @@
         </h3>
         <div class="text-xs mt-0 mb-2 text-slate-400 font-bold uppercase">
           <i class="fas fa-map-marker-alt mr-2 text-slate-400 opacity-75"></i
-          >物联网工程
+          >{{ UserInformation.major }}
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
       <button class="btn btn-outline btn-primary" style="margin-right: 30px;" onclick="userInfo.showModal()">
         编辑个人信息
       </button>
-      <button class="btn btn-outline btn-primary">退 出 登 录</button>
+      <button class="btn btn-outline btn-primary" onclick="confirm_logout.showModal()">退 出 登 录</button>
     </div>
   </div>
   <!--设置头像页面-->
@@ -64,24 +64,24 @@
       <h3 class="font-bold text-lg">更改头像</h3>
       <label v-if="!NewAvatar" for="dropzone-file" class="dropzone">
         <div
-          class="flex flex-col items-center justify-center px-3 pt-5 pb-6"
+            class="flex flex-col items-center justify-center px-3 pt-5 pb-6"
         >
           <svg
-            aria-hidden="true"
-            class="w-10 h-10 mb-3 text-gbase-600 dark:text-gbase-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              class="w-10 h-10 mb-3 text-gbase-600 dark:text-gbase-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
             />
           </svg>
-          <span class="font-semibold">电极上传</span>
+          <span class="font-semibold">点击上传</span>
           <p class="text-sm text-red-500">
             {{ AvatarError }}
           </p>
@@ -90,19 +90,19 @@
       </label>
       <output v-if="UploadSuccess" class="drop-shadow m-2 w-96">
         <Cropper
-          ref="cropper"
-          class="cropper"
-          :src="NewAvatarURL"
-          :stencil-props="{
+            ref="cropper"
+            class="cropper"
+            :src="NewAvatarURL"
+            :stencil-props="{
                 aspectRatio: 1,
               }"
-          :canvas="{
-                minHeight: 64,
-                minWidth: 64,
+            :canvas="{
+                minHeight: 150,
+                minWidth: 150,
                 maxHeight: 640,
                 maxWidth: 640,
               }"
-          @change="crop"
+            @change="crop"
         />
       </output>
       <img v-else :src="NewAvatarURL" class="mask mask-squircle overflow-hidden _avatar w-56 h-56">
@@ -126,23 +126,35 @@
         <label class="label">
           <span class="label-text">年级</span>
         </label>
-        <input type="text" placeholder="年级" class="input input-bordered" v-model="UserInformation.name"/>
+        <input type="text" placeholder="年级" class="input input-bordered" v-model="UserInformation.grade"/>
         <!-- TODO 密码修改 -->
       </div>
       <div class="flex justify-stretch m-4">
         <label class="label">
           <span class="label-text">方向</span>
         </label>
-        <input type="text" placeholder="方向" class="input input-bordered" v-model="UserInformation.name"/>
+        <input type="text" placeholder="方向" class="input input-bordered" v-model="UserInformation.work_group"/>
         <label class="label">
           <span class="label-text">专业</span>
         </label>
-        <input type="text" placeholder="专业" class="input input-bordered" v-model="UserInformation.name"/>
+        <input type="text" placeholder="专业" class="input input-bordered" v-model="UserInformation.major"/>
       </div>
       <div class="modal-action">
         <form method="dialog">
-          <button class="btn m-2">保存并上传</button>
+          <button class="btn m-2" @click="uploadUser">保存并上传</button>
           <button class="btn m-2">关闭</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+  <!--确认退出登录-->
+  <dialog id="confirm_logout" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">你确定要退出登录吗?</h3>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn" @click="handelLogout">是的</button>
+          <button class="btn">还是算了</button>
         </form>
       </div>
     </div>
@@ -150,18 +162,19 @@
 </template>
 
 <script setup lang="ts">
-import {getUrl} from "../utils/urlUtils";
 import {GlobalStore} from "../stores/Global";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {Cropper} from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css';
 import {UserInfo} from "../api/interfaces/Schema";
-import {updateAvatar} from "../api/API";
+import {queryUser, updateAvatar, updateUser} from "../api/API";
 import {ElNotification} from "element-plus";
 
 const globalStore = GlobalStore();
 
 let moveIn = ref(false);
+
+let RandomNumber = ref(Math.random());
 
 const NewAvatar = ref(false)
 const NewAvatarURL = ref('')
@@ -171,7 +184,7 @@ const UploadSuccess = ref(true)
 const cropper = ref()
 
 let emptyInformation: UserInfo = {
-  WeekTime: 0, id: "", isAdmin: false, major: "", name: "", token: ""
+  WeekTime: 0, avatar: "", grade: "", id: "", isAdmin: false, major: "", name: "", token: "", work_group: ""
 }
 
 let UserInformation = ref<UserInfo>(emptyInformation)
@@ -182,17 +195,17 @@ function checkAvatar(file: ArrayBuffer) {
 
 const saveAndUploadAvatar = async () => {
   handleMoveOut()
-  //TODO uploadFile
-  if(croppedAvatar.value){
-    let res = await updateAvatar(croppedAvatar.value,globalStore.Setting.userInfo.id)
-    if(res.success){
+  if (croppedAvatar.value) {
+    let res = await updateAvatar(croppedAvatar.value, globalStore.Setting.userInfo.id)
+    if (res.success) {
       globalStore.Setting.userInfo.avatar = res.data;
       ElNotification({
         title: "上传成功",
         message: "可能不能及时更新显示",
         type: "success",
       });
-    }else {
+      RandomNumber.value = Math.random();
+    } else {
       ElNotification({
         title: "上传失败!",
         message: res.msg,
@@ -208,6 +221,11 @@ const handelCancel = () => {
   NewAvatarURL.value = '';
   NewAvatar.value = false
 }
+
+const handelLogout = ()=>{
+  window.electronAPI.Logout();
+}
+
 const selectAvatarFile = async (e: Event) => {
   const file = (e?.target as HTMLInputElement)?.files?.[0]
   if (!file) {
@@ -227,6 +245,41 @@ function crop({canvas}: { canvas: HTMLCanvasElement }) {
     croppedAvatar.value = await blob?.arrayBuffer()
   }, 'image/png', 1)
 }
+
+const loadUserInformation = async () => {
+  let res = await queryUser(globalStore.Setting.userInfo.id)
+  if (!res.success) {
+    ElNotification({
+      title: "请求失败！",
+      message: "系统异常",
+      type: "error"
+    });
+  } else {
+    console.log(res.data)
+    UserInformation.value = res.data;
+  }
+}
+const uploadUser = async () => {
+  let res = await updateUser(UserInformation.value)
+  if (!res.success) {
+    ElNotification({
+      title: "请求失败！",
+      message: "系统异常",
+      type: "error"
+    });
+  } else {
+    ElNotification({
+      title: "上传成功",
+      message: "别乱填个人信息哦",
+      type: "success",
+    });
+  }
+}
+
+
+onBeforeMount(async () => {
+  await loadUserInformation()
+})
 
 onMounted(() => {
   NewAvatar.value = false;
@@ -293,6 +346,12 @@ const handleMoveOut = () => {
   @apply max-w-2xl;
 }
 
+.user-img {
+
+}
+.modal-action{
+  justify-content: center;
+}
 /* .button-group {
   display: flex;
   align-items: center;

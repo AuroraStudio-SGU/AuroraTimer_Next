@@ -11,7 +11,7 @@
             <div
                 class="w-44 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
             >
-              <img :src="getUrl('keli.jpg')"/>
+              <img :src="Top3[1].avatar"/>
             </div>
           </div>
 
@@ -74,7 +74,7 @@
             <div
                 class="w-60 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
             >
-              <img :src="getUrl('caos.jpg')"/>
+              <img :src="Top3[0].avatar"/>
             </div>
           </div>
           <button class="btn btn-secondary flex text-3xl btn-lg mt-6">
@@ -136,7 +136,7 @@
             <div
                 class="w-44 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"
             >
-              <img :src="getUrl('hutao.jpg')"/>
+              <img :src="Top3[2].avatar"/>
             </div>
           </div>
           <button class="btn btn-accent flex text-2xl btn-lg mt-6">
@@ -201,17 +201,17 @@
 <script setup lang="ts">
 import {onBeforeMount, ref, toRaw} from "vue";
 import {getUrl} from "../utils/urlUtils";
-import {UserTime} from "../api/interfaces/Schema";
+import {UserTime_avtar} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
-import {getTop3} from "../api/API";
+import {getAvatarById, getTop3} from "../api/API";
 
-let empty:UserTime={
-  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,
+let empty:UserTime_avtar={
+  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,avatar:''
 }
 let Top3s = [
   empty,empty,empty
 ]
-let Top3 = ref<UserTime[]>(Top3s);
+let Top3 = ref<UserTime_avtar[]>(Top3s);
 
 const loadTop3 = async () => {
   let res = await getTop3()
@@ -223,6 +223,12 @@ const loadTop3 = async () => {
     });
   } else {
     Top3.value = res.data;
+    for (let i = 0; i < Top3.value.length; i++) {
+      let res = await getAvatarById(Top3.value[i].id)
+      if (res.success) {
+        Top3.value[i].avatar = res.data;
+      }
+    }
   }
 }
 

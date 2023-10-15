@@ -40,6 +40,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   login: (callback) => ipcRenderer.send('login', callback),
   openBrowser:(callback) => ipcRenderer.send('open-browser', callback),
   pushDataToMain:(callback) => ipcRenderer.send('send-data-toMain', callback),
+  Logout:(callback) => ipcRenderer.send('logout', callback),
 
 })
 

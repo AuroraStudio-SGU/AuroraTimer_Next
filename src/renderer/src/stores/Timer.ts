@@ -24,7 +24,8 @@ export const TimerStore = defineStore('timer', {
             return SecondToString(state.time)
         },
         getTimerProgress(state) {
-            let percentage = Number((state.time / 864).toFixed(2))
+            const globalStore = GlobalStore()
+            let percentage = Number((globalStore.Setting.userInfo.WeekTime / 864).toFixed(2))
             return {
                 big: percentage > 100 ? 100 : percentage,
                 middle: percentage - 100 < 0 ? 0 : percentage - 100 > 100 ? 100 : percentage - 100,

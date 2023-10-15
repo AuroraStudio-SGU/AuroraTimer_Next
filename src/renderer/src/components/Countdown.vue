@@ -23,7 +23,7 @@
 
 <script setup>
 import {TimerStore} from "../stores/Timer";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
 import * as API from '../api/API'
@@ -38,7 +38,10 @@ try {
   //Timer 返回函数。
   timeStore.timer.onmessage = async (event) => {
     timeStore.TimePlusPlus();
-    let time = timeStore.time
+    let time = Number(globalStore.Setting.userInfo.WeekTime);
+    if (isNaN(time)) {
+      time = 0;
+    }
     //挂机检测
     if (time % timeStore.AfkLimit === 0 && time !== 0 && globalStore.AFKDetected) {
       window.electronAPI.getMousePoint().then((point) => {
@@ -48,15 +51,15 @@ try {
           //TODO 提示用户是否正在挂机
           const NOTIFICATION_TITLE = "你是不是正在挂机？";
           const NOTIFICATION_BODY =
-            "点我恢复计时！";
+              "点我恢复计时！";
           new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-            () => {
-              StartTimer();
-              ElNotification({
-                title: '重新恢复计时',
-                type: 'success'
-              })
-            };
+              () => {
+                StartTimer();
+                ElNotification({
+                  title: '重新恢复计时',
+                  type: 'success'
+                })
+              };
         }
         globalStore.lastMousePoint = point
       })
@@ -67,7 +70,12 @@ try {
       API.addTime(globalStore.Setting.userInfo.id).then((res) => {
         if (res.success) {
           if (typeof (res.data) == 'number') {
-            timeStore.setTimeFromServer(res.data)
+            if (globalStore.Setting.userInfo.WeekTime < res.data) {
+              globalStore.Setting.userInfo.WeekTime = Number(res.data)
+            }
+            if(Number(globalStore.Setting.userInfo.WeekTime)-Number(res.data)>=60){
+              globalStore.Setting.userInfo.WeekTime = Number(res.data)
+            }
           }
         }
       })
@@ -116,11 +124,14 @@ const SecondToTimeStr = (second) => {
 }
 
 
-onMounted(() => {
+onBeforeMount(() => {
   if (!(timeStore.timer instanceof Worker)) {
     timeStore.timer = new Worker(new URL('../utils/Timer.js', import.meta.url).href)
   }
-  let time = timeStore.time
+  let time = Number(globalStore.Setting.userInfo.WeekTime)
+  if (isNaN(time)) {
+    time = 0;
+  }
   let nowTimeStr = SecondToTimeStr(time)
   hour.value = nowTimeStr.hour;
   min.value = nowTimeStr.min;
@@ -128,7 +139,6 @@ onMounted(() => {
   if (timeStore.isStarted) {
     timeStore.timer.postMessage('stop')
     timeStore.timer.postMessage('start')
-
   }
   window.electronAPI.getMousePoint().then((point) => {
     globalStore.lastMousePoint = point;

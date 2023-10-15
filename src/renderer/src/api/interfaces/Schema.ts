@@ -53,3 +53,12 @@ export interface Notice{
   notice:string,
   updateTime:Date
 }
+export interface UserTime_avtar {
+  id:string,
+  name:string,
+  totalTime:number,
+  weekTime:number,
+  reduceTime:number,
+  unfinishedCount:number,
+  avatar:string,
+}

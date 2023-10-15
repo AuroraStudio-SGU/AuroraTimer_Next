@@ -4,8 +4,8 @@
       <div class="hero h-full">
         <div class="hero-content flex-row">
           <img
-            :src="getUrl('icon.png')"
-            class="max-w-sm rounded-lg shadow-2xl"
+              :src="getUrl('icon.png')"
+              class="max-w-sm rounded-lg shadow-2xl"
           />
           <div>
             <h1 class="text-5xl font-bold">工作室公告</h1>
@@ -20,15 +20,15 @@
       <div class="about-guys">处刑榜</div>
       <div class="align">
         <div class="card">
-          <div class="photo"><img :src="getUrl('keli.jpg')" alt=""/></div>
+          <div class="photo"><img :src="Last3[0].avatar" alt=""/></div>
           <h2>{{ Last3[0].name }}</h2>
         </div>
         <div class="card">
-          <div class="photo"><img :src="getUrl('caos.jpg')" alt=""/></div>
+          <div class="photo"><img :src="Last3[1].avatar" alt=""/></div>
           <h2>{{ Last3[1].name }}</h2>
         </div>
         <div class="card">
-          <div class="photo"><img :src="getUrl('hutao.jpg')" alt=""/></div>
+          <div class="photo"><img :src="Last3[2].avatar" alt=""/></div>
           <h2>{{ Last3[2].name }}</h2>
         </div>
       </div>
@@ -41,23 +41,26 @@ import "../assets/css/common.css";
 import {AdminStore} from "../stores/Admin";
 import {onBeforeMount, ref, toRaw} from "vue";
 import {getUrl} from "../utils/urlUtils";
-import {UserTime} from "../api/interfaces/Schema";
-import {getLast3} from "../api/API";
+import {UserTime_avtar} from "../api/interfaces/Schema";
+import {getAvatarById, getLast3} from "../api/API";
 import {ElNotification} from "element-plus";
 
 const adminStore = AdminStore();
 const noticeContext = ref(null);
 
-function isNotEmptyStr(s) {
+function isNotEmptyStr(s: string) {
   return typeof s == "string" && s.length > 0;
 }
-let empty:UserTime={
-  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,
+
+
+let empty: UserTime_avtar = {
+  avatar: "",
+  id: '', name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0
 }
 let Last3s = [
-  empty,empty,empty
+  empty, empty, empty
 ]
-let Last3 = ref<UserTime[]>(Last3s);
+let Last3 = ref<UserTime_avtar[]>(Last3s);
 
 
 const loadLast3 = async () => {
@@ -70,12 +73,17 @@ const loadLast3 = async () => {
     });
   } else {
     Last3.value = res.data;
+    for (let i = 0; i < Last3.value.length; i++) {
+      let res = await getAvatarById(Last3.value[i].id)
+      if (res.success) {
+        Last3.value[i].avatar = res.data;
+      }
+    }
   }
 }
 
 onBeforeMount(async () => {
   let notice = toRaw(await adminStore.getNotice());
-  console.log(notice)
   if (notice == null || !isNotEmptyStr(notice.notice)) {
     noticeContext.value.innerHTML = `<p> 负责人还没写公告呢~ </p>`
   } else {

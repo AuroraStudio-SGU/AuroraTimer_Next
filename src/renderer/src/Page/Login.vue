@@ -113,7 +113,7 @@ const login = async () => {
   //TODO more userInformation
   let userInfo: UserInfo = {
     WeekTime: result.currentWeekTime, avatar: result.avatar, grade: result.grade,
-    id: result.id, isAdmin: result.admin, major: result.major, name: result.major, token: result.token, work_group: result.work_group
+    id: result.id, isAdmin: result.admin, major: result.major, name: result.name, token: result.token, work_group: result.work_group
   }
   window.electronAPI.pushDataToMain({
     type: "UserInfo",

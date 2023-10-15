@@ -66,7 +66,7 @@ export const DefaultSetting:SettingFile={
     host:"http://localhost:8084",
   },
   version:"0.0.1",
-  skin:"valentine",
+  skin:"light",
   autoLogin:false,
   OpenAtStart:false,
 }
