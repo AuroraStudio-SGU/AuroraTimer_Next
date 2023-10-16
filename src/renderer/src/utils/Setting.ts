@@ -63,7 +63,7 @@ export const DefaultSetting:SettingFile={
     }
   },
   netWork:{
-    host:"http://localhost:8084",
+    host:"http://192.168.49.66:8088",
   },
   version:"0.0.1",
   skin:"light",

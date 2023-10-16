@@ -190,7 +190,7 @@ let emptyInformation: UserInfo = {
 let UserInformation = ref<UserInfo>(emptyInformation)
 
 function checkAvatar(file: ArrayBuffer) {
-  return file.byteLength <= 2_000_000 // 2 MB
+  return file.byteLength <= 10_000_000 // 10 MB
 }
 
 const saveAndUploadAvatar = async () => {
@@ -205,6 +205,7 @@ const saveAndUploadAvatar = async () => {
         type: "success",
       });
       RandomNumber.value = Math.random();
+      globalStore.AvatarUpdateFlag = Math.random();
     } else {
       ElNotification({
         title: "上传失败!",
@@ -233,7 +234,7 @@ const selectAvatarFile = async (e: Event) => {
   }
 
   if (!checkAvatar(await file.arrayBuffer())) {
-    AvatarError.value = "图片不得超过2MB"
+    AvatarError.value = "图片不得超过10MB"
     return
   }
   NewAvatar.value = true;
@@ -255,7 +256,6 @@ const loadUserInformation = async () => {
       type: "error"
     });
   } else {
-    console.log(res.data)
     UserInformation.value = res.data;
   }
 }

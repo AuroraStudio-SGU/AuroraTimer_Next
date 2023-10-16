@@ -84,7 +84,7 @@ try {
     if (value) {
       console.log("从主进程加载配置文件");
       globalStore.loadAllSetting(JSON.parse(value));
-      init(globalStore.Setting.netWork.host);
+      init(globalStore.Setting.netWork.host,globalStore.Setting.userInfo.token);
     }
   });
   window.electronAPI.OnDateFromMain((_event, value) => {

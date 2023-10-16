@@ -3,6 +3,7 @@ import {DefaultSetting, SettingFile} from "../utils/Setting";
 import {getDuty, getRank, getTargetTime} from "../api/API";
 import {isSameWeek} from "../utils/DateUtils";
 import {DutyList, UserInfo, UserTime} from "../api/interfaces/Schema";
+import {ref} from "vue";
 
 
 const themes = [
@@ -50,6 +51,7 @@ export const GlobalStore = defineStore('main', {
         isAFK: false,
         DutyList: [] as DutyList[],
         TargetTime: -1,
+        AvatarUpdateFlag:Math.random(),
     }),
     getters: {
         getUserInfo(state): UserInfo {

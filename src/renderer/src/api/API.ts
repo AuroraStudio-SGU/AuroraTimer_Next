@@ -4,173 +4,179 @@ import {APIResponse, Notice, User, UserInfo} from "./interfaces/Schema";
 let instance: AxiosInstance;
 
 const HTTP_OK = 200;
+const HTTP_ERROR = 100;
 
-export function init(baseUrl: string, token?: string) {
-  instance = axios.create({
-    baseURL: baseUrl,
-    timeout: 10000,
-    headers: {
-      "token": token,
-    },
-  });
+export function init(baseUrl: string, token: string) {
+    instance = axios.create({
+        baseURL: baseUrl,
+        timeout: 10000,
+        headers: {
+            "token": token,
+        },
+    });
 }
 
 async function processResponse(RawResp: AxiosResponse): Promise<APIResponse> {
-  let apiResp: APIResponse = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  if (RawResp.status != HTTP_OK) {
-    apiResp.success = false;
-    apiResp.msg = "HTTP Code is not 200,current status is " + RawResp.status + "statusText is " + RawResp.statusText
-    return apiResp;
-  }
-  //TODO target interface
-  let Res = RawResp.data
-  if (Res.code != HTTP_OK) {
-    apiResp.success = false;
-    apiResp.msg = "System return not 200 code,current code :" + Res.code
-    return apiResp;
-  }
+    let apiResp: APIResponse = {
+        success: true,
+        msg: null,
+        data: null
+    }
+    if (RawResp.status != HTTP_OK) {
+        apiResp.success = false;
+        apiResp.msg = "HTTP Code is not 200,current status is " + RawResp.status + "statusText is " + RawResp.statusText
+        return apiResp;
+    }
+    //TODO target interface
+    let Res = RawResp.data
+    if (Res.code != HTTP_OK) {
+        apiResp.success = false;
+        if (Res.code === HTTP_ERROR) {
+            apiResp.msg = Res.msg;
+        } else {
+            apiResp.msg = "系统错误";
+        }
+        return apiResp;
+    }
 
-  apiResp.msg = "操作成功"
-  apiResp.data = Res.data
-  return apiResp;
+    apiResp.msg = "操作成功"
+    apiResp.data = Res.data
+    return apiResp;
 }
 
-async function doGet(url: string, token?: string): Promise<APIResponse> {
-  let apiResp: APIResponse = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  try {
-    let RawResp: AxiosResponse = await instance.get(url, {headers: {"token": token}})
-    return await processResponse(RawResp);
-  } catch (e) {
-    apiResp.success = false;
-    apiResp.msg = e;
-    return apiResp;
-  }
+async function doGet(url: string): Promise<APIResponse> {
+    let apiResp: APIResponse = {
+        success: true,
+        msg: null,
+        data: null
+    }
+    try {
+        let RawResp: AxiosResponse = await instance.get(url);
+        return await processResponse(RawResp);
+    } catch (e) {
+        apiResp.success = false;
+        apiResp.msg = e;
+        return apiResp;
+    }
 
 }
 
-async function doPost(url: string, Obj: object, token?: string): Promise<APIResponse> {
-  let apiResp: APIResponse = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  try {
-    let RawResp: AxiosResponse = await instance.post(url, Obj, {headers: {"token": token}})
-    return processResponse(RawResp);
-  } catch (e) {
-    apiResp.success = false;
-    apiResp.msg = e;
-    return apiResp;
-  }
+async function doPost(url: string, Obj: object): Promise<APIResponse> {
+    let apiResp: APIResponse = {
+        success: true,
+        msg: null,
+        data: null
+    }
+    try {
+        let RawResp: AxiosResponse = await instance.post(url, Obj)
+        return processResponse(RawResp);
+    } catch (e) {
+        apiResp.success = false;
+        apiResp.msg = e;
+        return apiResp;
+    }
 }
 
 
 export async function getPing() {
-  return doGet('/ping')
+    return doGet('/ping')
 }
 
 export async function addTime(id: string) {
-  return doGet('/timer/addTime/' + id);
+    return doGet('/timer/addTime/' + id);
 }
 
 export async function getRank(lastXWeek: number) {
-  return doGet('/timer/lastXWeek/' + lastXWeek)
+    return doGet('/timer/lastXWeek/' + lastXWeek)
 }
 
 export async function register(user: User) {
-  return doPost('/user/register', user);
+    return doPost('/user/register', user);
 }
 
 export async function login(user: User) {
-  return doPost('/user/login', user);
+    return doPost('/user/login', user);
 }
 
 export async function loginByToken(token: string) {
-  return doGet('/user/loginByToken/' + token)
+    return doGet('/user/loginByToken/' + token)
 }
 
 export async function setDuty(wed: string, sun: string) {
-  let obj = {
-    wed,
-    sun,
-  }
-  return doPost('/admin/setDuty', obj);
+    let obj = {
+        wed,
+        sun,
+    }
+    return doPost('/admin/setDuty', obj);
 }
 
 export async function getDuty() {
-  return doGet('/getDustList')
+    return doGet('/getDustList')
 }
 
 export async function setReduceTime(uid: string, time: number) {
-  return doGet('/admin/setUserReduceTime/' + uid + '/' + time)
+    return doGet('/admin/setUserReduceTime/' + uid + '/' + time)
 }
 
 export async function setTargetTime(hours: number) {
-  return doGet('/admin/setTargetTime/' + hours)
+    return doGet('/admin/setTargetTime/' + hours)
 }
 
 export async function getTargetTime() {
-  return doGet('/getTargetTime')
+    return doGet('/getTargetTime')
 }
 
 export async function getNotice() {
-  return doGet('/admin/getNotice')
+    return doGet('/timer/getNotice')
 }
 
 export async function createNotice(notice: Notice) {
-  return doPost('/admin/uploadNotice', notice);
+    return doPost('/admin/uploadNotice', notice);
 }
 
 export async function getTop3() {
-  return doGet('/timer/top3');
+    return doGet('/timer/top3');
 }
 
 export async function getLast3() {
-  return doGet('/timer/last3');
+    return doGet('/timer/last3');
 }
 
 export async function updateAvatar(byte: ArrayBuffer, id: string) {
-  const blob = new Blob([byte]);
-  const formData = new FormData();
-  formData.append('file', blob, id + '.avatar');
-  let apiResp: APIResponse = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  try {
-    let RawResp: AxiosResponse = await instance.post('/user/uploadAvatar/' + id, formData, {headers: {'Content-Type': 'multipart/form-data'}})
-    return processResponse(RawResp);
-  } catch (e) {
-    apiResp.success = false;
-    apiResp.msg = e;
-    return apiResp;
-  }
+    const blob = new Blob([byte]);
+    const formData = new FormData();
+    formData.append('file', blob, id + '.avatar');
+    let apiResp: APIResponse = {
+        success: true,
+        msg: null,
+        data: null
+    }
+    try {
+        let RawResp: AxiosResponse = await instance.post('/user/uploadAvatar/' + id, formData, {headers: {'Content-Type': 'multipart/form-data'}})
+        return processResponse(RawResp);
+    } catch (e) {
+        apiResp.success = false;
+        apiResp.msg = e;
+        return apiResp;
+    }
 }
 
 export async function getAvatarById(id: string) {
-  return doGet('/user/avatar/' + id);
+    return doGet('/user/avatar/' + id);
 }
 
 export async function checkAdmin() {
-  return doGet('/admin/test');
+    return doGet('/admin/test');
 }
-export async function queryUser(id:string) {
-  return doGet('/user/'+id);
+
+export async function queryUser(id: string) {
+    return doGet('/user/' + id);
 }
 
 /**
  * tips: this cant not change admin state
  * @param user UserInfo
  */
-export async function updateUser(user:UserInfo){
-  return doPost('/user/update',user)
+export async function updateUser(user: UserInfo) {
+    return doPost('/user/update', user)
 }

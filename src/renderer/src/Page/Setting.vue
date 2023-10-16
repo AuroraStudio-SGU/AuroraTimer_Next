@@ -97,7 +97,7 @@ const SaveSetting = () => {
   let flag = window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   if (flag) {
     //加载渲染进程当中需要更新的设置
-    init(globalStore.Setting.netWork.host)
+    init(globalStore.Setting.netWork.host,globalStore.Setting.userInfo.token)
     ElNotification({
       title: '保存成功',
       type: 'success'

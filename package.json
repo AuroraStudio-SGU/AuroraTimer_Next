@@ -1,6 +1,6 @@
 {
   "name": "auroratimer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Next Gen AuroraStudio Timer tool set",
   "main": "./out/main/index.js",
   "author": "DAYGood_Time",
