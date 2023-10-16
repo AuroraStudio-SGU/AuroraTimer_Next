@@ -63,8 +63,8 @@
 .wheel {
   background: radial-gradient(
     100% 100% at center,
-    hsla(0, 0%, 60%, 0) 47.8%,
-    hsl(0, 0%, 60%) 48%
+    hsla(0, 0%, 60%, 0) 46%,
+    hsl(0, 0%, 60%) 47%
   );
   z-index: 2;
 }

@@ -1,23 +1,33 @@
 <template>
   <div class="app">
     <router-view v-if="!loginPanel"></router-view>
-    <div v-if="loginPanel" :data-theme="globalStore.getCurrentTheme" class="main">
+    <div
+      v-if="loginPanel"
+      :data-theme="globalStore.getCurrentTheme"
+      class="main"
+    >
       <div class="top-bar">
         <!-- 顶部栏 -->
         <div class="drag-bar"></div>
         <!-- 拖拽栏 -->
         <div class="window-bar">
           <!-- 红 绿 灯  -->
-          <div class="circle-green" @click="windowOperation('Min')"></div>
-          <div class="circle-yellow" @click="windowOperation('Max')"></div>
-          <div class="circle-red" @click="windowOperation('Close')"></div>
+          <div class="circle-green" @click="windowOperation('Min')">
+            <img :src="getUrl('min.png')" class="icon" />
+          </div>
+          <div class="circle-yellow" @click="windowOperation('Max')">
+            <img :src="getUrl('max.png')" class="icon" />
+          </div>
+          <div class="circle-red" @click="windowOperation('Close')">
+            <img :src="getUrl('close.png')" class="icon" />
+          </div>
         </div>
       </div>
       <div class="some-change">
         <div class="sliderBar">
           <SliderBar></SliderBar>
         </div>
-        <div class="top-bottom" >
+        <div class="top-bottom">
           <div class="navBar">
             <NavBar></NavBar>
           </div>
@@ -41,18 +51,19 @@
 
 <script setup>
 import SliderBar from "./components/SliderBar.vue";
-import {onBeforeMount, ref} from "vue";
-import {GlobalStore} from "./stores/Global";
+import { onBeforeMount, ref } from "vue";
+import { GlobalStore } from "./stores/Global";
 import Love from "./components/Love.vue";
 import NavBar from "./components/NavBar.vue";
 import Star from "./components/Star.vue";
-import {init} from "./api/API";
+import { init } from "./api/API";
+import { getUrl } from "./utils/urlUtils";
 
 //登录状态栏
 const loginPanel = ref(false);
 const globalStore = GlobalStore();
 
-const name = ref('nmame')
+const name = ref("nmame");
 
 const themeList = [];
 let usingTime;
@@ -80,13 +91,13 @@ try {
     console.log("从主进程加载数据");
     if (value) {
       if (value.type === "UserInfo") {
-        globalStore.setUserInfo(value.data)
+        globalStore.setUserInfo(value.data);
       }
-      if(value.type === "Setting"){
-        globalStore.Setting = value.data
+      if (value.type === "Setting") {
+        globalStore.Setting = value.data;
       }
     }
-  })
+  });
 } catch (e) {
   console.error(e);
 }
@@ -129,7 +140,6 @@ onBeforeMount(() => {
   transform: scale(v-bind(plex));
   backdrop-filter: blur(10px);
 }
-
 
 .drag-bar {
   border-radius: 10px;
@@ -197,6 +207,9 @@ onBeforeMount(() => {
   border-radius: 50%;
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circle-yellow {
@@ -206,6 +219,9 @@ onBeforeMount(() => {
   border-radius: 50%;
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .circle-red {
@@ -215,6 +231,9 @@ onBeforeMount(() => {
   border-radius: 50%;
   transition: color 0.4s ease;
   transition: transform 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .some-change {
@@ -231,7 +250,6 @@ onBeforeMount(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
 }
 
 .app-box {
@@ -245,13 +263,16 @@ onBeforeMount(() => {
 .navBar {
   /* padding: 24px 1000px 0 140px; */
   position: relative;
-
-
 }
 
 .sliderBar {
   height: 100%;
   margin-right: 35px;
   width: 100px;
+}
+
+.icon {
+  width: 10px;
+  height: 10px;
 }
 </style>
