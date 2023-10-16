@@ -20,7 +20,7 @@
     </div>
 
     <div class="flex-none gap-2 font-f">
-<!--      <LoaderTriangle></LoaderTriangle>-->
+     <LoaderTriangle></LoaderTriangle>
     </div>
     <div class="dropdown dropdown-end">
       <label

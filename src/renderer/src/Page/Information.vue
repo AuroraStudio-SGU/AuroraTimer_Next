@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="w-full text-center mt-5">
-          <div class="flex justify-center lg:pt-4 pb-0 pt-14">
+          <div class="flex justify-center lg:pt-4 pb-0" style="padding-top: 7vh;">
             <div class="p-3 text-center">
               <span
                   class="text-xl font-bold block uppercase tracking-wide text-slate-700"
@@ -325,7 +325,7 @@ const handleMoveOut = () => {
 .top-white {
   @apply bg-accent;
   width: 100%;
-  height: 40px;
+  height: 7vh;
   border-radius: 10px 10px 0 0;
 }
 
