@@ -13,13 +13,13 @@
         <div class="window-bar">
           <!-- 红 绿 灯  -->
           <div class="circle-green" @click="windowOperation('Min')">
-            <img :src="getUrl('min.png')" class="icon" />
+            <img :src="getUrl('min.png')" class="icony" />
           </div>
           <div class="circle-yellow" @click="windowOperation('Max')">
-            <img :src="getUrl('max.png')" class="icon" />
+            <img :src="getUrl('max.png')" class="icony" />
           </div>
           <div class="circle-red" @click="windowOperation('Close')">
-            <img :src="getUrl('close.png')" class="icon" />
+            <img :src="getUrl('close.png')" class="icony" />
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ onBeforeMount(() => {
   width: 100px;
 }
 
-.icon {
+.icony {
   width: 10px;
   height: 10px;
 }

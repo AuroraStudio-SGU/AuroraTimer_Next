@@ -19,22 +19,24 @@
         </li>
         <li>
           <a @click="jumpTo('Rank')">
+            
             <svg class="slider-svg">
-              <use xlink:href="../assets/svg/SliderBarIcons.svg#calculator"></use>
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#signal"></use>
             </svg>
           </a>
+          
         </li>
         <li>
-          <a @click="jumpTo('Setting')">
+          <a @click="jumpTo('LeaderBoard')">
             <svg class="slider-svg">
-              <use xlink:href="../assets/svg/SliderBarIcons.svg#setting"></use>
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#info"></use>
             </svg>
           </a>
         </li>
         <li>
           <a @click="jumpTo('Other')">
             <svg class="slider-svg">
-              <use xlink:href="../assets/svg/SliderBarIcons.svg#signal"></use>
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#calculator"></use>
             </svg>
           </a>
         </li>
@@ -46,9 +48,10 @@
           </a>
         </li> -->
         <li>
-          <a @click="jumpTo('LeaderBoard')">
+          
+          <a @click="jumpTo('Admin')">
             <svg class="slider-svg">
-              <use xlink:href="../assets/svg/SliderBarIcons.svg#info"></use>
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#admin"></use>
             </svg>
           </a>
         </li>
@@ -60,9 +63,9 @@
           </a>
         </li>
         <li>
-          <a @click="jumpTo('Admin')">
+          <a @click="jumpTo('Setting')">
             <svg class="slider-svg">
-              <use xlink:href="../assets/svg/SliderBarIcons.svg#admin"></use>
+              <use xlink:href="../assets/svg/SliderBarIcons.svg#setting"></use>
             </svg>
           </a>
         </li>
