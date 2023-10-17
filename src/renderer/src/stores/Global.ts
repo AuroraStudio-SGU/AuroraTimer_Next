@@ -47,7 +47,7 @@ export const GlobalStore = defineStore('main', {
         Setting: DefaultSetting as SettingFile,
         ThemeList: themes,
         lastMousePoint: false,
-        AFKDetected: false,
+        AFKDetected: true,
         isAFK: false,
         DutyList: [] as DutyList[],
         TargetTime: -1,

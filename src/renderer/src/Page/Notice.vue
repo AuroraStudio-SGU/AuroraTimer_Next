@@ -76,7 +76,7 @@ const loadLast3 = async () => {
     for (let i = 0; i < Last3.value.length; i++) {
       let res = await getAvatarById(Last3.value[i].id)
       if (res.success) {
-        Last3.value[i].avatar = res.data;
+        Last3.value[i].avatar = res.data + '?' + Math.random();
       }
     }
   }

@@ -226,7 +226,7 @@ const loadTop3 = async () => {
     for (let i = 0; i < Top3.value.length; i++) {
       let res = await getAvatarById(Top3.value[i].id)
       if (res.success) {
-        Top3.value[i].avatar = res.data;
+        Top3.value[i].avatar = res.data + '?' + Math.random();
       }
     }
   }

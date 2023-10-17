@@ -24,6 +24,7 @@ export interface UserTime {
   weekTime:number,
   reduceTime:number,
   unfinishedCount:number,
+  avatar:string,//前端字段
 }
 /*
   id:string,

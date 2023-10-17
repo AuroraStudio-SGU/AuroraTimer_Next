@@ -16,7 +16,14 @@
         :default-sort="{ prop: 'weekTime', order: 'descending' }"
         v-loading="Loading"
       >
-        <el-table-column label="姓名" prop="name" min-width="30"/>
+        <el-table-column label="姓名" prop="name" min-width="40">
+          <template #default="scope">
+            <div style="display: flex; align-items: center">
+              <img :src="scope.row.avatar" height="30" width="30" style="border-radius: 10px" />
+              <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column
           :filter-method="filterHandler" :filters="GradeFilters"
           :formatter="GradeFormatter"
@@ -47,6 +54,7 @@ import {GlobalStore} from "../stores/Global";
 import {TimerStore} from "../stores/Timer";
 import {UserTime} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
+import {getAvatarById} from "../api/API";
 
 interface Week {
     index:number,
@@ -133,12 +141,17 @@ const loadRankList = async () => {
   UserList.value = res
   timerStore.setUserTimeList(UserList.value)
   //在加载前获取所有成员的年级列表
-  UserList.value.forEach(user => {
+  for (let i = 0; i < UserList.value.length; i++) {
+    let user = UserList.value[i];
     let g = user.id.substring(0, 2)
     let index = GradeList.value.indexOf(g)
     if (index == -1)
       GradeList.value.push(g)
-  })
+    let res = await getAvatarById(user.id)
+    if (res.success) {
+      UserList.value[i].avatar = res.data + '?' + Math.random();
+    }
+  }
   GradeList.value.forEach(i => {
     let obj = {
       text: i + '级',

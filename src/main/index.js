@@ -345,7 +345,7 @@ const LoadSetting = async () => {
 
 function focusWindow() {
     if (mainWindow.isVisible()) {
-        mainWindow.force()
+        mainWindow.focus()
     } else {
         mainWindow.show()
     }

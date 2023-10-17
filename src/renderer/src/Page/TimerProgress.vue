@@ -132,7 +132,7 @@
           <div class="stat-value">{{ DutyList.wed }} {{ DutyList.sun }}</div>
         </div>
       </div>
-      <button class="btn btn-success" style="position: absolute;right: 200px;" @click="startTimer">计时(测试用)</button>
+<!--      <button class="btn btn-success" style="position: absolute;right: 200px;" @click="startTimer">计时(测试用)</button>-->
     </div>
   </div>
 </template>
@@ -149,10 +149,8 @@ const timerStore = TimerStore();
 const CountDown = ref(null);
 
 const startTimer = () => {
-  if (timerStore.isStarted) {
-    CountDown.value.StopTimer();
-  } else {
-    CountDown.value.StartTimer();
+  if (!timerStore.isStarted) {
+    CountDown.value.StartTimer()
   }
 };
 const stopTimer = () => {
@@ -179,6 +177,7 @@ onBeforeMount(async () => {
     DutyList.value.createTime = dutyList.createTime
     let res = await globalStore.getTargetTime()
     TargetTime.value = toRaw(res).targetTime
+    startTimer();
   } catch (e) {}
 })
 
