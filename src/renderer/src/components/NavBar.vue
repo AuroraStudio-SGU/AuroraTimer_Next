@@ -6,14 +6,14 @@
       <div
           v-if="globalStore.isAFK"
           class="badge font-semibold"
-          style="margin-left: 10px"
+          style="margin-left: 80px"
       >
         挂机中
       </div>
       <div
           v-else
           class="badge font-semibold"
-          style="margin-left: 10px"
+          style="margin-left: 80px"
       >
         计时中
       </div>

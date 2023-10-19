@@ -25,7 +25,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+
+</script>
 
 <style scoped>
 .scale-box {
@@ -34,7 +36,7 @@
   transform: scale(0.4);
   position: absolute;
   top:0;
-  left: 243px;
+  left: 144px;
 }
 .wheel-and-hamster {
   --dur: 1s;
