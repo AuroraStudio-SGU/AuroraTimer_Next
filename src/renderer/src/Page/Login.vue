@@ -62,7 +62,7 @@ import {md5} from "js-md5";
 import {UserInfo} from "../api/interfaces/Schema";
 
 const globalStore = GlobalStore()
-let AutoLogin = ref(false)
+let AutoLogin = ref(true)
 
 onBeforeMount(() => {
   window.electronAPI.handleSetting((_event, value) => {
@@ -94,7 +94,6 @@ let confirmPsw = ref('')
 
 const login = async () => {
   console.log("登录操作")
-  globalStore.Setting.autoLogin = AutoLogin.value
   const user = {
     id: id.value,
     name: name.value,
@@ -120,7 +119,8 @@ const login = async () => {
     data: userInfo
   });
   globalStore.Setting.userInfo = userInfo;
-  window.electronAPI.SaveSetting(JSON.stringify(toRaw(globalStore.Setting)))
+  globalStore.Setting.autoLogin = AutoLogin.value;
+  window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   window.electronAPI.login()
 }
 

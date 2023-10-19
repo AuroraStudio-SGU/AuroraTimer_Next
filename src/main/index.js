@@ -168,6 +168,26 @@ function mainLogger(event, value) {
 
 
 const enableDevTool = true;
+
+//多开检测
+const gotTheLock = app.requestSingleInstanceLock(AdditionalData)
+//多开锁
+if (!gotTheLock) {
+  isAppQuit = true;
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+    // 输出从第二个实例中接收到的数据
+    AdditionalData = additionalData
+    // 有人试图运行第二个实例，我们应该关注我们的窗口
+    if (!mainWindow.isVisible()) {
+      mainWindow.show()
+    } else {
+      focusWindow()
+    }
+  })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -186,24 +206,6 @@ app.whenReady().then(() => {
     //创建窗口
     createWindow()
     createLoginWindow()
-    //多开检测
-    const gotTheLock = app.requestSingleInstanceLock(AdditionalData)
-    //多开锁
-    if (!gotTheLock) {
-        isAppQuit = true;
-        app.quit()
-    } else {
-        app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
-            // 输出从第二个实例中接收到的数据
-            AdditionalData = additionalData
-            // 有人试图运行第二个实例，我们应该关注我们的窗口
-            if (!mainWindow.isVisible()) {
-                mainWindow.show()
-            } else {
-                focusWindow()
-            }
-        })
-    }
     //加载配置文件
     LoadSetting()
 
@@ -391,7 +393,6 @@ function checkForUpdates() {
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
             if (returnValue.response === 0) {
-                isAppQuit = true;
                 autoUpdater.quitAndInstall()
             }
         })

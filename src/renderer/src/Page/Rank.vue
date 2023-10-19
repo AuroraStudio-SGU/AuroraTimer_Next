@@ -19,7 +19,7 @@
         <el-table-column label="姓名" prop="name" min-width="40">
           <template #default="scope">
             <div style="display: flex; align-items: center">
-              <img :src="scope.row.avatar" height="30" width="30" style="border-radius: 10px" />
+              <img :src="scope.row.avatar" height="30" width="30" style="border-radius: 10px" @click="showInformation(scope.row.id)" />
               <span style="margin-left: 10px">{{ scope.row.name }}</span>
             </div>
           </template>
@@ -40,6 +40,20 @@
         <el-table-column :formatter="TimeFormatter" label="该学期打卡时长" prop="totalTime" sortable/>
         <el-table-column :formatter="TimeFormatter" label="本周打卡时长" prop="weekTime" sortable/>
       </el-table>
+      <dialog id="user" ref="user" class="modal">
+        <div class="modal-box-notice modal-box relative overflow-hidden">
+          <h3 class="font-bold text-lg">公告设置📢</h3>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <div class="container">
+            114514
+          </div>
+          <div class="modal-action">
+            <label for="notice" class="btn">保存</label>
+          </div>
+        </div>
+      </dialog>
     </div>
   </div>
 
@@ -55,6 +69,7 @@ import {TimerStore} from "../stores/Timer";
 import {UserTime} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
 import {getAvatarById} from "../api/API";
+
 
 interface Week {
     index:number,
@@ -93,6 +108,11 @@ const GradeFormatter = (row, colum) => {
 
 const TimeFormatter = (row, colum) => {
   return formatSecondTime(row[colum.property])
+}
+const user = ref(null);
+const showInformation = (id:string) =>{
+  user.value.showModal()
+  console.log("show")
 }
 
 const handlePageChange = async (state:boolean) => {
@@ -141,6 +161,7 @@ const loadRankList = async () => {
   UserList.value = res
   timerStore.setUserTimeList(UserList.value)
   //在加载前获取所有成员的年级列表
+  GradeList.value = [];
   for (let i = 0; i < UserList.value.length; i++) {
     let user = UserList.value[i];
     let g = user.id.substring(0, 2)
@@ -152,6 +173,7 @@ const loadRankList = async () => {
       UserList.value[i].avatar = res.data + '?' + Math.random();
     }
   }
+  GradeFilters.value = [];
   GradeList.value.forEach(i => {
     let obj = {
       text: i + '级',

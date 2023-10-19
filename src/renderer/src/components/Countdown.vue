@@ -27,6 +27,7 @@ import {onBeforeMount, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
 import * as API from '../api/API'
+import {getUrl} from "../utils/urlUtils";
 
 let hour = ref('00')
 let min = ref('00')
@@ -50,11 +51,14 @@ try {
           globalStore.isAFK = true
           //TODO 提示用户是否正在挂机
           const NOTIFICATION_TITLE = "你是不是正在挂机？";
-          const NOTIFICATION_BODY =
-              "点我恢复计时！";
-          new Notification(NOTIFICATION_TITLE, {body: NOTIFICATION_BODY}).onclick =
-              () => {
+          const NOTIFICATION_BODY = "点我恢复计时！";
+          const img = getUrl('icon-sm.png')
+          let notice = new Notification(
+              NOTIFICATION_TITLE,
+              {body: NOTIFICATION_BODY,requireInteraction:true,icon:img})
+              .onclick = () => {
                 StartTimer();
+                globalStore.isAFK = false;
                 ElNotification({
                   title: '重新恢复计时',
                   type: 'success'

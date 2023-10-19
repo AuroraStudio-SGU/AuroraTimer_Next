@@ -67,6 +67,6 @@ export const DefaultSetting:SettingFile={
   },
   version:"0.0.1",
   skin:"light",
-  autoLogin:false,
+  autoLogin:true,
   OpenAtStart:false,
 }
