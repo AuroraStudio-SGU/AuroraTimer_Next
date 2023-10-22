@@ -50,7 +50,14 @@ const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
 const iconImg = nativeImage.createFromPath(icon)
 // const UpdateServerURL = "http://localhost:9999/timer/"
-const UpdateServerURL = "http://192.168.49.66:8000"
+let UpdateServerURL;
+
+switch (process.platform) {
+    case "darwin":UpdateServerURL = "http://192.168.49.66:8000/apps/mac";break;
+    case "win32":UpdateServerURL = "http://192.168.49.66:8000/apps/win";break;
+    default:UpdateServerURL = "http://192.168.49.66:8000/apps";break;
+}
+
 const offlineMode = false
 
 
