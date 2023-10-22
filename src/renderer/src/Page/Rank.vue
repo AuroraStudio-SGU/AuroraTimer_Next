@@ -4,6 +4,7 @@
       <div class="header">
         <div class="Title">工作室本周打卡情况</div>
         <div class="join">
+          <button class="btn " style="margin-right: 2rem" v-show="lastXWeek!=0" @click="resetLastWeek">回到本周</button>
           <button class="join-item btn" @click="handlePageChange(true)">
             «
           </button>
@@ -131,6 +132,7 @@ onBeforeMount(async () => {
   await loadWeekList();
   document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
   await loadRankList();
+  Loading.value = false;
 });
 
 onMounted(async () => {
@@ -207,6 +209,7 @@ const loadRankList = async () => {
     });
     return;
   }
+  document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
   UserList.value = res;
   timerStore.setUserTimeList(UserList.value);
   //在加载前获取所有成员的年级列表
@@ -231,6 +234,12 @@ const loadRankList = async () => {
   });
   Loading.value = false;
 };
+
+const resetLastWeek = async ()=>{
+  if(Loading.value){return}
+  lastXWeek.value = 0;
+  await loadRankList();
+}
 
 const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"

@@ -3,20 +3,19 @@ export interface APIResponse {
   msg:string;
   data:any;
 }
-
-export interface getRank {
-  code:number,
-  msg:string,
-  data:UserTime[]
-}
-
-
-export class User {
+export interface User {
   id:string;
   name:string;
   password:string;
+  avatar:string;
+  admin:boolean;
+  afk:boolean;
+  reduceTime:number;
+  unfinishedCount:number;
+  major:string;
+  grade:string;
+  workGroup:string;
 }
-
 export interface UserTime {
   id:string,
   name:string,
@@ -26,12 +25,6 @@ export interface UserTime {
   unfinishedCount:number,
   avatar:string,//前端字段
 }
-/*
-  id:string,
-  name:string,
-  major:string,
-  token:string,
- */
 export interface UserInfo {
   id: string,
   name: string,

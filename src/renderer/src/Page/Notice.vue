@@ -14,9 +14,6 @@
           </div>
         </div>
       </div>
-      <!--      <div class="container">-->
-      <!--        <div class="item" v-for="item in items" :key="item.id">{{item.name}}111</div>-->
-      <!--      </div>-->
       <div class="about-guys">处刑榜</div>
       <div class="align">
         <div class="card">
@@ -94,17 +91,11 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-}
-
-.item {
-  margin: 0 10px;
-}
-
 .align {
   display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .about-guys {

@@ -169,6 +169,7 @@ import 'vue-advanced-cropper/dist/style.css';
 import {UserInfo} from "../api/interfaces/Schema";
 import {queryUser, updateAvatar, updateUser} from "../api/API";
 import {ElNotification} from "element-plus";
+import {isNotEmptyStr} from "../utils/StringUtil";
 
 const globalStore = GlobalStore();
 
@@ -187,12 +188,20 @@ let emptyInformation: UserInfo = {
   WeekTime: 0, avatar: "", grade: "", id: "", isAdmin: false, major: "", name: "", token: "", work_group: ""
 }
 
+//存储用户信息数据
 let UserInformation = ref<UserInfo>(emptyInformation)
 
+/**
+ * 检查头像文件大小
+ * @param file 文件对象
+ */
 function checkAvatar(file: ArrayBuffer) {
   return file.byteLength <= 10_000_000 // 10 MB
 }
 
+/**
+ * 保存并上传头像到服务器中
+ */
 const saveAndUploadAvatar = async () => {
   handleMoveOut()
   if (croppedAvatar.value) {
@@ -217,16 +226,24 @@ const saveAndUploadAvatar = async () => {
   NewAvatarURL.value = '';
   NewAvatar.value = false
 }
+
+/**
+ * 处理用户离开头像遮罩的处理
+ */
 const handelCancel = () => {
   handleMoveOut()
   NewAvatarURL.value = '';
   NewAvatar.value = false
 }
 
+//与主进程通信，传递登出函数
 const handelLogout = ()=>{
   window.electronAPI.Logout();
 }
-
+/**
+ * 用户选择头像后触发的事件函数
+ * @param e input元素事件
+ */
 const selectAvatarFile = async (e: Event) => {
   const file = (e?.target as HTMLInputElement)?.files?.[0]
   if (!file) {
@@ -241,12 +258,19 @@ const selectAvatarFile = async (e: Event) => {
   NewAvatarURL.value = URL.createObjectURL(file);
 }
 
+/**
+ * 处理需要裁切的图片
+ * @param canvas
+ */
 function crop({canvas}: { canvas: HTMLCanvasElement }) {
   canvas.toBlob(async (blob) => {
     croppedAvatar.value = await blob?.arrayBuffer()
   }, 'image/png', 1)
 }
 
+/**
+ * 加载用户信息
+ */
 const loadUserInformation = async () => {
   let res = await queryUser(globalStore.Setting.userInfo.id)
   if (!res.success) {
@@ -259,7 +283,54 @@ const loadUserInformation = async () => {
     UserInformation.value = res.data;
   }
 }
+
+
+const DefaultPlaceHolder = "待填写";
+const MAX_LENGTH = 32
+/**
+ * 处理用户信息上传
+ */
 const uploadUser = async () => {
+  if(!isNotEmptyStr(UserInformation.value.name)){
+    ElNotification({
+      title: "参数错误",
+      message: "名字不能为空",
+      type: "error"
+    });return;
+  }else if(UserInformation.value.name.length >=MAX_LENGTH){
+    ElNotification({
+      title: "参数错误",
+      message: "太长了，能不能小于32个字符",
+      type: "error"
+    });return;
+  }
+  if(!isNotEmptyStr(UserInformation.value.work_group)){
+    UserInformation.value.work_group = DefaultPlaceHolder
+  }else if(UserInformation.value.work_group.length >= MAX_LENGTH){
+    ElNotification({
+      title: "参数错误",
+      message: "太长了，能不能小于32个字符",
+      type: "error"
+    });return;
+  }
+  if(!isNotEmptyStr(UserInformation.value.grade)){
+    UserInformation.value.grade = DefaultPlaceHolder
+  }else if(UserInformation.value.grade.length >= 4){
+    ElNotification({
+      title: "参数错误",
+      message: "4个字以上的年级，你想干什么",
+      type: "error"
+    });return;
+  }
+  if(!isNotEmptyStr(UserInformation.value.major)){
+    UserInformation.value.major = DefaultPlaceHolder
+  }else if(UserInformation.value.major.length >= MAX_LENGTH) {
+    ElNotification({
+      title: "参数错误",
+      message: "太长了，能不能小于32个字符",
+      type: "error"
+    });return;
+  }
   let res = await updateUser(UserInformation.value)
   if (!res.success) {
     ElNotification({
@@ -276,7 +347,7 @@ const uploadUser = async () => {
   }
 }
 
-
+//在渲染前加载用户信息
 onBeforeMount(async () => {
   await loadUserInformation()
 })

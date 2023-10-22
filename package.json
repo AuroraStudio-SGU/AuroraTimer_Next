@@ -1,6 +1,6 @@
 {
   "name": "auroratimer",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "新·打卡计时器",
   "main": "./out/main/index.js",
   "author": "DAYGood_Time",
@@ -24,7 +24,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "autoprefixer": "^10.4.14",
     "axios": "^1.5.0",
-    "daisyui": "^3.7.3",
+    "daisyui": "^3.9.3",
     "electron-color-picker": "^0.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",

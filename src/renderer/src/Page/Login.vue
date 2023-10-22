@@ -26,7 +26,14 @@
                   <input type="checkbox" checked="checked" class="checkbox" v-model="AutoLogin"/>
                 </label>
               </div>
-              <button class="btn btn-accent sumbit" @click="login">登录</button>
+              <div class="btn-list">
+                <div>
+                  <button class="btn btn-accent" @click="login">登录</button>
+                </div>
+                <div>
+                  <button class="btn btn-accent" onclick="restPwd.showModal()">忘记密码了?</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -46,30 +53,56 @@
           <p class="account">还没有账号?</p>
           <button id="signup" class="button">立即注册</button>
         </div>
+        <!--重置密码页面-->
+        <dialog id="restPwd" class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">忘了密码</h3>
+            <p class="py-4">输入你的学号，直接帮你重置回123456,当然,你想设置新的密码也行</p>
+            <label class="label">
+              <span class="label-text">学号:</span>
+            </label>
+            <input type="text" placeholder="学号~~" class="input input-bordered w-full max-w-xs" v-model="account"/>
+            <label class="label">
+              <span class="label-text">密码:</span>
+            </label>
+            <input type="text" placeholder="不填就123456哦~" class="input input-bordered w-full max-w-xs"
+                   v-model="RestPwd"/>
+            <div class="modal-action">
+              <form method="dialog" class="flex">
+                <button class="btn" @click="forgetPwd">重置</button>
+                <button class="btn">关闭</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, onMounted, ref, toRaw} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import $ from 'jquery';
 import {ElNotification} from "element-plus";
 import * as API from "../api/API";
-import {init} from "../api/API";
+import {init, restPassword} from "../api/API";
 import {GlobalStore} from "../stores/Global";
 import {md5} from "js-md5";
 import {UserInfo} from "../api/interfaces/Schema";
+import {isNotEmptyStr} from "../utils/StringUtil";
 
 const globalStore = GlobalStore()
 let AutoLogin = ref(true)
+let account = ref(null)
+let RestPwd = ref("123456")
+const restPwd = ref(null) //组件对象
 
 onBeforeMount(() => {
   window.electronAPI.handleSetting((_event, value) => {
     if (value) {
       console.log("从主进程加载配置文件");
       globalStore.loadAllSetting(JSON.parse(value));
-      init(globalStore.Setting.netWork.host,globalStore.Setting.userInfo.token);
+      init(globalStore.Setting.netWork.host, globalStore.Setting.userInfo.token);
     }
   });
 })
@@ -111,8 +144,15 @@ const login = async () => {
   let result = Response.data
   //TODO more userInformation
   let userInfo: UserInfo = {
-    WeekTime: result.currentWeekTime, avatar: result.avatar, grade: result.grade,
-    id: result.id, isAdmin: result.admin, major: result.major, name: result.name, token: result.token, work_group: result.work_group
+    WeekTime: result.currentWeekTime,
+    avatar: result.avatar,
+    grade: result.grade,
+    id: result.id,
+    isAdmin: result.admin,
+    major: result.major,
+    name: result.name,
+    token: result.token,
+    work_group: result.work_group
   }
   window.electronAPI.pushDataToMain({
     type: "UserInfo",
@@ -146,16 +186,55 @@ const register = async () => {
     });
     return;
   }
-  //TODO register success
-  console.log(Response.data)
   $('.pinkbox').css('transform', 'translateX(0%)');
   $('.signup').addClass('nodisplay');
   $('.signin').removeClass('nodisplay');
+}
 
+const forgetPwd = async () => {
+  if (!isNotEmptyStr(account.value)) {
+    ElNotification({
+      title: "参数错误",
+      message: "填一下学号拉",
+      type: "error"
+    });
+    return;
+  }
+  if (!isNotEmptyStr(RestPwd.value)) {
+    RestPwd.value = "123456";
+  }
+  let res = await restPassword(account.value, RestPwd.value);
+  if (!res.success) {
+    ElNotification({
+      title: "系统错误!",
+      message: res.msg,
+      type: "error",
+    });
+  } else {
+    ElNotification({
+      title: "设置成功!",
+      type: "success",
+    });
+  }
+  restPwd.value.close()
 }
 </script>
 
 <style scoped>
+
+.modal-action {
+  justify-content: flex-end;
+}
+
+.btn-list {
+  display: flex;
+  margin-top: 2rem;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+
 * {
   margin: 0;
   padding: 0;

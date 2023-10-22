@@ -111,6 +111,7 @@ const textEditor = ref(null)
 const adminStore = AdminStore()
 const globalStore = GlobalStore()
 const timerStore = TimerStore()
+const notice = ref(null)//对话框对象
 
 
 function isNotEmptyStr(s) {
@@ -157,6 +158,7 @@ const uploadNotice = async () => {
       type: "error",
     });
   }
+  notice.value.close()
 }
 
 const TargetTimeOptions = ref([])

@@ -1,7 +1,7 @@
 # AuroraTimer_Next
-![Static Badge](https://img.shields.io/badge/AuroraTimer-beta_0.0.5-blue?logo=electron&label=AuroraTimer&labelColor=%23FFFFFF&color=%234FC08D)
+![Static Badge](https://img.shields.io/badge/AuroraTimer-beta_0.0.7-blue?logo=electron&label=AuroraTimer&labelColor=%23FFFFFF&color=%234FC08D)
 
-![Static Badge](https://img.shields.io/badge/electron-26.2.2-blue?logo=electron&label=electron&color=%2347848F) ![Static Badge](https://img.shields.io/badge/Vue-3.3.4-blue?logo=vuedotjs&label=Vue&color=%231AD1A5) ![Static Badge](https://img.shields.io/badge/daisyUI-3.7.3-blue?logo=daisyui&label=daisyUI&color=%235A0EF8) ![Static Badge](https://img.shields.io/badge/Vue-1.0.28-blue?logo=vite&label=electron-vite&color=%23646CFF)
+![Static Badge](https://img.shields.io/badge/electron-26.4.0-blue?logo=electron&label=electron&color=%2347848F) ![Static Badge](https://img.shields.io/badge/Vue-3.3.4-blue?logo=vuedotjs&label=Vue&color=%231AD1A5) ![Static Badge](https://img.shields.io/badge/daisyUI-3.9.3-blue?logo=daisyui&label=daisyUI&color=%235A0EF8) ![Static Badge](https://img.shields.io/badge/Vue-1.0.28-blue?logo=vite&label=electron-vite&color=%23646CFF)
 
 Next Gen AuroraTimer,now work in progress!
 
