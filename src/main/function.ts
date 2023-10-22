@@ -2,12 +2,20 @@ import {BrowserWindow, dialog, Notification, screen, shell} from "electron";
 import os from "node:os";
 import fs from 'fs'
 import {join} from 'path'
-import {checkAndMakeHomeDir} from "../renderer/src/utils/LogUtil";
 import {DefaultSetting, SettingFile} from "../renderer/src/utils/Setting";
 import NotificationConstructorOptions = Electron.NotificationConstructorOptions;
+let HomePath;
 
+//专门给苹果做特判.jpg
+if(os.platform()=== 'darwin'){
+  HomePath = join(os.homedir(),'Documents');
+}else{
+  HomePath = os.homedir();
+}
 
-let settingFilePath = join(os.homedir(), '/AuroraTimer/setting.json')
+let settingDirectory = join(HomePath,'AuroraTimer')
+let settingFilePath = join(settingDirectory, 'setting.json')
+
 
 let SettingObject
 
@@ -44,9 +52,10 @@ export function loadSetting(): SettingFile {
     buffer = fs.readFileSync(settingFilePath)
   } catch (e) {
     if (e.errno === -4058) {
-      checkAndMakeHomeDir()
+      
       try {
-        //载入默认的用户信息和配置信息
+        fs.mkdirSync(settingDirectory,{recursive:true});
+        //载入配置信息
         fs.writeFileSync(settingFilePath, JSON.stringify(DefaultSetting, null, 2))
         buffer = SettingObject
       } catch (e) {
