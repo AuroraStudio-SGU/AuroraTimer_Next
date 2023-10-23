@@ -66,7 +66,7 @@
             class="flex items-center  rounded-md "
           >
             <section
-              class="flex justify-center items-center w-20 h-20 rounded-full shadow-md bg-gradient-to-r hover:cursor-pointer hover:scale-110 duration-300"
+              class="justify-center items-center w-20 h-20 rounded-full shadow-md bg-gradient-to-r hover:cursor-pointer hover:scale-110 duration-300"
             ><img :src="UserInformation.avatar" class="rounded-full"></section>
 
             <section class="block border-l border-white m-3">
