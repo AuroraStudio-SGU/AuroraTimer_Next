@@ -35,6 +35,7 @@ export interface UserInfo {
   grade:string,
   work_group:string,
   avatar:string,
+  afk:boolean,
 }
 export interface DutyList {
   wed: string,

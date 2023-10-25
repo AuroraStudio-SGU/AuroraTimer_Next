@@ -3,7 +3,7 @@
 import {onBeforeMount, ref} from "vue";
 import {UserInfo, UserTime} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
-import {getAvatarById, queryAllUser, queryUser, updateUser} from "../api/API";
+import {getAvatarById, queryAllUser, updateUser} from "../api/API";
 
 const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"
@@ -76,8 +76,8 @@ let UserList = ref<UserInfo[]>();
 let withAFK = ref(true);
 let GradeList = ref([]);
 let GradeFilters = ref([]);
-let information = ref(null)
-
+let information = ref(null);//修改信息对话框对象
+let confirm_delete = ref(null);//确认删除成员对话框对象
 const loadUserList = async () => {
   LoadingData.value = true;
   //获取排行列表
@@ -117,36 +117,54 @@ const loadUserList = async () => {
 onBeforeMount(async () => {
   await loadUserList()
 })
-let emptyInformation: UserInfo = {WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: ""}
+let emptyInformation: UserInfo = {WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "", afk: false}
 let currentUser = ref<UserInfo>(emptyInformation)
-const handleChangeInformation = async (id: string) => {
-  let res = await queryUser(id);
+const handleChangeInformation = (user: UserInfo) => {
+  currentUser.value = user;
+  information.value.showModal()
+}
+const applyUserInfo = async () => {
+  let res = await updateUser(currentUser.value);
   if (res.success) {
-    currentUser.value = res.data;
-    information.value.showModal()
+    ElNotification({
+      title: "操作成功",
+      message: "修改成功",
+      type: 'success'
+    })
   } else {
     ElNotification({
-      title: "请求失败！",
+      title: "操作失败",
       message: res.msg,
-      type: "error"
-    });
+      type: 'error'
+    })
   }
 }
-const applyUserInfo = async ()=>{
-  let res = await updateUser(currentUser.value);
-  if(res.success){
+const setUserAfk = async (user: UserInfo) => {
+  user.afk = true;
+  let res = await updateUser(user);
+  if (res.success) {
     ElNotification({
-      title:"操作成功",
-      message:"修改成功",
-      type:'success'
+      title: "操作成功",
+      type: "success",
     })
-  }else {
+  } else {
     ElNotification({
-      title:"操作失败",
-      message:res.msg,
-      type:'error'
+      title: "系统错误",
+      message: res.msg,
+      type: "error",
     })
   }
+}
+
+const handelDelModal = (user: UserInfo) => {
+  currentUser.value = user;
+  confirm_delete.value.showModal()
+}
+const DeleteUser = () => {
+  ElNotification({
+    title: "删除成功(还没写接口)",
+    type: "success"
+  })
 }
 </script>
 
@@ -165,7 +183,7 @@ const applyUserInfo = async ()=>{
           width="32" height="32">
         <path
             d="M700.371228 394.525472 174.028569 394.525472l255.952416-227.506551c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.506619-42.367947-2.492774L76.425623 400.975371c-6.960529 5.496178-11.434423 14.003945-11.434423 23.561625 0 0.013303 0.001023 0.026606 0.001023 0.039909 0 0.01228-0.001023 0.025583-0.001023 0.037862 0 0.473791 0.01535 0.946558 0.037862 1.418302 0.001023 0.016373 0.001023 0.032746 0.001023 0.049119 0.39295 8.030907 3.992941 15.595186 10.034541 20.962427l315.040163 280.028764c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947l-256.128425-227.665163 526.518668 0c109.219517 0 198.075241 88.855724 198.075241 198.075241s-88.855724 198.075241-198.075241 198.075241L354.324888 850.696955c-16.57449 0-30.011524 13.437034-30.011524 30.011524s13.437034 30.011524 30.011524 30.011524l346.046341 0c142.31631 0 258.098289-115.783003 258.098289-258.098289S842.686515 394.525472 700.371228 394.525472z"
-            fill="#272636" p-id="4009"></path>
+            fill="#272636"></path>
       </svg>
       <div class="user-list overflow-auto">
         <el-table
@@ -228,9 +246,11 @@ const applyUserInfo = async ()=>{
           </el-table-column>
           <el-table-column label="操作" min-width="100">
             <template #default="scope">
-              <button class="btn btn-ghost btn-xs" @click="handleChangeInformation(scope.row.id)">修改信息</button>
-              <button class="btn btn-ghost btn-xs">设置为退休</button>
-              <button class="btn btn-ghost btn-xs">删除</button>
+              <button class="btn btn-ghost btn-xs" @click="handleChangeInformation(scope.row)">修改信息</button>
+              <button class="btn btn-ghost btn-xs" v-if="scope.row.afk==false" @click="setUserAfk(scope.row)">
+                设置为退休
+              </button>
+              <button class="btn btn-ghost btn-xs" @click="handelDelModal(scope.row)">删除</button>
             </template>
           </el-table-column>
         </el-table>
@@ -240,8 +260,7 @@ const applyUserInfo = async ()=>{
         <button class="btn">批量设置退休</button>
         <button class="btn">批量删除</button>
       </div>
-      <!--      修改信息对话框-->
-      <!--设置个人信息页面-->
+      <!--修改信息对话框-->
       <dialog id="information" ref="information" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box user-info-box">
           <h3 class="font-bold text-lg">修改 {{ currentUser.name }} 的用户信息</h3>
@@ -269,6 +288,19 @@ const applyUserInfo = async ()=>{
             <form method="dialog">
               <button class="btn m-2" @click="applyUserInfo">保存</button>
               <button class="btn m-2">关闭</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <!--确认删除-->
+      <dialog id="confirm_delete" ref="confirm_delete" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">请确认</h3>
+          <p class="py-4">你真的要删除 [{{ currentUser.name }}] 吗?</p>
+          <div class="modal-action">
+            <form method="dialog" class="flex justify-around">
+              <button class="btn" @click="DeleteUser">我老残忍了</button>
+              <button class="btn">还是算了</button>
             </form>
           </div>
         </div>

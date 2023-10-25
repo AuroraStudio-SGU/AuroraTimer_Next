@@ -52,7 +52,7 @@
 import LoaderTriangle from "./LoaderTriangle.vue";
 import {GlobalStore} from "../stores/Global";
 import {router} from "../utils/router";
-import {onBeforeMount, ref, watch} from "vue";
+import {onBeforeMount, ref} from "vue";
 import {getAvatarById} from "../api/API";
 import {ElNotification} from "element-plus";
 

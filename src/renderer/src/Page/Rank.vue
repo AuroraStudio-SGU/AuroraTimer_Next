@@ -102,7 +102,6 @@ import {TimerStore} from "../stores/Timer";
 import {UserInfo, UserTime} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
 import {getAvatarById, queryUser} from "../api/API";
-import {getUrl} from "../utils/urlUtils";
 
 
 interface Week {

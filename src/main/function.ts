@@ -4,9 +4,6 @@ import fs from 'fs'
 import {join} from 'path'
 import {DefaultSetting, SettingFile} from "../renderer/src/utils/Setting";
 import NotificationConstructorOptions = Electron.NotificationConstructorOptions;
-import {functions} from "electron-log";
-import MessageBoxOptions = Electron.MessageBoxOptions;
-import {CallbackEnum} from "../renderer/src/api/interfaces/CallbackEnum";
 let HomePath;
 
 //专门给苹果做特判.jpg

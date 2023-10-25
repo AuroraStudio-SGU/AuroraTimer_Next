@@ -171,30 +171,30 @@ const loadAnimation = () => {
 
   let json = JSON.parse(jsonStr);
 
-  var frames = []
-  var x = json.dates
-  var y = json.y
+  const frames = [];
+  const x = json.dates;
+  const y = json.y;
 
-  var n = 100;
-  for (var i = 0; i < n; i++) {
+  const n = 100;
+  for (let i = 0; i < n; i++) {
     frames[i] = {data: [{x: [], y: []}]}
     frames[i].data[0].x = x.slice(0, i + 1);
     frames[i].data[0].y = y.slice(0, i + 1);
   }
 
 
-  var trace1 = {
+  const trace1 = {
     x: frames[1].data[0].x,
     y: frames[1].data[0].y,
     fill: 'tozeroy',
     type: 'scatter',
     mode: 'lines',
     line: {color: 'green'}
-  }
+  };
 
-  var data = [trace1];
+  const data = [trace1];
 
-  var layout = {
+  const layout = {
     title: '打卡程度表',
     xaxis: {
       range: [frames[99].data[0].x[0], frames[99].data[0].x[99]],

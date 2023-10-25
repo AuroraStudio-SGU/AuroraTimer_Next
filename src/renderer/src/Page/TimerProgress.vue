@@ -132,14 +132,13 @@
           <div class="stat-value">{{ DutyList.wed }} {{ DutyList.sun }}</div>
         </div>
       </div>
-<!--      <button class="btn btn-success" style="position: absolute;right: 200px;" @click="startTimer">计时(测试用)</button>-->
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import "../assets/css/common.css";
-import {onBeforeMount, onMounted, ref, toRaw} from "vue";
+import {onBeforeMount, ref, toRaw} from "vue";
 import {TimerStore} from "../stores/Timer";
 import Countdown from "../components/Countdown.vue";
 import {GlobalStore} from "../stores/Global";
@@ -153,12 +152,7 @@ const startTimer = () => {
     CountDown.value.StartTimer()
   }
 };
-const stopTimer = () => {
-  CountDown.value.StopTimer();
-};
-const clearTimer = () => {
-  CountDown.value.clearTime();
-};
+
 
 const DutyList = ref(
   {

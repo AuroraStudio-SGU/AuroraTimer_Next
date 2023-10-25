@@ -100,7 +100,7 @@ onMounted(() => {
     $(".stars").toggleClass("stars-fade");
     $(".shooting-star").toggleClass("shooting");
 
-    var angle = $(".sun-container").data("angle") + 360 || 360;
+    let angle = $(".sun-container").data("angle") + 360 || 360;
     $(".sun-container").css({
       transform: "rotate(" + angle + "deg)",
     });

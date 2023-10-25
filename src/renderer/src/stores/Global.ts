@@ -3,7 +3,6 @@ import {DefaultSetting, SettingFile} from "../utils/Setting";
 import {getDuty, getRank, getTargetTime} from "../api/API";
 import {isSameWeek} from "../utils/DateUtils";
 import {DutyList, UserInfo, UserTime} from "../api/interfaces/Schema";
-import {ref} from "vue";
 
 
 const themes = [
