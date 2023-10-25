@@ -4,6 +4,9 @@ import fs from 'fs'
 import {join} from 'path'
 import {DefaultSetting, SettingFile} from "../renderer/src/utils/Setting";
 import NotificationConstructorOptions = Electron.NotificationConstructorOptions;
+import {functions} from "electron-log";
+import MessageBoxOptions = Electron.MessageBoxOptions;
+import {CallbackEnum} from "../renderer/src/api/interfaces/CallbackEnum";
 let HomePath;
 
 //专门给苹果做特判.jpg
@@ -52,7 +55,7 @@ export function loadSetting(): SettingFile {
     buffer = fs.readFileSync(settingFilePath)
   } catch (e) {
     if (e.errno === -4058) {
-      
+
       try {
         fs.mkdirSync(settingDirectory,{recursive:true});
         //载入配置信息
@@ -111,9 +114,14 @@ export function getMousePoint() {
   return screen.getCursorScreenPoint()
 }
 
-export function SysNotification(options?: NotificationConstructorOptions) {
-  new Notification(options).show()
+type CallbackOnClick = () => void;
+export function WebNotification(options?: NotificationConstructorOptions,callback?:CallbackOnClick) {
+  let notification = new Notification(options);
+  notification.show();
+  notification.on('click',callback)
 }
+
+
 
 
 

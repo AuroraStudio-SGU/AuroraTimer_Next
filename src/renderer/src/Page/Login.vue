@@ -27,12 +27,8 @@
                 </label>
               </div>
               <div class="btn-list">
-                <div>
-                  <button class="btn btn-accent" @click="login">登录</button>
-                </div>
-                <div>
-                  <button class="btn btn-accent" onclick="restPwd.showModal()">忘记密码了?</button>
-                </div>
+                <button class="btn btn-accent" @click="login">登录</button>
+                <a class="link link-hover" style="font-size: 13px" onclick="restPwd.showModal()">忘记密码了?</a>
               </div>
             </div>
           </div>
@@ -68,9 +64,12 @@
             <input type="text" placeholder="不填就123456哦~" class="input input-bordered w-full max-w-xs"
                    v-model="RestPwd"/>
             <div class="modal-action">
-              <form method="dialog" class="flex">
-                <button class="btn" @click="forgetPwd">重置</button>
-                <button class="btn">关闭</button>
+              <form method="dialog" class="w-32">
+                <div class="flex items-center justify-around w-full">
+                  <button class="btn" @click="forgetPwd">重置</button>
+                  <button class="btn">关闭</button>
+                </div>
+
               </form>
             </div>
           </div>
@@ -148,7 +147,7 @@ const login = async () => {
     avatar: result.avatar,
     grade: result.grade,
     id: result.id,
-    isAdmin: result.admin,
+    admin: result.admin,
     major: result.major,
     name: result.name,
     token: result.token,
@@ -230,8 +229,9 @@ const forgetPwd = async () => {
   display: flex;
   margin-top: 2rem;
   align-items: center;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  justify-content: center;
+ flex-direction: column;
+  height: 6rem;
 }
 
 

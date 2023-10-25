@@ -110,7 +110,7 @@ interface Week {
   name: string;
 }
 let emptyInformation: UserInfo = {
-  WeekTime: 0, avatar: "", grade: "", id: "", isAdmin: false, major: "", name: "", token: "", work_group: ""
+  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: ""
 }
 const globalStore = GlobalStore();
 const timerStore = TimerStore();
@@ -338,7 +338,7 @@ const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
 }
 
 :deep(.el-loading-spinner) {
-  top: 20%;
+  top: 15%;
 }
 
 .glassmophism {

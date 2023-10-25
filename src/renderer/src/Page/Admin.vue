@@ -12,6 +12,7 @@
           <button class="btn" onclick="duty.showModal()">设置值日🧹</button>
           <button class="btn" onclick="targetTime.showModal()">设置目标时长⏰</button>
           <button class="btn" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+          <button class="btn" @click="toUserManage">成员管理</button>
         </div>
         <!--公告设置页面-->
         <dialog id="notice" class="modal">
@@ -106,6 +107,7 @@ import {GlobalStore} from "../stores/Global";
 import TextEditor from "../components/TextEditor.vue";
 import {TimerStore} from "../stores/Timer";
 import {Notice} from "../api/interfaces/Schema";
+import {router} from "../utils/router";
 
 const textEditor = ref(null)
 const adminStore = AdminStore()
@@ -258,6 +260,10 @@ const handleReduceTime = async () => {
       });
     }
   }
+}
+
+const toUserManage = () => {
+  router.push({name:'Users'})
 }
 </script>
 

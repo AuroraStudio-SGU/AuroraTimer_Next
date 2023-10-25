@@ -1,9 +1,9 @@
-export interface APIResponse {
+export interface APIResponse<T> {
   success:boolean;
   msg:string;
-  data:any;
+  data:T;
 }
-export interface User {
+export interface User { //only for login
   id:string;
   name:string;
   password:string;
@@ -29,7 +29,7 @@ export interface UserInfo {
   id: string,
   name: string,
   WeekTime: number,
-  isAdmin: boolean,
+  admin: boolean,
   token:string,
   major:string,
   grade:string,

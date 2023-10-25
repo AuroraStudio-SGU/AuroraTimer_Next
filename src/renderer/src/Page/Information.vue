@@ -127,7 +127,6 @@
           <span class="label-text">年级</span>
         </label>
         <input type="text" placeholder="年级" class="input input-bordered" v-model="UserInformation.grade"/>
-        <!-- TODO 密码修改 -->
       </div>
       <div class="flex justify-stretch m-4">
         <label class="label">
@@ -152,7 +151,7 @@
     <div class="modal-box">
       <h3 class="font-bold text-lg">你确定要退出登录吗?</h3>
       <div class="modal-action">
-        <form method="dialog">
+        <form method="dialog" class="w-48 flex justify-around">
           <button class="btn" @click="handelLogout">是的</button>
           <button class="btn">还是算了</button>
         </form>
@@ -185,7 +184,7 @@ const UploadSuccess = ref(true)
 const cropper = ref()
 
 let emptyInformation: UserInfo = {
-  WeekTime: 0, avatar: "", grade: "", id: "", isAdmin: false, major: "", name: "", token: "", work_group: ""
+  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: ""
 }
 
 //存储用户信息数据

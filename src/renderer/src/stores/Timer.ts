@@ -13,7 +13,7 @@ export const TimerStore = defineStore('timer', {
         time: 0,
         isStarted: false,
         timer: {} as Worker,
-        AfkLimit: 1800,//挂机时间检测阈值,单位为秒,且实际阈值为这里的两倍!
+        AfkLimit: 1440,//挂机时间检测阈值,单位为秒,且实际阈值为这里的两倍!
         UserRankList: [] as UserTime[],
     }),
     getters: {

@@ -1,3 +1,5 @@
+import {CallbackEnum} from "../renderer/src/api/interfaces/CallbackEnum";
+
 const startTime = new Date().getTime();
 import {
     app,
@@ -26,7 +28,7 @@ import {
     openBrowser,
     openFile,
     SaveSetting,
-    SysNotification,
+    WebNotification,
     windowOperate
 } from "./function";
 import {DefaultSetting} from "../renderer/src/utils/Setting";
@@ -289,6 +291,7 @@ app.whenReady().then(() => {
     ipcMain.on('open-browser', openBrowser)
     ipcMain.on('send-data-toMain', (_event, value) => pushSharedDataToMainWindow(value))
     ipcMain.on('logout', Logout)
+    ipcMain.on('push-sys-notification',(_event,options)=>{SysNotification(options)})
 
     //设置自启选项
     if (app.isPackaged) {
@@ -367,7 +370,7 @@ function checkForUpdates() {
     })
     autoUpdater.on('update-available', (info) => {
         logger.info('Update available.')
-        SysNotification({
+        WebNotification({
             body: `发现有新版本${info.version},尝试下载`,
             icon: iconImg
         })
@@ -437,7 +440,7 @@ function tryToLogin() {
                         avatar: result.avatar,
                         grade: result.grade,
                         id: result.id,
-                        isAdmin: result.admin,
+                        admin: result.admin,
                         major: result.major,
                         name: result.name,
                         token: result.token,
@@ -468,4 +471,9 @@ function Logout() {
     mainWindow.hide()
     loginWindow.show()
     isLogin = false;
+}
+function SysNotification(options) {
+    dialog.showMessageBox(options).then(()=>{
+        mainWindow.webContents.send('callback-result', CallbackEnum.RESTARTTIMER)
+    });
 }

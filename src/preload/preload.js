@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   loadSetting:(callback) => ipcRenderer.invoke('load-setting', callback),
   getMousePoint:(callback) => ipcRenderer.invoke('get-mouse', callback),
   OnDateFromMain:(callback) =>ipcRenderer.on('receive-data', callback),
+  CallbackInformation:(callback) =>ipcRenderer.on('callback-result', callback),
   //渲染→主进程
   windowOperate: (callback) => ipcRenderer.send('window-operate', callback),
   mainLogger: (callback) => ipcRenderer.send('main-logger', callback),
@@ -41,6 +42,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openBrowser:(callback) => ipcRenderer.send('open-browser', callback),
   pushDataToMain:(callback) => ipcRenderer.send('send-data-toMain', callback),
   Logout:(callback) => ipcRenderer.send('logout', callback),
+  PushSysNotification:(callback) =>ipcRenderer.send('push-sys-notification',callback),
 
 })
 

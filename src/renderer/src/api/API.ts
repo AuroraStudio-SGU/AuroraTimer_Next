@@ -15,8 +15,8 @@ export function init(baseUrl: string, token: string) {
   });
 }
 
-async function processResponse(RawResp: AxiosResponse): Promise<APIResponse> {
-  let apiResp: APIResponse = {
+async function processResponse(RawResp: AxiosResponse): Promise<APIResponse<any>> {
+  let apiResp: APIResponse<any> = {
     success: true,
     msg: null,
     data: null
@@ -38,8 +38,8 @@ async function processResponse(RawResp: AxiosResponse): Promise<APIResponse> {
   return apiResp;
 }
 
-async function doGet(url: string): Promise<APIResponse> {
-  let apiResp: APIResponse = {
+async function doGet(url: string): Promise<APIResponse<any>> {
+  let apiResp: APIResponse<any> = {
     success: true,
     msg: null,
     data: null
@@ -55,8 +55,8 @@ async function doGet(url: string): Promise<APIResponse> {
 
 }
 
-async function doPost(url: string, Obj: object): Promise<APIResponse> {
-  let apiResp: APIResponse = {
+async function doPost(url: string, Obj: object): Promise<APIResponse<any>> {
+  let apiResp: APIResponse<any> = {
     success: true,
     msg: null,
     data: null
@@ -140,7 +140,7 @@ export async function updateAvatar(byte: ArrayBuffer, id: string) {
   const blob = new Blob([byte]);
   const formData = new FormData();
   formData.append('file', blob, id + '.avatar');
-  let apiResp: APIResponse = {
+  let apiResp: APIResponse<any> = {
     success: true,
     msg: null,
     data: null
@@ -177,4 +177,8 @@ export async function updateUser(user: UserInfo) {
 
 export async function restPassword(id:string,pwd:string) {
   return doGet('/user/resetPassword/'+id+'?pwd='+pwd);
+}
+
+export async function queryAllUser(withAFK:boolean):Promise<APIResponse<UserInfo>> {
+  return doGet('/admin/queryAllUser?withAFK='+withAFK);
 }

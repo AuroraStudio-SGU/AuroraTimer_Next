@@ -28,6 +28,7 @@ import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
 import * as API from '../api/API'
 import {getUrl} from "../utils/urlUtils";
+import {CallbackEnum} from "../api/interfaces/CallbackEnum";
 
 let hour = ref('00')
 let min = ref('00')
@@ -55,15 +56,23 @@ try {
           const img = getUrl('icon-sm.png')
           let notice = new Notification(
               NOTIFICATION_TITLE,
-              {body: NOTIFICATION_BODY,requireInteraction:true,icon:img})
+              {body: NOTIFICATION_BODY, requireInteraction: true, icon: img})
               .onclick = () => {
-                StartTimer();
-                globalStore.isAFK = false;
-                ElNotification({
-                  title: '重新恢复计时',
-                  type: 'success'
-                })
-              };
+            StartTimer();
+            ElNotification({
+              title: '重新恢复计时',
+              type: 'success'
+            })
+          };
+          const dialogOpts = {
+            type: 'warning',
+            buttons: ['恢复计时', '恢复计时'],
+            title: '你还在吗?挂机太长时间不计时的哦!',
+            message: "看不到通知？这个总能看到了把，要是这个看不到，那我也没办法了",
+            detail: `我尽力让你看到这个消息了`
+          }
+          //通过ipc通信，让主进程发送系统级通知。
+          window.electronAPI.PushSysNotification(dialogOpts)
         }
         globalStore.lastMousePoint = point
       })
@@ -77,7 +86,7 @@ try {
             if (globalStore.Setting.userInfo.WeekTime < res.data) {
               globalStore.Setting.userInfo.WeekTime = Number(res.data)
             }
-            if(Number(globalStore.Setting.userInfo.WeekTime)-Number(res.data)>=60){
+            if (Number(globalStore.Setting.userInfo.WeekTime) - Number(res.data) >= 60) {
               globalStore.Setting.userInfo.WeekTime = Number(res.data)
             }
           }
@@ -89,12 +98,22 @@ try {
     min.value = nowTimeStr.min;
     second.value = nowTimeStr.second;
   }
-} catch (e) {
-}
+  //监听回用户点击事件，回来确认恢复计时
+  window.electronAPI.CallbackInformation((_event, Enum) => {
+    if (Enum === CallbackEnum.RESTARTTIMER) {
+      StartTimer();
+      ElNotification({
+        title: '重新恢复计时',
+        type: 'success'
+      })
+    }
+  })
+} catch (e) {}
 const StartTimer = () => {
   if (!timeStore.isStarted) {
     timeStore.OpenTimer()
     timeStore.timer.postMessage('start')
+    globalStore.isAFK = false;
   }
 }
 const StopTimer = () => {

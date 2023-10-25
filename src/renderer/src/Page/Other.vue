@@ -17,16 +17,16 @@
         </div>
         <div>
           <el-select
-            v-model="testPage"
-            class="m-2"
-            placeholder="其它测试页面"
-            @change="jumpTo"
+              v-model="testPage"
+              class="m-2"
+              placeholder="其它测试页面"
+              @change="jumpTo"
           ><!-- 太多测试页面了放不下！!-->
             <el-option
-              v-for="item in otherTestPage"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+                v-for="item in otherTestPage"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
             />
           </el-select>
         </div>
@@ -36,36 +36,36 @@
         <div>
           <span class="label-text">图表显示</span>
           <el-switch
-            v-model="isShowTable"
-            :active-icon="Check"
-            :inactive-icon="Close"
-            class="mt-2"
-            inline-prompt
-            style="margin-left: 24px"
-            @change="loadTable"
+              v-model="isShowTable"
+              :active-icon="Check"
+              :inactive-icon="Close"
+              class="mt-2"
+              inline-prompt
+              style="margin-left: 24px"
+              @change="loadTable"
           />
         </div>
       </div>
       <div class="container-self">
         <div class="header-self">
           <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
           >
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g
-              id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
               <path
-                d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
-                stroke="#000000"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                  d="M7 10V9C7 6.23858 9.23858 4 12 4C14.7614 4 17 6.23858 17 9V10C19.2091 10 21 11.7909 21 14C21 15.4806 20.1956 16.8084 19 17.5M7 10C4.79086 10 3 11.7909 3 14C3 15.4806 3.8044 16.8084 5 17.5M7 10C7.43285 10 7.84965 10.0688 8.24006 10.1959M12 12V21M12 12L15 15M12 12L9 15"
+                  stroke="#000000"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
               ></path>
             </g>
           </svg>
@@ -73,16 +73,16 @@
         </div>
         <label for="file" class="footer-self">
           <svg
-            fill="#000000"
-            viewBox="0 0 32 32"
-            xmlns="http://www.w3.org/2000/svg"
+              fill="#000000"
+              viewBox="0 0 32 32"
+              xmlns="http://www.w3.org/2000/svg"
 
           >
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g
-              id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
               <path d="M15.331 6H8.5v20h15V14.154h-8.169z"></path>
@@ -91,43 +91,43 @@
           </svg>
           <p>Not selected file</p>
           <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
           >
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g
-              id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
               <path
-                d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z"
-                stroke="#000000"
-                stroke-width="2"
+                  d="M5.16565 10.1534C5.07629 8.99181 5.99473 8 7.15975 8H16.8402C18.0053 8 18.9237 8.9918 18.8344 10.1534L18.142 19.1534C18.0619 20.1954 17.193 21 16.1479 21H7.85206C6.80699 21 5.93811 20.1954 5.85795 19.1534L5.16565 10.1534Z"
+                  stroke="#000000"
+                  stroke-width="2"
               ></path>
               <path
-                d="M19.5 5H4.5"
-                stroke="#000000"
-                stroke-width="2"
-                stroke-linecap="round"
+                  d="M19.5 5H4.5"
+                  stroke="#000000"
+                  stroke-width="2"
+                  stroke-linecap="round"
               ></path>
               <path
-                d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z"
-                stroke="#000000"
-                stroke-width="2"
+                  d="M10 3C10 2.44772 10.4477 2 11 2H13C13.5523 2 14 2.44772 14 3V5H10V3Z"
+                  stroke="#000000"
+                  stroke-width="2"
               ></path>
             </g>
           </svg>
         </label>
-        <input id="file" @click="openFile" />
+        <input id="file" @click="openFile"/>
       </div>
       <div
-        v-if="isShowTable"
-        id="plotly"
-        ref="plotlyContainer"
-        class="plotly-container ">
+          v-if="isShowTable"
+          id="plotly"
+          ref="plotlyContainer"
+          class="plotly-container ">
       </div>
     </div>
   </div>
@@ -135,19 +135,16 @@
 
 
 <script lang="ts" setup>
-import { Check, Close } from "@element-plus/icons-vue";
+import {Check, Close} from "@element-plus/icons-vue";
 import "../assets/css/common.css";
-import { ElNotification } from "element-plus";
-import {
-  CalculateSunTime,
-  currentDate,
-  formatSecondTime,
-} from "../utils/TimeUtil";
-import { ref } from "vue";
+import {ElNotification} from "element-plus";
+import {CalculateSunTime, currentDate, formatSecondTime,} from "../utils/TimeUtil";
+import {ref} from "vue";
 import Plotly from "plotly.js-dist";
-import { router } from "../utils/router";
+import {router} from "../utils/router";
 import {getUrl} from "../utils/urlUtils";
 import * as API from "../api/API"
+import {CallbackEnum} from "../api/interfaces/CallbackEnum";
 
 const plotlyContainer = ref(null);
 let testPage = ref("");
@@ -181,8 +178,8 @@ const loadAnimation = () => {
   var n = 100;
   for (var i = 0; i < n; i++) {
     frames[i] = {data: [{x: [], y: []}]}
-    frames[i].data[0].x = x.slice(0, i+1);
-    frames[i].data[0].y = y.slice(0, i+1);
+    frames[i].data[0].x = x.slice(0, i + 1);
+    frames[i].data[0].y = y.slice(0, i + 1);
   }
 
 
@@ -273,10 +270,10 @@ const SunRise = () => {
   let sunTime = CalculateSunTime();
   let curDate = Date.parse(currentDate().Date);
   let message =
-    "当前日出时间" +
-    formatSecondTime((sunTime.Sunrise - curDate) / 1000) +
-    " \n 日落时间:" +
-    formatSecondTime((sunTime.Sunset - curDate) / 1000);
+      "当前日出时间" +
+      formatSecondTime((sunTime.Sunrise - curDate) / 1000) +
+      " \n 日落时间:" +
+      formatSecondTime((sunTime.Sunset - curDate) / 1000);
   ElNotification({
     title: "日出日落测试",
     message,
@@ -292,37 +289,60 @@ const sendMsgIn = () => {
 };
 
 const sendReq = async () => {
-  let apiRes:APIResponse = await API.getPing()
-  if(!apiRes.success){
+  let apiRes: APIResponse = await API.getPing()
+  if (!apiRes.success) {
     ElNotification({
       title: "请求失败！",
-      message:apiRes.msg,
-      type:"error"
+      message: apiRes.msg,
+      type: "error"
     });
-  }else {
+  } else {
     ElNotification({
       title: "请求成功！",
-      message: "返回值:"+JSON.stringify(apiRes.data),
-      type:'success'
+      message: "返回值:" + JSON.stringify(apiRes.data),
+      type: 'success'
     });
   }
 }
+
+try {
+  window.electronAPI.CallbackInformation((_event, Enum) => {
+    if(Enum === CallbackEnum.RESTARTTIMER){
+      ElNotification({
+        title: '重新恢复计时',
+        type: 'success'
+      })
+    }else {
+      console.log("NO OK")
+    }
+  })
+} catch (e) {
+}
+
 
 const sendMsg = () => {
   const NOTIFICATION_TITLE = "一个标题";
   const NOTIFICATION_BODY = "您有一个好！";
   console.log(getUrl('icon.png'))
   let options = {
-    body:NOTIFICATION_BODY,
-    icon:getUrl('icon-sm.png')
+    body: NOTIFICATION_BODY,
+    icon: getUrl('icon-sm.png')
   }
-  new Notification(NOTIFICATION_TITLE,options).onclick =
-    () => {
-      ElNotification({
-        title: "你点击了系统的通知提示",
-        message: "我知道了我知道了.jpg",
-      });
-    };
+  // new Notification(NOTIFICATION_TITLE,options).onclick =
+  //   () => {
+  //     ElNotification({
+  //       title: "你点击了系统的通知提示",
+  //       message: "我知道了我知道了.jpg",
+  //     });
+  //   };
+  const dialogOpts = {
+    type: 'warning',
+    buttons: ['恢复计时', '恢复计时'],
+    title: '你还在吗?挂机太长时间不计时的哦!',
+    message: "看不到通知？这个总能看到了把，要是这个看不到，那我也没办法了(这就是个测试消息呀！)",
+    detail: `我尽力让你看到这个消息了`
+  }
+  window.electronAPI.PushSysNotification(dialogOpts)
 };
 </script>
 
