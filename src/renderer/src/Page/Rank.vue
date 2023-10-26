@@ -63,7 +63,7 @@
       <dialog id="user" ref="user" class="modal">
         <div class="modal-box   glassmophism">
           <div
-            class="flex items-center  rounded-md "
+            class="items-center  rounded-md "
           >
             <section
               class="justify-center items-center w-20 h-20 rounded-full shadow-md bg-gradient-to-r hover:cursor-pointer hover:scale-110 duration-300"
