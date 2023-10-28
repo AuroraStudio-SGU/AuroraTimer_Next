@@ -39,7 +39,7 @@ import {AdminStore} from "../stores/Admin";
 import {onBeforeMount, ref, toRaw} from "vue";
 import {getUrl} from "../utils/urlUtils";
 import {UserTime_avtar} from "../api/interfaces/Schema";
-import {getAvatarById, getLast3} from "../api/API";
+import {getAvatarById, getDefaultAvatarUrl, getLast3} from "../api/API";
 import {ElNotification} from "element-plus";
 
 const adminStore = AdminStore();
@@ -62,6 +62,13 @@ let Last3 = ref<UserTime_avtar[]>(Last3s);
 
 const loadLast3 = async () => {
   let res = await getLast3()
+  let default_url_res = await getDefaultAvatarUrl();
+  let default_url;
+  if(!default_url_res.success){
+    default_url = 'http://192.168.49.66:8000/avatars/DefaultAvtart.png'
+  }else {
+    default_url = default_url_res.data
+  }
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
@@ -75,6 +82,12 @@ const loadLast3 = async () => {
       if (res.success) {
         Last3.value[i].avatar = res.data + '?' + Math.random();
       }
+    }
+    for (let i = Last3.value.length; i < 3 ; i++) {
+      let BlankUser:UserTime_avtar = {
+        avatar: default_url, id: '1000', name: "暂无入榜", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0
+      }
+      Last3.value.push(BlankUser);
     }
   }
 }

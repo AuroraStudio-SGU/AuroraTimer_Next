@@ -17,7 +17,7 @@ const routes = [
   {path: '/setting', name: 'Setting', component: About, props: true},
   {path: '/Notice', name: 'Notice', component: Notice},
   {path: '/rank', name: 'Rank', component: Rank},
-  {path: '/other', name: 'Other', component: UserManage},
+  {path: '/other', name: 'Other', component: Other},
   {path: '/Login', name: 'Login', component: Login},
   {path: '/welcome', name: 'Welcome', component: Welcome},
   {path: '/leaderboard', name: 'LeaderBoard', component: LeaderBoard},

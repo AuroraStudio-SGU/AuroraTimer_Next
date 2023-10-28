@@ -108,6 +108,10 @@ try {
       })
     }
   })
+  //收到当前鼠标坐标
+  window.electronAPI.getMousePoint().then((point) => {
+    globalStore.lastMousePoint = point;
+  })
 } catch (e) {}
 const StartTimer = () => {
   if (!timeStore.isStarted) {
@@ -160,12 +164,9 @@ onBeforeMount(() => {
   min.value = nowTimeStr.min;
   second.value = nowTimeStr.second;
   if (timeStore.isStarted) {
-    timeStore.timer.postMessage('stop')
-    timeStore.timer.postMessage('start')
+    StopTimer();
+    StartTimer();
   }
-  window.electronAPI.getMousePoint().then((point) => {
-    globalStore.lastMousePoint = point;
-  })
 })
 
 defineExpose({

@@ -1,10 +1,14 @@
 <script setup lang="ts">
-// const fallback = ()=>{ router.back() }
+
 import {onBeforeMount, ref} from "vue";
 import {UserInfo, UserTime} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
-import {getAvatarById, queryAllUser, updateUser} from "../api/API";
+import {deleteUser, getAvatarById, queryAllUser, updateUser} from "../api/API";
+import {router} from "../utils/router";
 
+const fallback = () => {
+  router.back()
+}
 const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"
          begin="0s" dur="1s"
@@ -160,31 +164,42 @@ const handelDelModal = (user: UserInfo) => {
   currentUser.value = user;
   confirm_delete.value.showModal()
 }
-const DeleteUser = () => {
-  ElNotification({
-    title: "删除成功(还没写接口)",
-    type: "success"
-  })
+const DeleteUser = async (id: string) => {
+  let res = await deleteUser(id);
+  if (res.success) {
+    ElNotification({
+      title: "删除成功",
+      type: "success"
+    })
+  } else {
+    ElNotification({
+      title: "删除失败",
+      message: res.msg,
+      type: "error"
+    })
+  }
 }
 </script>
 
 <template>
   <div class="menu">
     <div class="white-box-rank">
-      <div class="Title p-4">工作室人员设置</div>
-      <div class="form-control">
-        <label class="cursor-pointer label">
-          <span class="label-text">Remember me</span>
-          <input type="checkbox" checked="checked" class="checkbox checkbox-accent"/>
-        </label>
+      <div class="Title flex">
+        <svg
+            class="icon m-2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            width="32" height="32" @click="fallback">
+          <path
+              d="M700.371228 394.525472 174.028569 394.525472l255.952416-227.506551c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.506619-42.367947-2.492774L76.425623 400.975371c-6.960529 5.496178-11.434423 14.003945-11.434423 23.561625 0 0.013303 0.001023 0.026606 0.001023 0.039909 0 0.01228-0.001023 0.025583-0.001023 0.037862 0 0.473791 0.01535 0.946558 0.037862 1.418302 0.001023 0.016373 0.001023 0.032746 0.001023 0.049119 0.39295 8.030907 3.992941 15.595186 10.034541 20.962427l315.040163 280.028764c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947l-256.128425-227.665163 526.518668 0c109.219517 0 198.075241 88.855724 198.075241 198.075241s-88.855724 198.075241-198.075241 198.075241L354.324888 850.696955c-16.57449 0-30.011524 13.437034-30.011524 30.011524s13.437034 30.011524 30.011524 30.011524l346.046341 0c142.31631 0 258.098289-115.783003 258.098289-258.098289S842.686515 394.525472 700.371228 394.525472z"
+              fill="#272636"></path>
+        </svg>
+        工作室人员设置
       </div>
-      <svg
-          class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          width="32" height="32">
-        <path
-            d="M700.371228 394.525472 174.028569 394.525472l255.952416-227.506551c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.506619-42.367947-2.492774L76.425623 400.975371c-6.960529 5.496178-11.434423 14.003945-11.434423 23.561625 0 0.013303 0.001023 0.026606 0.001023 0.039909 0 0.01228-0.001023 0.025583-0.001023 0.037862 0 0.473791 0.01535 0.946558 0.037862 1.418302 0.001023 0.016373 0.001023 0.032746 0.001023 0.049119 0.39295 8.030907 3.992941 15.595186 10.034541 20.962427l315.040163 280.028764c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947l-256.128425-227.665163 526.518668 0c109.219517 0 198.075241 88.855724 198.075241 198.075241s-88.855724 198.075241-198.075241 198.075241L354.324888 850.696955c-16.57449 0-30.011524 13.437034-30.011524 30.011524s13.437034 30.011524 30.011524 30.011524l346.046341 0c142.31631 0 258.098289-115.783003 258.098289-258.098289S842.686515 394.525472 700.371228 394.525472z"
-            fill="#272636"></path>
-      </svg>
+      <!--      <div class="form-control">-->
+      <!--        <label class="cursor-pointer label">-->
+      <!--          <span class="label-text">Remember me</span>-->
+      <!--          <input type="checkbox" checked="checked" class="checkbox checkbox-accent"/>-->
+      <!--        </label>-->
+      <!--      </div>-->
       <div class="user-list overflow-auto">
         <el-table
             :data="UserList"
@@ -256,9 +271,10 @@ const DeleteUser = () => {
         </el-table>
       </div>
       <div class="action-list m-2">
-        <button class="btn">批量设置减时</button>
-        <button class="btn">批量设置退休</button>
-        <button class="btn">批量删除</button>
+        <!--        WIP-->
+        <!--        <button class="btn">批量设置减时</button>-->
+        <!--        <button class="btn">批量设置退休</button>-->
+        <!--        <button class="btn">批量删除</button>-->
       </div>
       <!--修改信息对话框-->
       <dialog id="information" ref="information" class="modal modal-bottom sm:modal-middle">
@@ -297,9 +313,9 @@ const DeleteUser = () => {
         <div class="modal-box">
           <h3 class="font-bold text-lg">请确认</h3>
           <p class="py-4">你真的要删除 [{{ currentUser.name }}] 吗?</p>
-          <div class="modal-action">
-            <form method="dialog" class="flex justify-around">
-              <button class="btn" @click="DeleteUser">我老残忍了</button>
+          <div class="modal-action" >
+            <form method="dialog" class="w-48 flex justify-around">
+              <button class="btn" @click="DeleteUser(currentUser.id)">我老残忍了</button>
               <button class="btn">还是算了</button>
             </form>
           </div>
@@ -326,7 +342,8 @@ const DeleteUser = () => {
 }
 
 :deep(.el-loading-spinner) {
-  top: 10%
+  margin-top: 10rem;
+  position: static;
 }
 
 :deep(.el-scrollbar__bar is-vertical) {

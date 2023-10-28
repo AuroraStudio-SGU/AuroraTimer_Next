@@ -337,7 +337,8 @@ const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
 }
 
 :deep(.el-loading-spinner) {
-  top: 15%;
+  margin-top: 10rem;
+  position: static;
 }
 
 .glassmophism {

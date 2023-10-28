@@ -5,36 +5,36 @@
         <div class="progress1">
           <div class="little">
             <el-progress
-              :hidden="115"
-              :percentage="timerStore.getTimerProgress.little"
-              :stroke-width="40"
-              :width="115"
-              class="littleCircle"
-              type="circle"
+                :hidden="115"
+                :percentage="timerStore.getTimerProgress.little"
+                :stroke-width="40"
+                :width="115"
+                class="littleCircle"
+                type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="medium">
             <el-progress
-              :hidden="195"
-              :percentage="timerStore.getTimerProgress.middle"
-              :stroke-width="40"
-              :width="195"
-              class="mediumCircle"
-              type="circle"
+                :hidden="195"
+                :percentage="timerStore.getTimerProgress.middle"
+                :stroke-width="40"
+                :width="195"
+                class="mediumCircle"
+                type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="big">
             <el-progress
-              :hidden="270"
-              :percentage="timerStore.getTimerProgress.big"
-              :stroke-width="40"
-              :width="270"
-              class="bigCircle"
-              type="circle"
+                :hidden="270"
+                :percentage="timerStore.getTimerProgress.big"
+                :stroke-width="40"
+                :width="270"
+                class="bigCircle"
+                type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
@@ -45,19 +45,19 @@
             <defs>
               <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                  :style="{
+                    :style="{
                     stopColor:
                       globalStore.Setting.progressBar.color.small.start,
                   }"
-                  offset="0%"
-                  stop-opacity="0.8"
+                    offset="0%"
+                    stop-opacity="0.8"
                 ></stop>
                 <stop
-                  :style="{
+                    :style="{
                     stopColor: globalStore.Setting.progressBar.color.small.end,
                   }"
-                  offset="100%"
-                  stop-opacity="1"
+                    offset="100%"
+                    stop-opacity="1"
                 ></stop>
               </linearGradient>
             </defs>
@@ -66,19 +66,19 @@
             <defs>
               <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                  :style="{
+                    :style="{
                     stopColor:
                       globalStore.Setting.progressBar.color.medium.start,
                   }"
-                  offset="0%"
-                  stop-opacity="0.8"
+                    offset="0%"
+                    stop-opacity="0.8"
                 ></stop>
                 <stop
-                  :style="{
+                    :style="{
                     stopColor: globalStore.Setting.progressBar.color.medium.end,
                   }"
-                  offset="100%"
-                  stop-opacity="1"
+                    offset="100%"
+                    stop-opacity="1"
                 ></stop>
               </linearGradient>
             </defs>
@@ -87,18 +87,18 @@
             <defs>
               <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                  :style="{
+                    :style="{
                     stopColor: globalStore.Setting.progressBar.color.big.start,
                   }"
-                  offset="0%"
-                  stop-opacity="0.8"
+                    offset="0%"
+                    stop-opacity="0.8"
                 ></stop>
                 <stop
-                  :style="{
+                    :style="{
                     stopColor: globalStore.Setting.progressBar.color.big.end,
                   }"
-                  offset="100%"
-                  stop-opacity="0.9"
+                    offset="100%"
+                    stop-opacity="0.9"
                 ></stop>
               </linearGradient>
             </defs>
@@ -116,22 +116,22 @@
       <div class="stats shadow-md flex " style="margin-top: 15px;">
         <div class="stat place-items-center">
           <div class="stat-title">本周计时</div>
-          <div class="stat-value">{{TargetTime}}H</div>
+          <div class="stat-value">{{ TargetTime }}H</div>
           <div class="stat-desc">周一到周日</div>
         </div>
-
         <div class="stat place-items-center">
           <div class="stat-title">成员名</div>
           <div class="stat-value text-secondary">{{ globalStore.getUserInfo.name }}</div>
           <div class="stat-desc text-secondary">{{ globalStore.getUserInfo.id }}</div>
         </div>
-
         <div class="stat place-items-center">
           <div class="stat-title">本周值日</div>
           <div class="stat-desc">周三 周日</div>
           <div class="stat-value">{{ DutyList.wed }} {{ DutyList.sun }}</div>
         </div>
       </div>
+<!--      只在挂机的时候显示恢复按钮-->
+      <button class="btn btn-success" style="position: absolute;right: 200px;" v-show="globalStore.isAFK" @click="startTimer">恢复计时</button>
     </div>
   </div>
 </template>
@@ -153,13 +153,12 @@ const startTimer = () => {
   }
 };
 
-
 const DutyList = ref(
-  {
-    wed: '暂未公布',
-    sun: '暂未公布',
-    createTime: new Date(),
-  }
+    {
+      wed: '暂未公布',
+      sun: '暂未公布',
+      createTime: new Date(),
+    }
 )
 const TargetTime = ref(18)
 
@@ -172,7 +171,8 @@ onBeforeMount(async () => {
     let res = await globalStore.getTargetTime()
     TargetTime.value = toRaw(res).targetTime
     startTimer();
-  } catch (e) {}
+  } catch (e) {
+  }
 })
 
 </script>

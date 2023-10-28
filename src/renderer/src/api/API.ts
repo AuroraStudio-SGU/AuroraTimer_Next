@@ -182,3 +182,9 @@ export async function restPassword(id:string,pwd:string) {
 export async function queryAllUser(withAFK:boolean):Promise<APIResponse<UserInfo>> {
   return doGet('/admin/queryAllUser?withAFK='+withAFK);
 }
+export async function getDefaultAvatarUrl() {
+  return doGet('/getDefaultAvatar');
+}
+export async function deleteUser(id:string) {
+  return doGet('/admin/deleteUser/'+id);
+}

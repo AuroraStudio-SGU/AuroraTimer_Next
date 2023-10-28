@@ -398,7 +398,7 @@ function checkForUpdates() {
             buttons: ['重启更新', '等下再说'],
             title: '是否更新?',
             message: process.platform === 'win32' ? info.releaseNotes : info.releaseName,
-            detail: `新版本(${info.version})已经下载完成,重启既可更新新版本!`
+            detail: `新版本(${info.version})已经下载完成,重启既可更新新版本!你说你想知道更新了什么?,那么怎么不去仓库里面看看呢?`
         }
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
@@ -411,7 +411,6 @@ function checkForUpdates() {
     // More properties on autoUpdater, see https://www.electron.build/auto-update#AppUpdater
     //autoUpdater.autoDownload = true
     //autoUpdater.autoInstallOnAppQuit = true
-
     // No debugging! Check main.log for details.
     // Ready? Go!
     logger.info('checkForUpdates() -- begin')
@@ -476,4 +475,8 @@ function SysNotification(options) {
     dialog.showMessageBox(options).then(()=>{
         mainWindow.webContents.send('callback-result', CallbackEnum.RESTARTTIMER)
     });
+}
+export function appQuit() {
+  isAppQuit = true;
+  app.quit()
 }
