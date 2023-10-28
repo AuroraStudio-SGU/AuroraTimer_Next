@@ -1,6 +1,4 @@
 import {CallbackEnum} from "../renderer/src/api/interfaces/CallbackEnum";
-
-const startTime = new Date().getTime();
 import {
     app,
     BrowserWindow,
@@ -26,13 +24,15 @@ import {
     getMousePoint,
     loadSetting,
     openBrowser,
-    openFile,
+    openFile, openSettingFolder,
     SaveSetting,
     WebNotification,
     windowOperate
 } from "./function";
 import {DefaultSetting} from "../renderer/src/utils/Setting";
 import logger from "electron-log";
+
+const startTime = new Date().getTime();
 
 autoUpdater.logger = logger
 logger.transports.file.maxSize = 1002430 // 10M
@@ -55,9 +55,15 @@ const iconImg = nativeImage.createFromPath(icon)
 let UpdateServerURL;
 
 switch (process.platform) {
-    case "darwin":UpdateServerURL = "http://192.168.49.66:8000/apps/mac";break;
-    case "win32":UpdateServerURL = "http://192.168.49.66:8000/apps/win";break;
-    default:UpdateServerURL = "http://192.168.49.66:8000/apps";break;
+    case "darwin":
+        UpdateServerURL = "http://192.168.49.66:8000/apps/mac";
+        break;
+    case "win32":
+        UpdateServerURL = "http://192.168.49.66:8000/apps/win";
+        break;
+    default:
+        UpdateServerURL = "http://192.168.49.66:8000/apps";
+        break;
 }
 
 const offlineMode = false
@@ -91,11 +97,11 @@ async function createLoginWindow() {
             devTools: true,//客户端可以打开开发者工具（在客户端打开快捷键：ctrl+shift+i）
         },
     });
-    loginWindow.on('close',(event)=>{
-        if(!isAppQuit){
+    loginWindow.on('close', (event) => {
+        if (!isAppQuit) {
             event.preventDefault()
             loginWindow.hide();
-        }else {
+        } else {
             loginWindow.close()
         }
     })
@@ -160,11 +166,11 @@ async function createWindow() {
         await mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
         //DEV setting
     }
-    mainWindow.on('close',(event)=>{
-        if(!isAppQuit){
+    mainWindow.on('close', (event) => {
+        if (!isAppQuit) {
             event.preventDefault()
             mainWindow.hide()
-        }else {
+        } else {
             mainWindow.close()
         }
     })
@@ -182,19 +188,19 @@ const enableDevTool = true;
 const gotTheLock = app.requestSingleInstanceLock(AdditionalData)
 //多开锁
 if (!gotTheLock) {
-  isAppQuit = true;
-  app.quit()
+    isAppQuit = true;
+    app.quit()
 } else {
-  app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
-    // 输出从第二个实例中接收到的数据
-    AdditionalData = additionalData
-    // 有人试图运行第二个实例，我们应该关注我们的窗口
-    if (!mainWindow.isVisible()) {
-      mainWindow.show()
-    } else {
-      focusWindow()
-    }
-  })
+    app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+        // 输出从第二个实例中接收到的数据
+        AdditionalData = additionalData
+        // 有人试图运行第二个实例，我们应该关注我们的窗口
+        if (!mainWindow.isVisible()) {
+            mainWindow.show()
+        } else {
+            focusWindow()
+        }
+    })
 }
 
 // This method will be called when Electron has finished
@@ -238,14 +244,18 @@ app.whenReady().then(() => {
     // 设置系统托盘
     tray = new Tray(iconImg)
     const contextMenu = Menu.buildFromTemplate([
-        {
-            label: '退出', type: 'normal', click: () => {
-                try {
-                    isAppQuit = true;
+        {label: '打开设置文件', type: 'normal', click: () => {
+                openSettingFolder()}
+        },
+        {label: '热加载配置文件', type: 'normal', click: () => {
+                LoadSetting()}
+        },
+        {label: '退出', type: 'normal', click: () => {
+            try {
+              isAppQuit = true;
                     tray.destroy()
                     app.quit()
-                }catch (e) {}
-            }
+            } catch (e) {}}
         },
     ])
     tray.setToolTip('新·极光工作室打卡器')
@@ -291,7 +301,9 @@ app.whenReady().then(() => {
     ipcMain.on('open-browser', openBrowser)
     ipcMain.on('send-data-toMain', (_event, value) => pushSharedDataToMainWindow(value))
     ipcMain.on('logout', Logout)
-    ipcMain.on('push-sys-notification',(_event,options)=>{SysNotification(options)})
+    ipcMain.on('push-sys-notification', (_event, options) => {
+        SysNotification(options)
+    })
 
     //设置自启选项
     if (app.isPackaged) {
@@ -334,14 +346,14 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin'){
+    if (process.platform !== 'darwin') {
         isAppQuit = true;
         app.quit()
     }
 })
 //app准备退出后进行的操作
 app.on('will-quit', () => {
-    if(tray){
+    if (tray) {
         tray.destroy()
     }
 })
@@ -471,12 +483,14 @@ function Logout() {
     loginWindow.show()
     isLogin = false;
 }
+
 function SysNotification(options) {
-    dialog.showMessageBox(options).then(()=>{
+    dialog.showMessageBox(options).then(() => {
         mainWindow.webContents.send('callback-result', CallbackEnum.RESTARTTIMER)
     });
 }
+
 export function appQuit() {
-  isAppQuit = true;
-  app.quit()
+    isAppQuit = true;
+    app.quit()
 }

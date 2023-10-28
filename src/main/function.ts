@@ -142,6 +142,9 @@ export function internalSysMessage(options?: MessageBoxOptions, onClickEvent?: C
         onClickEvent(returnValue);
     })
 }
+export function openSettingFolder() {
+    shell.showItemInFolder(settingFilePath)
+}
 
 
 

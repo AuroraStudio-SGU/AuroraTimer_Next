@@ -1,8 +1,10 @@
 <template>
   <div class="navbar bg-base-100 get-topup">
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-3xl rounded-box">Aurora</a
-      ><!--打算在这里显示版本信息(或者测试用途)-->
+      <div class="tooltip" :data-tip="config.version">
+        <a class="btn btn-ghost normal-case text-3xl rounded-box">Aurora</a
+        ><!--打算在这里显示版本信息(或者测试用途)-->
+      </div>
       <div
           v-if="globalStore.isAFK"
           class="badge font-semibold"
@@ -55,6 +57,7 @@ import {router} from "../utils/router";
 import {onBeforeMount, ref} from "vue";
 import {getAvatarById} from "../api/API";
 import {ElNotification} from "element-plus";
+import config from '../../../../package.json'
 
 const globalStore = GlobalStore();
 
