@@ -299,6 +299,7 @@ app.whenReady().then(() => {
     ipcMain.on('open-file', openFile)
     ipcMain.on('login', login)
     ipcMain.on('open-browser', openBrowser)
+    ipcMain.on('close-sys-notification', closeNotification)
     ipcMain.on('send-data-toMain', (_event, value) => pushSharedDataToMainWindow(value))
     ipcMain.on('logout', Logout)
     ipcMain.on('push-sys-notification', (_event, options) => {
@@ -324,7 +325,10 @@ app.whenReady().then(() => {
         const winUrl = 'http://localhost:5173/#/login';
         loginWindow.loadURL(winUrl)
     }
-
+    if(!app.isPackaged){
+      //开发环境还是自动切成本地好了，老要自己改
+      setting.netWork.host = 'http://localhost:8084'
+    }
     //加载API实例
     init(setting.netWork.host, setting.userInfo.token)
     loginWindow.once('ready-to-show', () => {
@@ -483,11 +487,22 @@ function Logout() {
     loginWindow.show()
     isLogin = false;
 }
+let ac = null;
 
 function SysNotification(options) {
+    if(ac!=null){
+        ac = ac.abort()
+    }
+    ac = new AbortController();
+    options.signal = ac.signal;
     dialog.showMessageBox(options).then(() => {
         mainWindow.webContents.send('callback-result', CallbackEnum.RESTARTTIMER)
     });
+}
+function closeNotification() {
+    if(ac!=null){
+        ac.abort("user click other close")
+    }
 }
 
 export function appQuit() {

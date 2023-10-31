@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {TimerStore} from "../stores/Timer";
 import {onBeforeMount, ref} from "vue";
 import {GlobalStore} from "../stores/Global";
@@ -35,7 +35,7 @@ let min = ref('00')
 let second = ref('00')
 const timeStore = TimerStore()
 const globalStore = GlobalStore()
-
+let notification = ref<Notification>(null)
 try {
   //Timer 返回函数。
   timeStore.timer.onmessage = async (event) => {
@@ -46,7 +46,7 @@ try {
     }
     //挂机检测
     if (time % timeStore.AfkLimit === 0 && time !== 0 && globalStore.AFKDetected) {
-      window.electronAPI.getMousePoint().then((point) => {
+      window.electronAPI.getMousePoint().then((point:Electron.Point) => {
         if (globalStore.lastMousePoint.x === point.x || globalStore.lastMousePoint.y === point.y) {
           StopTimer()
           globalStore.isAFK = true
@@ -54,25 +54,27 @@ try {
           const NOTIFICATION_TITLE = "你是不是正在挂机？";
           const NOTIFICATION_BODY = "点我恢复计时！";
           const img = getUrl('icon-sm.png')
-          let notice = new Notification(
+          timeStore.AFKNotification =  new Notification(
               NOTIFICATION_TITLE,
-              {body: NOTIFICATION_BODY, requireInteraction: true, icon: img})
-              .onclick = () => {
-            StartTimer();
-            ElNotification({
-              title: '重新恢复计时',
-              type: 'success'
-            })
-          };
+              {body: NOTIFICATION_BODY, requireInteraction: true, icon: img});
+          timeStore.AFKNotification.onclick = () => {
+            if (StartTimer()) {
+              ElNotification({
+                title: '重新恢复计时',
+                type: 'success'
+              })
+            }
+          }
           const dialogOpts = {
             type: 'warning',
             buttons: ['恢复计时', '恢复计时'],
             title: '你还在吗?挂机太长时间不计时的哦!',
             message: "看不到通知？这个总能看到了把，要是这个看不到，那我也没办法了",
-            detail: `我尽力让你看到这个消息了`
+            detail: `我尽力让你看到这个消息了`,
           }
           //通过ipc通信，让主进程发送系统级通知。
           window.electronAPI.PushSysNotification(dialogOpts)
+
         }
         globalStore.lastMousePoint = point
       })
@@ -83,10 +85,7 @@ try {
       API.addTime(globalStore.Setting.userInfo.id).then((res) => {
         if (res.success) {
           if (typeof (res.data) == 'number') {
-            if (globalStore.Setting.userInfo.WeekTime < res.data) {
-              globalStore.Setting.userInfo.WeekTime = Number(res.data)
-            }
-            if (Number(globalStore.Setting.userInfo.WeekTime) - Number(res.data) >= 60) {
+            if (Math.abs(Number(globalStore.Setting.userInfo.WeekTime) - Number(res.data)) >= 60) {
               globalStore.Setting.userInfo.WeekTime = Number(res.data)
             }
           }
@@ -98,32 +97,46 @@ try {
     min.value = nowTimeStr.min;
     second.value = nowTimeStr.second;
   }
-  //监听回用户点击事件，回来确认恢复计时
-  window.electronAPI.CallbackInformation((_event, Enum) => {
-    if (Enum === CallbackEnum.RESTARTTIMER) {
-      StartTimer();
-      ElNotification({
-        title: '重新恢复计时',
-        type: 'success'
-      })
-    }
-  })
   //收到当前鼠标坐标
-  window.electronAPI.getMousePoint().then((point) => {
+  window.electronAPI.getMousePoint().then((point:Electron.Point) => {
     globalStore.lastMousePoint = point;
   })
-} catch (e) {}
+  //监听用户点击事件，回来确认恢复计时
+  window.electronAPI.CallbackInformation((_event, Enum) => {
+    if (Enum === CallbackEnum.RESTARTTIMER) {
+      if (StartTimer()) {
+        ElNotification({
+          title: '重新恢复计时',
+          type: 'success'
+        })
+      }
+    }
+  })
+} catch (e) {
+}
 const StartTimer = () => {
   if (!timeStore.isStarted) {
     timeStore.OpenTimer()
     timeStore.timer.postMessage('start')
+    if(globalStore.isAFK){
+      window.electronAPI.CloseSysNotification()
+      console.log(timeStore.AFKNotification)
+      if(timeStore.AFKNotification!=null){
+        timeStore.AFKNotification.close()
+        timeStore.AFKNotification = null
+      }
+    }
     globalStore.isAFK = false;
+    globalStore.changeMouseState(true)
+    return true;
   }
+  return false;
 }
 const StopTimer = () => {
   if (timeStore.isStarted) {
     timeStore.CloseTimer()
     timeStore.timer.postMessage('stop')
+    globalStore.changeMouseState(false)
   }
 }
 
@@ -135,13 +148,13 @@ const clearTime = () => {
   timeStore.time = 0
 }
 
-const SecondToTimeStr = (second) => {
-  let hour = Math.floor((second / 3600))
+const SecondToTimeStr = (second:any) => {
+  let hour:any = Math.floor((second / 3600))
   if (hour < 10) hour = '0' + hour
   if (hour > 99) hour = '99' //不会真的有人能99+把
-  let min = Math.floor((second % 3600) / 60)
+  let min:any = Math.floor((second % 3600) / 60)
   if (min < 10) min = '0' + min
-  let seconds = Math.floor(second % 60)
+  let seconds:any = Math.floor(second % 60)
   if (seconds < 10) seconds = '0' + seconds
   return {
     hour: String(hour),

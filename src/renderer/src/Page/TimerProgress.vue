@@ -6,7 +6,7 @@
           <div class="little">
             <el-progress
                 :hidden="115"
-                :percentage="timerStore.getTimerProgress.little"
+                :percentage="globalStore.getTimerProgress.little"
                 :stroke-width="40"
                 :width="115"
                 class="littleCircle"
@@ -18,7 +18,7 @@
           <div class="medium">
             <el-progress
                 :hidden="195"
-                :percentage="timerStore.getTimerProgress.middle"
+                :percentage="globalStore.getTimerProgress.middle"
                 :stroke-width="40"
                 :width="195"
                 class="mediumCircle"
@@ -30,7 +30,7 @@
           <div class="big">
             <el-progress
                 :hidden="270"
-                :percentage="timerStore.getTimerProgress.big"
+                :percentage="globalStore.getTimerProgress.big"
                 :stroke-width="40"
                 :width="270"
                 class="bigCircle"
@@ -45,17 +45,12 @@
             <defs>
               <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                    :style="{
-                    stopColor:
-                      globalStore.Setting.progressBar.color.small.start,
-                  }"
+                    :style="{stopColor:globalStore.Setting.progressBar.color.small.start}"
                     offset="0%"
                     stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{
-                    stopColor: globalStore.Setting.progressBar.color.small.end,
-                  }"
+                    :style="{stopColor: globalStore.Setting.progressBar.color.small.end}"
                     offset="100%"
                     stop-opacity="1"
                 ></stop>
@@ -67,16 +62,12 @@
               <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
                     :style="{
-                    stopColor:
-                      globalStore.Setting.progressBar.color.medium.start,
-                  }"
+                    stopColor:globalStore.Setting.progressBar.color.medium.start}"
                     offset="0%"
                     stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{
-                    stopColor: globalStore.Setting.progressBar.color.medium.end,
-                  }"
+                    :style="{stopColor: globalStore.Setting.progressBar.color.medium.end}"
                     offset="100%"
                     stop-opacity="1"
                 ></stop>
@@ -87,16 +78,12 @@
             <defs>
               <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                    :style="{
-                    stopColor: globalStore.Setting.progressBar.color.big.start,
-                  }"
+                    :style="{stopColor: globalStore.Setting.progressBar.color.big.start}"
                     offset="0%"
                     stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{
-                    stopColor: globalStore.Setting.progressBar.color.big.end,
-                  }"
+                    :style="{stopColor: globalStore.Setting.progressBar.color.big.end}"
                     offset="100%"
                     stop-opacity="0.9"
                 ></stop>
@@ -130,8 +117,10 @@
           <div class="stat-value">{{ DutyList.wed }} {{ DutyList.sun }}</div>
         </div>
       </div>
-<!--      只在挂机的时候显示恢复按钮-->
-      <button class="btn btn-success" style="position: absolute;right: 200px;" v-show="globalStore.isAFK" @click="startTimer">恢复计时</button>
+      <!--      只在挂机的时候显示恢复按钮-->
+      <button class="btn btn-success" style="position: absolute;right: 200px;" v-show="globalStore.isAFK"
+              @click="startTimer(true)">恢复计时
+      </button>
     </div>
   </div>
 </template>
@@ -142,14 +131,20 @@ import {onBeforeMount, ref, toRaw} from "vue";
 import {TimerStore} from "../stores/Timer";
 import Countdown from "../components/Countdown.vue";
 import {GlobalStore} from "../stores/Global";
+import {ElNotification} from "element-plus";
 
 const globalStore = GlobalStore();
 const timerStore = TimerStore();
 const CountDown = ref(null);
 
-const startTimer = () => {
+const startTimer = (restart:boolean) => {
   if (!timerStore.isStarted) {
-    CountDown.value.StartTimer()
+    if(CountDown.value.StartTimer() && restart){
+      ElNotification({
+        title: '重新恢复计时',
+        type: 'success'
+      })
+    }
   }
 };
 
@@ -170,7 +165,7 @@ onBeforeMount(async () => {
     DutyList.value.createTime = dutyList.createTime
     let res = await globalStore.getTargetTime()
     TargetTime.value = toRaw(res).targetTime
-    startTimer();
+    startTimer(false);
   } catch (e) {
   }
 })

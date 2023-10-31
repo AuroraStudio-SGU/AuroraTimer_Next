@@ -188,3 +188,6 @@ export async function getDefaultAvatarUrl() {
 export async function deleteUser(id:string) {
   return doGet('/admin/deleteUser/'+id);
 }
+export async function getTimeDetail(id:string) {
+  return doGet('/timer/queryTimeDetail/'+id);
+}

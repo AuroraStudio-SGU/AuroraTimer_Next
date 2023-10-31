@@ -171,24 +171,24 @@
 
 <script setup lang="ts">
 import {onBeforeMount, ref} from "vue";
-import {UserTime_avtar} from "../api/interfaces/Schema";
+import {UserTime} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
 import {getAvatarById, getTop3} from "../api/API";
 
-let empty:UserTime_avtar={
-  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,avatar:''
+let empty:UserTime={
+  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,avatar:'',grade:''
 }
 let Top3s = [
   empty,empty,empty
 ]
-let Top3 = ref<UserTime_avtar[]>(Top3s);
+let Top3 = ref<UserTime[]>(Top3s);
 
 const loadTop3 = async () => {
   let res = await getTop3()
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {

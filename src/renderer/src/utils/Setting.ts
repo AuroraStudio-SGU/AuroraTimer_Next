@@ -1,15 +1,7 @@
+import {UserInfo} from "../api/interfaces/Schema";
+
 export interface SettingFile{
-  userInfo:{
-    id: string,
-    name: string,
-    avatar:string,
-    WeekTime: number,
-    admin: boolean,
-    token:string,
-    major:string,
-    grade:string,
-    work_group:string,
-  },
+  userInfo:UserInfo,
   progressBar:{
     color:{
       small:{
@@ -37,14 +29,15 @@ export interface SettingFile{
 export const DefaultSetting:SettingFile={
   userInfo:{
     id: '21125023044',
-    name: 'DAY',
+    name: '如果你看到这个,说明配置文件炸了,请联系管理员',
     WeekTime: 0,
     admin: false,
     token: 'why u thing there will have default token?',
     major: 'major',
     avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     grade:'21级',
-    work_group:'Web组'
+    work_group:'Web组',
+    afk:false,
   },
   progressBar:{
     color:{

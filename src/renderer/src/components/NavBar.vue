@@ -68,7 +68,7 @@ const loadAvatar = async () => {
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {

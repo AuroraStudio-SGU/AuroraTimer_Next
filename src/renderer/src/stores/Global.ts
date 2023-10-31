@@ -38,6 +38,8 @@ const themes = [
     "winter",
 ]; //主题列表
 
+type MouseState = 'running' | 'paused'
+
 export const GlobalStore = defineStore('main', {
     state: () => ({
         loginPanel: false,
@@ -45,12 +47,13 @@ export const GlobalStore = defineStore('main', {
         ProjectLink: 'https://github.com/AuroraStudio-SGU/AuroraTimer_Next',
         Setting: DefaultSetting as SettingFile,
         ThemeList: themes,
-        lastMousePoint: false,
+        lastMousePoint: null as Electron.Point,
         AFKDetected: true,
         isAFK: false,
         DutyList: [] as DutyList[],
         TargetTime: -1,
         AvatarUpdateFlag:Math.random(),
+        MouseSate: "running" as MouseState,
     }),
     getters: {
         getUserInfo(state): UserInfo {
@@ -61,7 +64,15 @@ export const GlobalStore = defineStore('main', {
         },
         getCurrentTheme(state): string {
             return state.Setting.skin
-        }
+        },
+        getTimerProgress(state) {
+            let percentage = Number((state.Setting.userInfo.WeekTime / 864).toFixed(2))
+            return {
+                big: percentage > 100 ? 100 : percentage,
+                middle: percentage - 100 < 0 ? 0 : percentage - 100 > 100 ? 100 : percentage - 100,
+                little: percentage - 200 < 0 ? 0 : percentage - 200 > 100 ? 100 : percentage - 200,
+            }
+        },
     },
     actions: {
         changeLoginPanel(): void {
@@ -76,20 +87,8 @@ export const GlobalStore = defineStore('main', {
         setUserInfo(user: UserInfo) {
             this.Setting.userInfo = user
         },
-        async getUserRankList(isRefresh: boolean, index?: number) {
-            if (this.UserRankList.length == 0 || isRefresh) {
-                //获取新Rank
-                if (index == undefined) index = 0;
-                let Response = await getRank(index);
-                if (Response.success) {
-                    this.UserRankList.value = Response.data
-                    return Response.data;
-                } else {
-                    return null
-                }
-            } else {
-                return this.UserRankList
-            }
+        setUserRankList(list:UserTime[]) {
+          this.UserRankList = list;
         },
         async getDutyList(): Promise<DutyList> {
             if (this.DutyList.wed == undefined || isSameWeek(this.DutyList.createTime, new Date())) {
@@ -114,6 +113,29 @@ export const GlobalStore = defineStore('main', {
                 }
             }
             return this.TargetTime;
+        },
+        getUidFormName(name: string): string | null {
+            let list:UserTime[] = this.UserRankList
+            let resList = list.filter((t)=>t.name===name);
+            if(resList.length>1){
+                return "ERROR_MULTI_USER_RESULT"
+            }else if(resList.length==0) return null;
+            return resList[0].id
+        },
+        changeMouseState(flag?:boolean){
+            if(flag === undefined || flag == null){
+                if(this.MouseSate==="running"){
+                    this.MouseSate = "paused"
+                }else {
+                    this.MouseSate = "running"
+                }
+                return;
+            }
+            if(flag){
+                this.MouseSate="running"
+            }else {
+                this.MouseSate = "paused"
+            }
         }
     }
 })

@@ -37,7 +37,6 @@
             <!-- 路由显示 -->
           </div>
         </div>
-
         <div class="love">
           <Love></Love>
         </div>
@@ -62,8 +61,6 @@ import { getUrl } from "./utils/urlUtils";
 //登录状态栏
 const loginPanel = ref(false);
 const globalStore = GlobalStore();
-
-const name = ref("nmame");
 
 const themeList = [];
 let usingTime;

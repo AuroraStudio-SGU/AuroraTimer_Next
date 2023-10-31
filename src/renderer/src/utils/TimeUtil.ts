@@ -89,7 +89,7 @@ const arcToAngle = (Arc:number):number =>{
  */
 export const CalculateSunTime = (): SumTime => {
   //正午时间 (单位小时)
-  const HighNoon = 12+Number((GTM8_lon - lon) * (1 / 15).toFixed(3))
+  const HighNoon = 12+Number((GTM8_lon - lon) * Number((1.0 / 15).toFixed(3)))
   //截面圆半径
   let _r = Earth_Round * Math.cos(angleToArc(lat))
   //太阳入射角计算

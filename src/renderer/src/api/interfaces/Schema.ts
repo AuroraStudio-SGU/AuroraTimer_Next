@@ -3,7 +3,7 @@ export interface APIResponse<T> {
   msg:string;
   data:T;
 }
-export interface User { //only for login
+export interface User { //only for login and register
   id:string;
   name:string;
   password:string;
@@ -23,7 +23,8 @@ export interface UserTime {
   weekTime:number,
   reduceTime:number,
   unfinishedCount:number,
-  avatar:string,//前端字段
+  grade:string,
+  avatar:string,
 }
 export interface UserInfo {
   id: string,
@@ -47,13 +48,4 @@ export interface Notice{
   notice_id:string | null,
   notice:string,
   updateTime:Date
-}
-export interface UserTime_avtar {
-  id:string,
-  name:string,
-  totalTime:number,
-  weekTime:number,
-  reduceTime:number,
-  unfinishedCount:number,
-  avatar:string,
 }

@@ -27,6 +27,10 @@
 
 <script setup>
 
+import {GlobalStore} from "../stores/Global";
+
+const globalStore = GlobalStore()
+
 </script>
 
 <style scoped>
@@ -51,6 +55,7 @@
 .hamster div,
 .spoke {
   position: absolute;
+  animation-play-state: v-bind(globalStore.MouseSate)
 }
 
 .wheel,
@@ -80,6 +85,7 @@
   transform: rotate(4deg) translate(-0.8em, 1.85em);
   transform-origin: 50% 0;
   z-index: 1;
+  animation-play-state: v-bind(globalStore.MouseSate)
 }
 
 .hamster__head {
@@ -220,6 +226,7 @@
         hsla(0, 0%, 65%, 0) 53%
       )
       50% 50% / 99% 99% no-repeat;
+  animation-play-state: v-bind(globalStore.MouseSate)
 }
 
 /* Animations */

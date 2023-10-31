@@ -275,7 +275,7 @@ const loadUserInformation = async () => {
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {
@@ -334,7 +334,7 @@ const uploadUser = async () => {
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {

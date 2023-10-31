@@ -101,7 +101,8 @@ import {GlobalStore} from "../stores/Global";
 import {TimerStore} from "../stores/Timer";
 import {UserInfo, UserTime} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
-import {getAvatarById, queryUser} from "../api/API";
+import {getRank, queryUser} from "../api/API";
+import {getGrade} from "../utils/StringUtil";
 
 
 interface Week {
@@ -109,7 +110,8 @@ interface Week {
   name: string;
 }
 let emptyInformation: UserInfo = {
-  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: ""
+  afk: false,
+  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "",grade:''
 }
 const globalStore = GlobalStore();
 const timerStore = TimerStore();
@@ -153,7 +155,7 @@ const showInformation = async  (id: string) => {
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {
@@ -189,39 +191,35 @@ const loadWeekList = async () => {
     } else {
       str = "上" + intToRoman(i) + "周";
     }
-    let week: Week = {
+    WeekIndex.value[i] = {
       index: i,
       name: str,
     };
-    WeekIndex.value[i] = week;
   }
 };
 const loadRankList = async () => {
   Loading.value = true;
   //获取排行列表
-  let res = await globalStore.getUserRankList(true, lastXWeek.value);
-  if (!res) {
+  let res = await getRank(lastXWeek.value)
+  if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error",
     });
     return;
   }
   document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
-  UserList.value = res;
-  timerStore.setUserTimeList(UserList.value);
+  UserList.value = res.data;
+  globalStore.setUserRankList(res.data)
   //在加载前获取所有成员的年级列表
   GradeList.value = [];
   for (let i = 0; i < UserList.value.length; i++) {
     let user = UserList.value[i];
-    let g = user.id.substring(0, 2);
+    let g = getGrade(user)
     let index = GradeList.value.indexOf(g);
     if (index == -1) GradeList.value.push(g);
-    let res = await getAvatarById(user.id);
-    if (res.success) {
-      UserList.value[i].avatar = res.data + "?" + Math.random();
-    }
+    UserList.value[i].avatar = UserList.value[i].avatar + "?" + Math.random();
   }
   GradeFilters.value = [];
   GradeList.value.forEach((i) => {

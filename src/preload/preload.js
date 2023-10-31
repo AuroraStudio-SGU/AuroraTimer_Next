@@ -43,6 +43,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   pushDataToMain:(callback) => ipcRenderer.send('send-data-toMain', callback),
   Logout:(callback) => ipcRenderer.send('logout', callback),
   PushSysNotification:(callback) =>ipcRenderer.send('push-sys-notification',callback),
+  CloseSysNotification:(callback) =>ipcRenderer.send('close-sys-notification',callback),
 
 })
 

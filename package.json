@@ -1,6 +1,6 @@
 {
   "name": "auroratimer",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "新·打卡计时器",
   "main": "./out/main/index.js",
   "author": "DAYGood_Time",
@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
+    "plotly.js-dist": "^2.22.0",
     "@types/jquery": "^3.5.22",
     "@vitejs/plugin-vue": "^4.3.4",
     "electron": "26.4.0",

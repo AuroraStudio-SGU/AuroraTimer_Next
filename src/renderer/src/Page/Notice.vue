@@ -4,8 +4,8 @@
       <div class="hero h-full">
         <div class="hero-content flex-row">
           <img
-              :src="getUrl('icon.png')"
-              class="max-w-sm rounded-lg shadow-2xl"
+            :src="getUrl('icon.png')"
+            class="max-w-sm rounded-lg shadow-2xl"
           />
           <div>
             <h1 class="text-5xl font-bold">工作室公告</h1>
@@ -38,9 +38,9 @@ import "../assets/css/common.css";
 import {AdminStore} from "../stores/Admin";
 import {onBeforeMount, ref, toRaw} from "vue";
 import {getUrl} from "../utils/urlUtils";
-import {UserTime_avtar} from "../api/interfaces/Schema";
 import {getAvatarById, getDefaultAvatarUrl, getLast3} from "../api/API";
 import {ElNotification} from "element-plus";
+import {UserTime} from "../api/interfaces/Schema";
 
 const adminStore = AdminStore();
 const noticeContext = ref(null);
@@ -50,29 +50,30 @@ function isNotEmptyStr(s: string) {
 }
 
 
-let empty: UserTime_avtar = {
+let empty: UserTime = {
+  grade: "",
   avatar: "",
   id: '', name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0
 }
 let Last3s = [
   empty, empty, empty
 ]
-let Last3 = ref<UserTime_avtar[]>(Last3s);
+let Last3 = ref<UserTime[]>(Last3s);
 
 
 const loadLast3 = async () => {
   let res = await getLast3()
   let default_url_res = await getDefaultAvatarUrl();
-  let default_url;
-  if(!default_url_res.success){
+  let default_url: string;
+  if (!default_url_res.success) {
     default_url = 'http://192.168.49.66:8000/avatars/DefaultAvtart.png'
-  }else {
+  } else {
     default_url = default_url_res.data
   }
   if (!res.success) {
     ElNotification({
       title: "请求失败！",
-      message: "系统异常",
+      message: res.msg,
       type: "error"
     });
   } else {
@@ -83,9 +84,9 @@ const loadLast3 = async () => {
         Last3.value[i].avatar = res.data + '?' + Math.random();
       }
     }
-    for (let i = Last3.value.length; i < 3 ; i++) {
-      let BlankUser:UserTime_avtar = {
-        avatar: default_url, id: '1000', name: "暂无入榜", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0
+    for (let i = Last3.value.length; i < 3; i++) {
+      let BlankUser: UserTime = {
+        avatar: default_url, id: '1000', name: "暂无入榜", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,grade:''
       }
       Last3.value.push(BlankUser);
     }

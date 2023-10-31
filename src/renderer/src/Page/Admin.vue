@@ -236,11 +236,18 @@ const handleReduceTime = async () => {
       type: "error",
     });
   } else {
-    let uid = await timerStore.getUidFormName(ReducePerson.value);
+    let uid = globalStore.getUidFormName(ReducePerson.value);
     if (uid === null) {
       ElNotification({
         title: "参数错误!",
         message: "该成员并不存在",
+        type: "error",
+      });
+      return
+    }else if(uid==="ERROR_MULTI_USER_RESULT"){
+      ElNotification({
+        title: "参数错误!",
+        message: "存在多个相同id的成员,请联系管理员",
         type: "error",
       });
       return

@@ -9,6 +9,7 @@
             <div class="Form">
               <input type="text" placeholder="学号" v-model="id"/>
               <input type="text" placeholder="姓名" v-model="name"/>
+              <input type="text" placeholder="年级" v-model="Grade"/>
               <input type="text" placeholder="密码" v-model="password"/>
               <input type="text" placeholder="确认密码" v-model="confirmPsw"/>
               <button class="btn btn-accent sumbit" @click="register">注册</button>
@@ -69,7 +70,6 @@
                   <button class="btn" @click="forgetPwd">重置</button>
                   <button class="btn">关闭</button>
                 </div>
-
               </form>
             </div>
           </div>
@@ -87,13 +87,14 @@ import * as API from "../api/API";
 import {init, restPassword} from "../api/API";
 import {GlobalStore} from "../stores/Global";
 import {md5} from "js-md5";
-import {UserInfo} from "../api/interfaces/Schema";
+import {User, UserInfo} from "../api/interfaces/Schema";
 import {isNotEmptyStr} from "../utils/StringUtil";
 
 const globalStore = GlobalStore()
 let AutoLogin = ref(true)
-let account = ref(null)
+let account = ref()
 let RestPwd = ref("123456")
+let Grade = ref()
 const restPwd = ref(null) //组件对象
 
 onBeforeMount(() => {
@@ -129,9 +130,10 @@ const login = async () => {
   const user = {
     id: id.value,
     name: name.value,
+    grade:Grade.value,
     password: md5(password.value),
   }
-  let Response = await API.login(user)
+  let Response = await API.login(<User>user)
   if (!Response.success) {
     ElNotification({
       title: "登录失败！",
@@ -141,8 +143,8 @@ const login = async () => {
     return;
   }
   let result = Response.data
-  //TODO more userInformation
   let userInfo: UserInfo = {
+    afk: false,
     WeekTime: result.currentWeekTime,
     avatar: result.avatar,
     grade: result.grade,
@@ -164,10 +166,45 @@ const login = async () => {
 }
 
 const register = async () => {
+  if(isNaN(Number(id.value))){
+    ElNotification({
+      title: "参数错误",
+      message:"现在学号还带符号了?",
+      type: "error"
+    });
+  }
   const user = {
     id: id.value,
     name: name.value,
     password: password.value,
+  }
+  if(!isNotEmptyStr(name.value)){
+    ElNotification({
+      title: "名字空的？",
+      type: "error"
+    });
+    return;
+  }
+  if(!isNotEmptyStr(Grade.value) || Grade.value.length>3){
+    ElNotification({
+      title: "年级填了吗?,或者说你年级太长了",
+      type: "error"
+    });
+    return;
+  }
+  if(!isNotEmptyStr(id.value)){
+    ElNotification({
+      title: "学号空的？",
+      type: "error"
+    });
+    return;
+  }
+  if(!isNotEmptyStr(password.value)){
+    ElNotification({
+      title: "密码空的？",
+      type: "error"
+    });
+    return;
   }
   if (password.value !== confirmPsw.value) {
     ElNotification({
@@ -176,7 +213,7 @@ const register = async () => {
     });
     return;
   }
-  let Response = await API.register(user)
+  let Response = await API.register(<User>user)
   if (!Response.success) {
     ElNotification({
       title: "注册失败！",
