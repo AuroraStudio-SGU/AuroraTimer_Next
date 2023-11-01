@@ -111,7 +111,7 @@ interface Week {
 }
 let emptyInformation: UserInfo = {
   afk: false,
-  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "",grade:''
+  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "",
 }
 const globalStore = GlobalStore();
 const timerStore = TimerStore();

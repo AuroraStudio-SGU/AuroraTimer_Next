@@ -1,5 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
 import {APIResponse, Notice, User, UserInfo} from "./interfaces/Schema";
+import config from '../../../../package.json'
 
 let instance: AxiosInstance;
 
@@ -77,7 +78,7 @@ export async function getPing() {
 }
 
 export async function addTime(id: string) {
-  return doGet('/timer/addTime/' + id);
+  return doGet('/timer/addTime/' + id + '?version='+config.version);
 }
 
 export async function getRank(lastXWeek: number) {

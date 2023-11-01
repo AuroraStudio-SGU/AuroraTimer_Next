@@ -51,7 +51,6 @@ const {
 const Windows_Main_Width = 1000
 const Windows_Main_Height = 670
 const iconImg = nativeImage.createFromPath(icon)
-// const UpdateServerURL = "http://localhost:9999/timer/"
 let UpdateServerURL;
 
 switch (process.platform) {
@@ -66,6 +65,7 @@ switch (process.platform) {
         break;
 }
 
+UpdateServerURL = "http://localhost:9999/timer/"
 const offlineMode = false
 
 
@@ -216,7 +216,9 @@ app.whenReady().then(() => {
     }
     if (app.isPackaged) {
         //检查更新
-        checkForUpdates()
+        try{
+          checkForUpdates()
+        }catch (e) {}
     }
     //创建窗口
     createWindow()

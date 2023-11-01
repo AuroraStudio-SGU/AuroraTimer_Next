@@ -134,7 +134,9 @@ type CallbackOnClick = (returnValue?: any) => void;
 export function WebNotification(options?: NotificationConstructorOptions, callback?: CallbackOnClick) {
     let notification = new Notification(options);
     notification.show();
-    notification.on('click', callback)
+    if(callback){
+      notification.on('click', callback)
+    }
 }
 
 export function internalSysMessage(options?: MessageBoxOptions, onClickEvent?: CallbackOnClick) {
