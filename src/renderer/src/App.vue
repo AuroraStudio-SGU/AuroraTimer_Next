@@ -93,6 +93,7 @@ try {
       if (value.type === "Setting") {
         globalStore.Setting = value.data;
       }
+      init(globalStore.Setting.netWork.host,globalStore.Setting.userInfo.token);
     }
   });
 } catch (e) {

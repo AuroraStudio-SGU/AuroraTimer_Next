@@ -161,7 +161,7 @@ const login = async () => {
   });
   globalStore.Setting.userInfo = userInfo;
   globalStore.Setting.autoLogin = AutoLogin.value;
-  window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
+  await window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   window.electronAPI.login()
 }
 
@@ -172,11 +172,6 @@ const register = async () => {
       message:"现在学号还带符号了?",
       type: "error"
     });
-  }
-  const user = {
-    id: id.value,
-    name: name.value,
-    password: password.value,
   }
   if(!isNotEmptyStr(name.value)){
     ElNotification({
@@ -212,6 +207,12 @@ const register = async () => {
       type: "error"
     });
     return;
+  }
+  const user = {
+    id: id.value,
+    name: name.value,
+    password: password.value,
+    grade:Grade.value,
   }
   let Response = await API.register(<User>user)
   if (!Response.success) {

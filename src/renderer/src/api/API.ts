@@ -29,9 +29,18 @@ async function processResponse(RawResp: AxiosResponse): Promise<APIResponse<any>
   }
   //TODO target interface
   let Res = RawResp.data
+
   if (Res.code != HTTP_OK) {
     apiResp.success = false;
-    apiResp.msg = Res.msg;
+    if(Array.isArray(Res.msg)){
+      let message = '';
+      Res.msg.forEach((m)=>{
+          message = message + m + ';'
+      })
+      apiResp.msg = message;
+    }else {
+      apiResp.msg = Res.msg;
+    }
     return apiResp;
   }
   apiResp.msg = Res.msg;

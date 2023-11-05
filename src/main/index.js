@@ -65,7 +65,7 @@ switch (process.platform) {
         break;
 }
 
-UpdateServerURL = "http://localhost:9999/timer/"
+// UpdateServerURL = "http://localhost:9999/timer/"
 const offlineMode = false
 
 
