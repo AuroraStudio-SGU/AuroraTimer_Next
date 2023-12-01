@@ -1,98 +1,99 @@
 <template>
   <div class="menu">
     <div class="white-box">
-      <div class="Title">管理员设置</div>
-      <div>
-        <label class="label">
-          <span>本周公告设置:</span>
-        </label>
+      <div class="Title">管理页面 当前职位:{{ priv.candidName }}</div>
+      <div class="buttons">
+        <div class="button-items admin " v-show="priv.val>=100">
         <!--公告设置触发元素-->
-        <div class="button-items">
-          <button class="btn" onclick="notice.showModal()">设置公告内容📢</button>
+          <button class="btn" style="margin-right: 1rem" onclick="notice.showModal()">设置公告内容📢</button>
+          <button class="btn" style="margin-right: 1rem" onclick="targetTime.showModal()">设置目标时长⏰</button>
+          <button class="btn" style="margin-right: 1rem" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+        </div>
+        <div class="button-items duty" v-show="priv.val==2 || priv.val>=100">
           <button class="btn" onclick="duty.showModal()">设置值日🧹</button>
-          <button class="btn" onclick="targetTime.showModal()">设置目标时长⏰</button>
-          <button class="btn" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+        </div>
+        <div class="button-items manager" v-show="priv.val>=11">
           <button class="btn" @click="toUserManage">成员管理</button>
         </div>
-        <!--公告设置页面-->
-        <dialog id="notice" class="modal">
-          <div class="modal-box-notice modal-box relative overflow-hidden">
-            <h3 class="font-bold text-lg">公告设置📢</h3>
-            <form method="dialog">
-              <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-            </form>
-            <div class="container">
-              <TextEditor data-twind-ignore ref="textEditor"></TextEditor>
-            </div>
-            <div class="modal-action">
-              <label for="notice" class="btn" @click="uploadNotice">保存</label>
-            </div>
-          </div>
-        </dialog>
-        <!--值日设置页面-->
-        <dialog id="duty" class="modal modal-bottom sm:modal-middle">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg">值日设置🧹</h3>
-            <p class="py-4">分别输入周三,周日需要值日的人员。如果忘记设置，则会显示"未安排"</p>
-            <label class="label">
-              <span class="label-text">周三值日:</span>
-            </label>
-            <input type="text" placeholder="🧹🧹🧹🧹" class="input input-bordered w-full max-w-xs" v-model="WedPerson"/>
-            <label class="label">
-              <span class="label-text">周日值日:</span>
-            </label>
-            <input type="text" placeholder="🧹🧹🧹🧹" class="input input-bordered w-full max-w-xs" v-model="SunPerson"/>
-            <div class="modal-action">
-              <button class="btn" @click="handleDuty">保存并上传</button>
-              <form method="dialog">
-                <button class="btn">关闭</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
-        <!--打卡时长设置页面-->
-        <dialog id="targetTime" class="modal modal-bottom sm:modal-middle">
-          <div class="modal-box modal-select-size">
-            <h3 class="font-bold text-lg">设置目标时长⏰</h3>
-            <p class="py-4">设置打卡时长要求，以最新的数据为准</p>
-            <el-select v-model="targetTime" clearable placeholder="⏰⏰⏰⏰" :teleported="false">
-              <el-option
-                  v-for="item in TargetTimeOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-            <div class="modal-action">
-              <button class="btn" @click="handleTargetUpload">保存并上传</button>
-              <form method="dialog">
-                <button class="btn">关闭</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
-        <!--设置减时页面-->
-        <dialog id="reduceTime" class="modal modal-bottom sm:modal-middle">
-          <div class="modal-box">
-            <h3 class="font-bold text-lg">设置减时⏳</h3>
-            <p class="py-4">输入需要减时人员的名字,以及减时的小时数。每周重置</p>
-            <label class="label">
-              <span class="label-text">需要减时的人员</span>
-            </label>
-            <input type="text" placeholder="人名" class="input input-bordered w-full max-w-xs" v-model="ReducePerson"/>
-            <label class="label">
-              <span class="label-text">减时时长</span>
-            </label>
-            <input type="text" placeholder="100" class="input input-bordered w-full max-w-xs" v-model="ReduceTime"/>
-            <div class="modal-action">
-              <button class="btn" @click="handleReduceTime">保存并上传</button>
-              <form method="dialog">
-                <button class="btn">关闭</button>
-              </form>
-            </div>
-          </div>
-        </dialog>
       </div>
+      <!--值日设置页面-->
+      <dialog id="duty" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">值日设置🧹</h3>
+          <p class="py-4">分别输入周三,周日需要值日的人员。如果忘记设置，则会显示"未安排"</p>
+          <label class="label">
+            <span class="label-text">周三值日:</span>
+          </label>
+          <input type="text" placeholder="🧹🧹🧹🧹" class="input input-bordered w-full max-w-xs" v-model="WedPerson"/>
+          <label class="label">
+            <span class="label-text">周日值日:</span>
+          </label>
+          <input type="text" placeholder="🧹🧹🧹🧹" class="input input-bordered w-full max-w-xs" v-model="SunPerson"/>
+          <div class="modal-action">
+            <button class="btn" @click="handleDuty">保存并上传</button>
+            <form method="dialog">
+              <button class="btn">关闭</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <!--公告设置页面-->
+      <dialog id="notice" class="modal">
+        <div class="modal-box-notice modal-box relative overflow-hidden">
+          <h3 class="font-bold text-lg">公告设置📢</h3>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+          <div class="container">
+            <TextEditor data-twind-ignore ref="textEditor"></TextEditor>
+          </div>
+          <div class="modal-action">
+            <label for="notice" class="btn" @click="uploadNotice">保存</label>
+          </div>
+        </div>
+      </dialog>
+      <!--打卡时长设置页面-->
+      <dialog id="targetTime" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box modal-select-size">
+          <h3 class="font-bold text-lg">设置目标时长⏰</h3>
+          <p class="py-4">设置打卡时长要求，以最新的数据为准</p>
+          <el-select v-model="targetTime" clearable placeholder="⏰⏰⏰⏰" :teleported="false">
+            <el-option
+              v-for="item in TargetTimeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+          <div class="modal-action">
+            <button class="btn" @click="handleTargetUpload">保存并上传</button>
+            <form method="dialog">
+              <button class="btn">关闭</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <!--设置减时页面-->
+      <dialog id="reduceTime" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h3 class="font-bold text-lg">设置减时⏳</h3>
+          <p class="py-4">输入需要减时人员的名字,以及减时的小时数。每周重置</p>
+          <label class="label">
+            <span class="label-text">需要减时的人员</span>
+          </label>
+          <input type="text" placeholder="人名" class="input input-bordered w-full max-w-xs" v-model="ReducePerson"/>
+          <label class="label">
+            <span class="label-text">减时时长</span>
+          </label>
+          <input type="text" placeholder="100" class="input input-bordered w-full max-w-xs" v-model="ReduceTime"/>
+          <div class="modal-action">
+            <button class="btn" @click="handleReduceTime">保存并上传</button>
+            <form method="dialog">
+              <button class="btn">关闭</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   </div>
 </template>
@@ -100,26 +101,30 @@
 <script setup lang="ts">
 import '../assets/css/scrollbar.css'
 import {onBeforeMount, ref} from "vue";
-import {AdminStore} from "../stores/Admin";
 import {ElNotification} from "element-plus";
-import {setDuty, setReduceTime, setTargetTime, createNotice} from '../api/API'
+import {setDuty, setReduceTime, setTargetTime, createNotice, getPriv} from '../api/API'
 import {GlobalStore} from "../stores/Global";
 import TextEditor from "../components/TextEditor.vue";
 import {TimerStore} from "../stores/Timer";
-import {Notice} from "../api/interfaces/Schema";
-import {router} from "../utils/router";
+import {Notice, Priv} from "../api/interfaces/Schema";
+import {useRouter} from "vue-router";
 
+
+const router = useRouter()
+
+const InvalidPriv:Priv = {val:-1,candidName:"权限未找到"}
 const textEditor = ref(null)
 const globalStore = GlobalStore()
 const timerStore = TimerStore()
 const notice = ref(null)//对话框对象
-
+let priv = ref<Priv>(InvalidPriv)
 
 function isNotEmptyStr(s) {
   return typeof s == 'string' && s.length > 0;
 }
 
-onBeforeMount(() => {
+
+onBeforeMount(async () => {
   let start = 12;
   let end = 48;
   let step = 0.5;
@@ -129,6 +134,22 @@ onBeforeMount(() => {
       value: i
     }
     TargetTimeOptions.value.push(time)
+  }
+  //load priv
+  let res = await getPriv();
+  if(!res.success){
+    priv.value = InvalidPriv;
+  }else {
+    if(res.data == null){
+      priv.value = InvalidPriv;
+    }else {
+      try{
+        priv.value = JSON.parse(res.data);
+      }catch (e) {
+        priv.value = InvalidPriv;
+        console.error(e)
+      }
+    }
   }
 })
 
@@ -299,5 +320,10 @@ const toUserManage = () => {
   align-items: center;
   justify-content: space-between;
 }
+.buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 
+}
 </style>

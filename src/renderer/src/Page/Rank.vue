@@ -19,8 +19,9 @@
         :default-sort="{ prop: 'weekTime', order: 'descending' }"
         v-loading="Loading"
         :element-loading-svg="svgLoading"
+        border
       >
-        <el-table-column label="姓名" prop="name" min-width="40">
+        <el-table-column label="姓名" prop="name" min-width="35">
           <template #default="scope">
             <div style="display: flex; align-items: center" @click="showInformation(scope.row.id)">
               <img
@@ -43,7 +44,7 @@
         >
           <template #default="scope">
             <el-tag disable-transitions>
-              {{ scope.row.id.substring(0, 2) }} 级
+              {{ getGrade(scope.row) }} 级
             </el-tag>
           </template>
         </el-table-column>
@@ -51,15 +52,44 @@
           :formatter="TimeFormatter"
           label="该学期打卡时长"
           prop="totalTime"
+          min-width="45"
           sortable
         />
         <el-table-column
           :formatter="TimeFormatter"
           label="本周打卡时长"
           prop="weekTime"
+          min-width="40"
           sortable
         />
+        <el-table-column
+          :filter-method="WorkGroupFilterHandler"
+          :filters="WorkGroupFilters"
+          label="方向"
+          prop="workGroup"
+          min-width="30"
+        >
+          <template #default="scope">
+            <el-tag disable-transitions>
+              {{ scope.row.workGroup }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :filter-method="PrivFilterHandler"
+          :filters="PrivFilters"
+          label="权限"
+          prop="priv"
+          min-width="30"
+        >
+          <template #default="scope">
+            <el-tag disable-transitions>
+              {{ getPriv(scope.row.priv) }}
+            </el-tag>
+          </template>
+        </el-table-column>
       </el-table>
+<!--用户信息展示弹窗-->
       <dialog id="user" ref="user" class="modal">
         <div class="modal-box   glassmophism">
           <div
@@ -75,10 +105,10 @@
                 <h3
                   class="bg-clip-text text-4xl font-bold gradient"
                 >
-                  {{UserInformation.name}}
+                  {{ UserInformation.name }}
                 </h3>
-                <h3 class="text-xl"> {{ UserInformation.grade }} {{ UserInformation.major}}</h3>
-                <h3 class="text-lg">{{UserInformation.work_group}}</h3>
+                <h3 class="text-xl"> {{ UserInformation.grade }} {{ UserInformation.major }}</h3>
+                <h3 class="text-lg">{{ UserInformation.work_group }}</h3>
               </div>
               <div class="flex gap-3 pt-2 pl-3"></div>
             </section>
@@ -99,7 +129,7 @@ import "../assets/css/common.css";
 import {ElNotification} from "element-plus";
 import {GlobalStore} from "../stores/Global";
 import {TimerStore} from "../stores/Timer";
-import {UserInfo, UserTime} from "../api/interfaces/Schema";
+import {getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
 import {getRank, queryUser} from "../api/API";
 import {getGrade} from "../utils/StringUtil";
@@ -109,38 +139,55 @@ interface Week {
   index: number;
   name: string;
 }
+
 let emptyInformation: UserInfo = {
   afk: false,
   WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "",
 }
 const globalStore = GlobalStore();
-const timerStore = TimerStore();
 
 const boxComponent = ref(null);
 
 let GradeList = ref([]);
 let GradeFilters = ref([]);
+let WorkGroupFilters = ref([]);
+let PrivFilters = ref([]);
 let Loading = ref(true);
 let UserList = ref<UserTime[]>();
 let WeekIndex = ref<Week[]>([]);
 let lastXWeek = ref(0);
 let UserInformation = ref<UserInfo>(emptyInformation)
+let WorkGroupList = ref(wgList)
 
+//处理年级过滤匹配
 const filterHandler = (value: string, row: UserTime) => {
   return row.id.substring(0, 2) === value;
 };
+//处理权限过滤匹配
+const PrivFilterHandler = (value: number, row: UserTime) => {
+    return value === row.priv;
+}
+//处理方向过滤匹配
+const WorkGroupFilterHandler = (value: string, row: UserTime) => {
+  if(value==="全体成员") return true;
+  return row.workGroup === value;
+}
+//首次加载
 onBeforeMount(async () => {
   await loadWeekList();
-  document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
   await loadRankList();
+  loadFilters();
+  if(WorkGroupList.value.indexOf("全体成员")===-1){
+    WorkGroupList.value.push("全体成员")
+  }
   Loading.value = false;
 });
 
 onMounted(async () => {
-
   await nextTick();
-
 });
+
+
 const GradeFormatter = (row, colum) => {
   return row.uid.substring(0, 2);
 };
@@ -148,9 +195,10 @@ const GradeFormatter = (row, colum) => {
 const TimeFormatter = (row, colum) => {
   return formatSecondTime(row[colum.property]);
 };
-const user = ref(null);
-const showInformation = async  (id: string) => {
 
+const user = ref(null);
+//触发展示个人信息弹窗
+const showInformation = async (id: string) => {
   let res = await queryUser(id)
   if (!res.success) {
     ElNotification({
@@ -164,6 +212,7 @@ const showInformation = async  (id: string) => {
   }
 };
 
+//处理更换x周的计时数据
 const handlePageChange = async (state: boolean) => {
   if (Loading.value) return;
   if (state) {
@@ -181,8 +230,9 @@ const handlePageChange = async (state: boolean) => {
   }
   await loadRankList();
 };
-
+//最多显示100周前的数据
 const max_week_size = 100;
+//加载可选的周列表
 const loadWeekList = async () => {
   for (let i = 0; i < max_week_size; i++) {
     let str = "本周";
@@ -197,6 +247,7 @@ const loadWeekList = async () => {
     };
   }
 };
+//加载排行榜
 const loadRankList = async () => {
   Loading.value = true;
   //获取排行列表
@@ -209,7 +260,6 @@ const loadRankList = async () => {
     });
     return;
   }
-  document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
   UserList.value = res.data;
   globalStore.setUserRankList(res.data)
   //在加载前获取所有成员的年级列表
@@ -231,14 +281,37 @@ const loadRankList = async () => {
   });
   Loading.value = false;
 };
+//加载过滤器列表
+const loadFilters = () => {
+  //方向过滤器
+  WorkGroupList.value.forEach((i) => {
+    let obj = {
+      text: i,
+      value: i,
+    }
+    WorkGroupFilters.value.push(obj)
+  })
+  //权限过滤器
+  PrivList.forEach((i)=>{
+    let obj = {
+      text: i.name,
+      value: i.val,
+    }
+    PrivFilters.value.push(obj)
+  })
+}
 
-const resetLastWeek = async ()=>{
-  if(Loading.value){return}
+//重置时间
+const resetLastWeek = async () => {
+  if (Loading.value) {
+    return
+  }
   lastXWeek.value = 0;
   await loadRankList();
 }
-
-const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
+//加载图标
+const svgLoading = `<svg viewBox="0 0 108 108">
+<circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"
          begin="0s" dur="1s"
          values="1;.2;1" calcMode="linear"
@@ -291,7 +364,8 @@ const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
          begin="200ms" dur="1s"
          values="1;.2;1" calcMode="linear"
          repeatCount="indefinite" />
-    </circle>`
+    </circle>
+</svg>`
 </script>
 
 <style scoped>

@@ -28,7 +28,7 @@ export interface SettingFile{
 }
 export const DefaultSetting:SettingFile={
   userInfo:{
-    id: '21125023044',
+    id: '-1',
     name: '如果你看到这个,说明配置文件炸了,请联系管理员',
     WeekTime: 0,
     admin: false,

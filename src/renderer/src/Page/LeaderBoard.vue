@@ -176,7 +176,7 @@ import {ElNotification} from "element-plus";
 import {getAvatarById, getTop3} from "../api/API";
 
 let empty:UserTime={
-  id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,avatar:'',grade:''
+  priv: 0, id:'',name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,avatar:'',grade:'',workGroup:''
 }
 let Top3s = [
   empty,empty,empty

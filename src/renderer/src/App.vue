@@ -95,6 +95,21 @@ try {
       }
       init(globalStore.Setting.netWork.host,globalStore.Setting.userInfo.token);
     }
+    //检查配置情况
+    setTimeout(()=>{
+      console.log("检查配置文件")
+      let id = undefined
+      try{
+        id = globalStore.Setting.userInfo.id;
+        if(!id){
+          //reload config
+          window.electronAPI.ReloadConfig()
+        }
+      }catch (e) {
+        //reload config
+        window.electronAPI.ReloadConfig()
+      }
+    },1000)
   });
 } catch (e) {
   console.error(e);
@@ -104,6 +119,7 @@ const windowOperation = (op) => {
 };
 
 onBeforeMount(() => {
+  //加载主题列表
   globalStore.ThemeList.forEach((value, index) => {
     let obj = {
       label: value,

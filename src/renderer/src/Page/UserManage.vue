@@ -1,15 +1,7 @@
 <script setup lang="ts">
-
-import {onBeforeMount, ref} from "vue";
-import {UserInfo, UserTime} from "../api/interfaces/Schema";
-import {ElNotification} from "element-plus";
-import {deleteUser, getAvatarById, queryAllUser, updateUser} from "../api/API";
-import {router} from "../utils/router";
-
-const fallback = () => {
-  router.back()
-}
-const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
+//加载图标
+const svgLoading = `<svg viewBox="0 0 108 108">
+<circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"
          begin="0s" dur="1s"
          values="1;.2;1" calcMode="linear"
@@ -62,26 +54,96 @@ const svgLoading = `<circle cx="12.5" cy="12.5" r="12.5">
          begin="200ms" dur="1s"
          values="1;.2;1" calcMode="linear"
          repeatCount="indefinite" />
-    </circle>`
+    </circle>
+</svg>`
+import {onBeforeMount, ref} from "vue";
+import {getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
+import {ElNotification} from "element-plus";
+import {deleteUser, queryAllUser, updateUser} from "../api/API";
+import {getGrade} from "../utils/StringUtil";
+import {useRouter} from "vue-router";
+
+interface User {
+  id: string,
+  name: string,
+  WeekTime: number,
+  admin: boolean,
+  token: string,
+  major: string,
+  grade: string,
+  workGroup: string,
+  avatar: string,
+  afk: boolean,
+  reduceTime:number,
+  priv:number,
+}
+
+const router = useRouter()
+let emptyInformation: User = {
+  afk: false,
+  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "", priv: 0, reduceTime: 0
+}
+const fallback = () => {
+  router.back()
+}
+
+//处理权限过滤匹配
+const PrivFilterHandler = (value: number, row: UserTime) => {
+  return value === row.priv;
+}
+//处理方向过滤匹配
+const WorkGroupFilterHandler = (value: string, row: UserTime) => {
+  if(value==="全体成员") return true;
+  return row.workGroup === value;
+}
+
+let WorkGroupFilters = ref([]);
+let PrivFilters = ref([]);
+//加载过滤器列表
+let WorkGroupList = ref(wgList)
+const loadFilters = () => {
+  //方向过滤器
+  WorkGroupList.value.forEach((i) => {
+    let obj = {
+      text: i,
+      value: i,
+    }
+    WorkGroupFilters.value.push(obj)
+  })
+  //权限过滤器
+  PrivList.forEach((i)=>{
+    let obj = {
+      text: i.name,
+      value: i.val,
+    }
+    PrivFilters.value.push(obj)
+  })
+}
 const GradeFormatter = (row, colum) => {
   return row.uid.substring(0, 2);
 }
 const filterHandler = (value: string, row: UserTime) => {
   return row.id.substring(0, 2) === value;
 }
-let SelectedList = ref<UserInfo[]>([])
-const handleSelectionChange = (list: UserInfo[]) => {
+let SelectedList = ref<User[]>([])
+const handleSelectionChange = (list: User[]) => {
   SelectedList.value = list;
+}
+const confirm_delete_list = ref(null);
+const handleMulitDel = () => {
+  confirm_delete_list.value.showModal()
 }
 
 
 let LoadingData = ref(true)
-let UserList = ref<UserInfo[]>();
+let UserList = ref<User[]>();
 let withAFK = ref(true);
 let GradeList = ref([]);
 let GradeFilters = ref([]);
 let information = ref(null);//修改信息对话框对象
 let confirm_delete = ref(null);//确认删除成员对话框对象
+const usercard = ref(null);//用户信息弹窗对象
+let UserInformation = ref<User>(emptyInformation)
 const loadUserList = async () => {
   LoadingData.value = true;
   //获取排行列表
@@ -94,19 +156,14 @@ const loadUserList = async () => {
     });
     return;
   }
-  document.getElementsByClassName('circular')[0].attributes[1].value = "0 0 108 108"
   UserList.value = res.data;
-  //TODO 到时候让大家把个人信息都填一填，现在先用学号来判断
   GradeList.value = [];
   for (let i = 0; i < UserList.value.length; i++) {
     let user = UserList.value[i];
-    let g = user.id.substring(0, 2);
+    let g = getGrade(user)
     let index = GradeList.value.indexOf(g);
     if (index == -1) GradeList.value.push(g);
-    let res = await getAvatarById(user.id);
-    if (res.success) {
-      UserList.value[i].avatar = res.data + "?" + Math.random();
-    }
+    UserList.value[i].avatar = UserList.value[i].avatar + "?" + Math.random();
   }
   GradeFilters.value = [];
   GradeList.value.forEach((i) => {
@@ -120,13 +177,16 @@ const loadUserList = async () => {
 };
 onBeforeMount(async () => {
   await loadUserList()
+  loadFilters();
 })
-let emptyInformation: UserInfo = {WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "", afk: false}
-let currentUser = ref<UserInfo>(emptyInformation)
-const handleChangeInformation = (user: UserInfo) => {
+
+let currentUser = ref<User>(emptyInformation)
+const handleChangeInformation = (user: User) => {
   currentUser.value = user;
   information.value.showModal()
 }
+
+
 const applyUserInfo = async () => {
   let res = await updateUser(currentUser.value);
   if (res.success) {
@@ -143,7 +203,7 @@ const applyUserInfo = async () => {
     })
   }
 }
-const setUserAfk = async (user: UserInfo) => {
+const setUserAfk = async (user: User) => {
   user.afk = true;
   let res = await updateUser(user);
   if (res.success) {
@@ -160,9 +220,14 @@ const setUserAfk = async (user: UserInfo) => {
   }
 }
 
-const handelDelModal = (user: UserInfo) => {
+const handelDelModal = (user: User) => {
   currentUser.value = user;
   confirm_delete.value.showModal()
+}
+const DeleteBatchUser = async ( users:User[])=>{
+  for (const u of users) {
+    await deleteUser(u.id);
+  }
 }
 const DeleteUser = async (id: string) => {
   let res = await deleteUser(id);
@@ -179,6 +244,11 @@ const DeleteUser = async (id: string) => {
     })
   }
 }
+//触发展示个人信息弹窗
+const showInformation = async (user: User) => {
+  UserInformation.value = user;
+  usercard.value.showModal();
+};
 </script>
 
 <template>
@@ -194,12 +264,6 @@ const DeleteUser = async (id: string) => {
         </svg>
         工作室人员设置
       </div>
-      <!--      <div class="form-control">-->
-      <!--        <label class="cursor-pointer label">-->
-      <!--          <span class="label-text">Remember me</span>-->
-      <!--          <input type="checkbox" checked="checked" class="checkbox checkbox-accent"/>-->
-      <!--        </label>-->
-      <!--      </div>-->
       <div class="user-list overflow-auto">
         <el-table
             :data="UserList"
@@ -207,10 +271,10 @@ const DeleteUser = async (id: string) => {
             :element-loading-svg="svgLoading"
             @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="30" fixed/>
-          <el-table-column label="姓名" prop="name" min-width="60" sortable>
+          <el-table-column type="selection" width="30" fixed @selection-change="handleSelectionChange"/>
+          <el-table-column label="姓名" prop="name" min-width="45" sortable>
             <template #default="scope">
-              <div style="display: flex; align-items: center">
+              <div style="display: flex; align-items: center" @click="showInformation(scope.row)">
                 <img
                     :src="scope.row.avatar"
                     height="30"
@@ -224,7 +288,7 @@ const DeleteUser = async (id: string) => {
           <el-table-column
               label="学号"
               prop="id"
-              min-width="40"
+              min-width="30"
               show-overflow-tooltip
           />
           <el-table-column
@@ -233,33 +297,41 @@ const DeleteUser = async (id: string) => {
               :formatter="GradeFormatter"
               label="年级"
               prop="grade"
-              min-width="40"
+              min-width="30"
           >
             <template #default="scope">
               <el-tag disable-transitions>
-                {{ scope.row.id.substring(0, 2) }} 级
+                {{ getGrade(scope.row) }} 级
               </el-tag>
             </template>
           </el-table-column>
           <el-table-column
-              label="减时情况"
-              prop="reduceTime"
-              min-width="50"
+              :filter-method="WorkGroupFilterHandler"
+              :filters="WorkGroupFilters"
+              label="方向"
+              prop="workGroup"
+              min-width="30"
           >
             <template #default="scope">
-              {{ (scope.row.reduceTime / 3600).toFixed(2) }} 小时
+              <el-tag disable-transitions>
+                {{ scope.row.workGroup }}
+              </el-tag>
             </template>
           </el-table-column>
           <el-table-column
-              label="是否退休"
-              prop="afk"
-              min-width="40"
+              :filter-method="PrivFilterHandler"
+              :filters="PrivFilters"
+              label="权限"
+              prop="priv"
+              min-width="30"
           >
             <template #default="scope">
-              {{ scope.row.afk ? '已退休' : '还没退休' }}
+              <el-tag disable-transitions>
+                {{ getPriv(scope.row.priv) }}
+              </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="操作" min-width="100">
+          <el-table-column label="操作" min-width="80">
             <template #default="scope">
               <button class="btn btn-ghost btn-xs" @click="handleChangeInformation(scope.row)">修改信息</button>
               <button class="btn btn-ghost btn-xs" v-if="scope.row.afk==false" @click="setUserAfk(scope.row)">
@@ -271,10 +343,7 @@ const DeleteUser = async (id: string) => {
         </el-table>
       </div>
       <div class="action-list m-2">
-        <!--        WIP-->
-        <!--        <button class="btn">批量设置减时</button>-->
-        <!--        <button class="btn">批量设置退休</button>-->
-        <!--        <button class="btn">批量删除</button>-->
+        <button class="btn" @click="handleMulitDel">删除已选的成员</button>
       </div>
       <!--修改信息对话框-->
       <dialog id="information" ref="information" class="modal modal-bottom sm:modal-middle">
@@ -313,13 +382,59 @@ const DeleteUser = async (id: string) => {
         <div class="modal-box">
           <h3 class="font-bold text-lg">请确认</h3>
           <p class="py-4">你真的要删除 [{{ currentUser.name }}] 吗?</p>
-          <div class="modal-action" >
-            <form method="dialog" class="w-48 flex justify-around">
-              <button class="btn" @click="DeleteUser(currentUser.id)">我老残忍了</button>
-              <button class="btn">还是算了</button>
+          <div class="modal-action">
+            <form method="dialog" class="">
+              <button class="btn m-2" @click="DeleteUser(currentUser.id)">我老残忍了</button>
+              <button class="btn m-2">还是算了</button>
             </form>
           </div>
         </div>
+      </dialog>
+      <!--确认删除(List)-->
+      <dialog id="confirm_delete_list" ref="confirm_delete_list" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <h2 class="font-bold text-lg">请确认</h2>
+          <p class="py-4">你真的要删除以下成员吗?</p>
+          <div class="names" v-for="(user,index) in SelectedList" :key="index">
+            <h3 class="text-lg"> {{ user.name }} </h3>
+          </div>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn m-2" @click="DeleteBatchUser(SelectedList)">我老残忍了</button>
+              <button class="btn m-2">还是算了</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      <!--用户信息展示弹窗-->
+      <dialog id="usercard" ref="usercard" class="modal">
+        <div class="modal-box   glassmophism">
+          <div
+              class="items-center  rounded-md "
+          >
+            <section
+                class="justify-center items-center w-20 h-20 rounded-full shadow-md bg-gradient-to-r hover:cursor-pointer hover:scale-110 duration-300"
+            ><img :src="UserInformation.avatar" class="rounded-full"></section>
+
+            <section class="block border-l border-white m-3">
+              <div class="pl-3">
+
+                <h3
+                    class="bg-clip-text text-4xl font-bold gradient"
+                >
+                  {{ UserInformation.name }}
+                </h3>
+                <h3 class="text-xl">年级: {{ UserInformation.grade }} {{ UserInformation.major }}</h3>
+                <h3 class="text-lg">方向: {{ UserInformation.workGroup }}</h3>
+                <h3 class="text-lg">减时情况: {{ (UserInformation.reduceTime / 3600).toFixed(2) }} 小时 是否退休: {{  UserInformation.afk? '已退休' : '还没退休'}}</h3>
+              </div>
+              <div class="flex gap-3 pt-2 pl-3"></div>
+            </section>
+          </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+          <button>close</button>
+        </form>
       </dialog>
     </div>
   </div>
@@ -341,6 +456,21 @@ const DeleteUser = async (id: string) => {
   @apply max-w-2xl;
 }
 
+:deep(.el-table) {
+  --el-table-border-color: hsl(var(--ac) / var(--tw-text-opacity));
+  --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
+  --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
+  --el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity));
+  --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
+  /*
+  //--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
+   */
+}
+
+:deep(.el-table__body-wrapper tr td.el-table-fixed-column--left) {
+  background: hsl(var(--ac) / var(--tw-text-opacity));
+}
+
 :deep(.el-loading-spinner) {
   margin-top: 10rem;
   position: static;
@@ -348,5 +478,11 @@ const DeleteUser = async (id: string) => {
 
 :deep(.el-scrollbar__bar is-vertical) {
   display: none;
+}
+
+.glassmophism {
+  background: rgba(255, 255, 255, .2);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 </style>

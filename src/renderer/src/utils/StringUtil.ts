@@ -9,9 +9,14 @@ export function checkLength(s:string,require:number):boolean {
 }
 
 export function getGrade(user:UserTime|UserInfo):string {
-    if(isNotEmptyStr(user.grade)){
-      return user.grade;
+  try{
+    if(isNotEmptyStr(user.grade) && user.grade != "待填写"){
+      return user.grade.substring(0,2);
     }else {
       return user.id.substring(0, 2);
     }
+  }catch (e) {
+    console.error(e)
+  }
+  console.log(user.grade)
 }

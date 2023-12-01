@@ -53,15 +53,17 @@
 <script setup>
 import LoaderTriangle from "./LoaderTriangle.vue";
 import {GlobalStore} from "../stores/Global";
-import {router} from "../utils/router";
 import {onBeforeMount, ref} from "vue";
 import {getAvatarById} from "../api/API";
 import {ElNotification} from "element-plus";
 import config from '../../../../package.json'
+import {useRouter} from "vue-router";
 
 const globalStore = GlobalStore();
 
 let avatar = ref('');
+
+const router = useRouter()
 
 const loadAvatar = async () => {
   let res = await getAvatarById(globalStore.Setting.userInfo.id)

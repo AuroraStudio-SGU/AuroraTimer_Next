@@ -9,7 +9,14 @@
             <div class="Form">
               <input type="text" placeholder="学号" v-model="id"/>
               <input type="text" placeholder="姓名" v-model="name"/>
-              <input type="text" placeholder="年级" v-model="Grade"/>
+              <select class="selector" v-model="Grade">
+                <option selected disabled >请选择年级</option>
+                <option v-for="(item,index) in GradeList" :key="index">{{item}}</option>
+              </select>
+                <select class="selector" v-model="SelectedWorkGroup">
+                    <option selected disabled >请选择方向</option>
+                    <option v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+                </select>
               <input type="text" placeholder="密码" v-model="password"/>
               <input type="text" placeholder="确认密码" v-model="confirmPsw"/>
               <button class="btn btn-accent sumbit" @click="register">注册</button>
@@ -87,7 +94,7 @@ import * as API from "../api/API";
 import {init, restPassword} from "../api/API";
 import {GlobalStore} from "../stores/Global";
 import {md5} from "js-md5";
-import {User, UserInfo} from "../api/interfaces/Schema";
+import {User, UserInfo,WorkGroupList} from "../api/interfaces/Schema";
 import {isNotEmptyStr} from "../utils/StringUtil";
 
 const globalStore = GlobalStore()
@@ -95,9 +102,12 @@ let AutoLogin = ref(true)
 let account = ref()
 let RestPwd = ref("123456")
 let Grade = ref()
+let GradeList = ref([])
 const restPwd = ref(null) //组件对象
+let SelectedWorkGroup = ref("请选择方向")
 
-onBeforeMount(() => {
+onBeforeMount(  () => {
+  loadGradeList();
   window.electronAPI.handleSetting((_event, value) => {
     if (value) {
       console.log("从主进程加载配置文件");
@@ -107,7 +117,8 @@ onBeforeMount(() => {
   });
 })
 
-onMounted(() => {
+onMounted( () => {
+
   $('#signup').click(function () {
     $('.pinkbox').css('transform', 'translateX(80%)');
     $('.signin').addClass('nodisplay');
@@ -165,6 +176,7 @@ const login = async () => {
   window.electronAPI.login()
 }
 
+
 const register = async () => {
   if(isNaN(Number(id.value))){
     ElNotification({
@@ -180,9 +192,9 @@ const register = async () => {
     });
     return;
   }
-  if(!isNotEmptyStr(Grade.value) || Grade.value.length>3){
+  if(SelectedWorkGroup.value === "请选择方向"){
     ElNotification({
-      title: "年级填了吗?,或者说你年级太长了",
+      title: "请选择方向",
       type: "error"
     });
     return;
@@ -213,6 +225,7 @@ const register = async () => {
     name: name.value,
     password: password.value,
     grade:Grade.value,
+    workGroup:SelectedWorkGroup.value,
   }
   let Response = await API.register(<User>user)
   if (!Response.success) {
@@ -254,6 +267,15 @@ const forgetPwd = async () => {
     });
   }
   restPwd.value.close()
+}
+const loadGradeList = ()=>{
+  let date = new Date();
+  let utcFullYear = date.getUTCFullYear();
+  let cur = Number(utcFullYear.toString().substring(2,4));
+  Grade.value = cur
+  for (let i = cur-3; i <=cur+3 ; i++) {
+      GradeList.value.push(i);
+  }
 }
 </script>
 
@@ -497,5 +519,13 @@ input:focus::placeholder {
   width: 1000px;
   height: 600px;
   border-radius: 20px;
+}
+.selector{
+  width: 13.5rem;
+  background: hsl(var(--p) / var(--tw-bg-opacity));
+  outline: none;
+  padding: 9px;
+  padding-left: 5px;
+  border-bottom: 1px solid rgba(246, 246, 246, 0.5);
 }
 </style>

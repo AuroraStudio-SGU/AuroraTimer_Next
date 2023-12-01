@@ -51,9 +51,7 @@ function isNotEmptyStr(s: string) {
 
 
 let empty: UserTime = {
-  grade: "",
-  avatar: "",
-  id: '', name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0
+  grade: "", avatar: "", id: '', name: "获取失败", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,priv:0,workGroup:''
 }
 let Last3s = [
   empty, empty, empty
@@ -86,7 +84,7 @@ const loadLast3 = async () => {
     }
     for (let i = Last3.value.length; i < 3; i++) {
       let BlankUser: UserTime = {
-        avatar: default_url, id: '1000', name: "暂无入榜", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,grade:''
+        avatar: default_url, id: '1000', name: "暂无入榜", reduceTime: 0, totalTime: 0, unfinishedCount: 0, weekTime: 0,grade:'',priv:0,workGroup:''
       }
       Last3.value.push(BlankUser);
     }

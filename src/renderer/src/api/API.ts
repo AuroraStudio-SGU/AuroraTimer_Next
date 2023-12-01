@@ -201,3 +201,9 @@ export async function deleteUser(id:string) {
 export async function getTimeDetail(id:string) {
   return doGet('/timer/queryTimeDetail/'+id);
 }
+export async function getWorkGroupList(){
+  return doGet('/getWorkGroupList');
+}
+export async function getPriv(){
+  return doGet('/user/getPriv')
+}
