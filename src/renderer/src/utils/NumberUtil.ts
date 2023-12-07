@@ -28,7 +28,7 @@ export function intToRoman(num:number):string {
         num = Math.trunc(num/10)
     }
     return result
-};
+}
 
 //阿拉伯数字转为数字
 export function romanToInt(s:string):number {
@@ -62,4 +62,4 @@ export function romanToInt(s:string):number {
         index++
     }
     return result
-};
+}

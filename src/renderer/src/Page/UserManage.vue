@@ -1,5 +1,7 @@
 <script setup lang="ts">
 //加载图标
+import {GlobalStore} from "../stores/Global";
+
 const svgLoading = `<svg viewBox="0 0 108 108">
 <circle cx="12.5" cy="12.5" r="12.5">
         <animate attributeName="fill-opacity"
@@ -57,35 +59,24 @@ const svgLoading = `<svg viewBox="0 0 108 108">
     </circle>
 </svg>`
 import {onBeforeMount, ref} from "vue";
-import {getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
+import {getPriv, PrivList, User, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
-import {deleteUser, queryAllUser, updateUser} from "../api/API";
+import {deleteUser, queryAllUser, queryUser, updateUser} from "../api/API";
 import {getGrade} from "../utils/StringUtil";
 import {useRouter} from "vue-router";
 
-interface User {
-  id: string,
-  name: string,
-  WeekTime: number,
-  admin: boolean,
-  token: string,
-  major: string,
-  grade: string,
-  workGroup: string,
-  avatar: string,
-  afk: boolean,
-  reduceTime:number,
-  priv:number,
-}
+
 
 const router = useRouter()
+const globalStore = GlobalStore()
+
 let emptyInformation: User = {
-  afk: false,
-  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "", priv: 0, reduceTime: 0
+  afk: false, avatar: "", password: "", grade: "", id: "", admin: false, major: "", name: "", token: "", workGroup: "", priv: 0, reduceTime: 0
 }
 const fallback = () => {
   router.back()
 }
+const operator = ref<User>(emptyInformation)
 
 //处理权限过滤匹配
 const PrivFilterHandler = (value: number, row: UserTime) => {
@@ -129,10 +120,7 @@ let SelectedList = ref<User[]>([])
 const handleSelectionChange = (list: User[]) => {
   SelectedList.value = list;
 }
-const confirm_delete_list = ref(null);
-const handleMulitDel = () => {
-  confirm_delete_list.value.showModal()
-}
+
 
 
 let LoadingData = ref(true)
@@ -178,17 +166,20 @@ const loadUserList = async () => {
 onBeforeMount(async () => {
   await loadUserList()
   loadFilters();
-})
+  let res = await queryUser(globalStore.Setting.userInfo.id);
+  if(res.success){
+    operator.value = res.data;
+  }
 
-let currentUser = ref<User>(emptyInformation)
+})
 const handleChangeInformation = (user: User) => {
-  currentUser.value = user;
+  UserInformation.value = user;
   information.value.showModal()
 }
 
 
 const applyUserInfo = async () => {
-  let res = await updateUser(currentUser.value);
+  let res = await updateUser(UserInformation.value);
   if (res.success) {
     ElNotification({
       title: "操作成功",
@@ -220,13 +211,27 @@ const setUserAfk = async (user: User) => {
   }
 }
 
+let isCrossWorkGroup = ref(false)
+const confirm_delete_list = ref(null);
+const handleMulitDel = () => {
+  SelectedList.value.forEach(u=>{
+    if(u.workGroup!=operator.value.workGroup && operator.value.priv<100){
+      isCrossWorkGroup.value = true;
+    }
+  })
+  confirm_delete_list.value.showModal()
+}
 const handelDelModal = (user: User) => {
-  currentUser.value = user;
+  UserInformation.value = user;
   confirm_delete.value.showModal()
 }
 const DeleteBatchUser = async ( users:User[])=>{
+  //没有选择则不处理
+  if(users.length==0) return;
   for (const u of users) {
-    await deleteUser(u.id);
+    if(u.workGroup==operator.value.workGroup || operator.value.priv>=100){
+      await deleteUser(u.id);
+    }
   }
 }
 const DeleteUser = async (id: string) => {
@@ -348,26 +353,33 @@ const showInformation = async (user: User) => {
       <!--修改信息对话框-->
       <dialog id="information" ref="information" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box user-info-box">
-          <h3 class="font-bold text-lg">修改 {{ currentUser.name }} 的用户信息</h3>
+          <h3 class="font-bold text-lg">修改 {{ UserInformation.name }} 的用户信息</h3>
           <div class="flex justify-stretch m-4">
             <label class="label">
               <span class="label-text">姓名</span>
             </label>
-            <input type="text" placeholder="名字" class="input input-bordered" v-model="currentUser.name"/>
+            <input type="text" placeholder="名字" class="input input-bordered" v-model="UserInformation.name"/>
             <label class="label">
               <span class="label-text">年级</span>
             </label>
-            <input type="text" placeholder="年级" class="input input-bordered" v-model="currentUser.grade"/>
+            <select class="selector input input-bordered" v-model="UserInformation.grade">
+              <option selected disabled >请选择年级</option>
+              <option v-for="(item,index) in GradeList" :key="index">{{item}}</option>
+            </select>
           </div>
           <div class="flex justify-stretch m-4">
             <label class="label">
               <span class="label-text">方向</span>
             </label>
-            <input type="text" placeholder="方向" class="input input-bordered" v-model="currentUser.work_group"/>
+            <select class="selector input input-bordered" v-model="UserInformation.workGroup">
+              <option disabled >请选择方向</option>
+              <option selected v-show="UserInformation.workGroup==item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+              <option v-show="UserInformation.workGroup!=item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+            </select>
             <label class="label">
               <span class="label-text">专业</span>
             </label>
-            <input type="text" placeholder="专业" class="input input-bordered" v-model="currentUser.major"/>
+            <input type="text" placeholder="专业" class="input input-bordered" v-model="UserInformation.major"/>
           </div>
           <div class="modal-action">
             <form method="dialog">
@@ -381,10 +393,10 @@ const showInformation = async (user: User) => {
       <dialog id="confirm_delete" ref="confirm_delete" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <h3 class="font-bold text-lg">请确认</h3>
-          <p class="py-4">你真的要删除 [{{ currentUser.name }}] 吗?</p>
+          <p class="py-4">你真的要删除 [{{ UserInformation.name }}] 吗?</p>
           <div class="modal-action">
             <form method="dialog" class="">
-              <button class="btn m-2" @click="DeleteUser(currentUser.id)">我老残忍了</button>
+              <button class="btn m-2" @click="DeleteUser(UserInformation.id)">我老残忍了</button>
               <button class="btn m-2">还是算了</button>
             </form>
           </div>
@@ -396,7 +408,13 @@ const showInformation = async (user: User) => {
           <h2 class="font-bold text-lg">请确认</h2>
           <p class="py-4">你真的要删除以下成员吗?</p>
           <div class="names" v-for="(user,index) in SelectedList" :key="index">
-            <h3 class="text-lg"> {{ user.name }} </h3>
+            <h3 class="text-lg" v-show="user.workGroup==operator.workGroup || operator.priv>=100" > {{ user.name }} </h3>
+          </div>
+          <div class="crossDel" v-show="isCrossWorkGroup">
+            <h2 class="font-bold text-lg">此外,这些成员的方向与你不同，非管理员无法删除</h2>
+            <div class="names" v-for="(user,index) in SelectedList" :key="index">
+              <h3 class="text-lg" v-if="user.workGroup!=operator.workGroup" > {{ user.name }} </h3>
+            </div>
           </div>
           <div class="modal-action">
             <form method="dialog">

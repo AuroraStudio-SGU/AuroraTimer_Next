@@ -154,23 +154,11 @@ const login = async () => {
     return;
   }
   let result = Response.data
-  let userInfo: UserInfo = {
-    afk: false,
-    WeekTime: result.currentWeekTime,
-    avatar: result.avatar,
-    grade: result.grade,
-    id: result.id,
-    admin: result.admin,
-    major: result.major,
-    name: result.name,
-    token: result.token,
-    work_group: result.work_group
-  }
   window.electronAPI.pushDataToMain({
     type: "UserInfo",
-    data: userInfo
+    data: result
   });
-  globalStore.Setting.userInfo = userInfo;
+  globalStore.Setting.userInfo = result;
   globalStore.Setting.autoLogin = AutoLogin.value;
   await window.electronAPI.SaveSetting(JSON.stringify(globalStore.Setting))
   window.electronAPI.login()
@@ -178,34 +166,6 @@ const login = async () => {
 
 
 const register = async () => {
-  if(isNaN(Number(id.value))){
-    ElNotification({
-      title: "参数错误",
-      message:"现在学号还带符号了?",
-      type: "error"
-    });
-  }
-  if(!isNotEmptyStr(name.value)){
-    ElNotification({
-      title: "名字空的？",
-      type: "error"
-    });
-    return;
-  }
-  if(SelectedWorkGroup.value === "请选择方向"){
-    ElNotification({
-      title: "请选择方向",
-      type: "error"
-    });
-    return;
-  }
-  if(!isNotEmptyStr(id.value)){
-    ElNotification({
-      title: "学号空的？",
-      type: "error"
-    });
-    return;
-  }
   if(!isNotEmptyStr(password.value)){
     ElNotification({
       title: "密码空的？",
@@ -524,8 +484,7 @@ input:focus::placeholder {
   width: 13.5rem;
   background: hsl(var(--p) / var(--tw-bg-opacity));
   outline: none;
-  padding: 9px;
-  padding-left: 5px;
+  padding: 9px 9px 9px 5px;
   border-bottom: 1px solid rgba(246, 246, 246, 0.5);
 }
 </style>

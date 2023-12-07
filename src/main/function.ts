@@ -111,7 +111,6 @@ export function openFile() {
         }],
         //打开按钮
         buttonLabel: '确定',
-
         //回调结果渲染到img标签上
     }).then(result => {
         logger.log(result)

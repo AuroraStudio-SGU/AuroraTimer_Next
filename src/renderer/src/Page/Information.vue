@@ -27,7 +27,7 @@
             <div class="p-3 text-center">
               <span
                   class="text-xl font-bold block uppercase tracking-wide text-slate-700"
-              >{{ UserInformation.work_group }}</span
+              >{{ UserInformation.workGroup }}</span
               >
               <span class="text-sm text-slate-400">方向</span>
             </div>
@@ -126,13 +126,20 @@
         <label class="label">
           <span class="label-text">年级</span>
         </label>
-        <input type="text" placeholder="年级" class="input input-bordered" v-model="UserInformation.grade"/>
+        <select class="selector input input-bordered" v-model="UserInformation.grade">
+          <option selected disabled >请选择年级</option>
+          <option v-for="(item,index) in GradeList" :key="index">{{item}}</option>
+        </select>
       </div>
       <div class="flex justify-stretch m-4">
         <label class="label">
           <span class="label-text">方向</span>
         </label>
-        <input type="text" placeholder="方向" class="input input-bordered" v-model="UserInformation.work_group"/>
+        <select class="selector input input-bordered" v-model="UserInformation.workGroup">
+          <option disabled >请选择方向</option>
+          <option selected v-show="UserInformation.workGroup==item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+          <option v-show="UserInformation.workGroup!=item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+        </select>
         <label class="label">
           <span class="label-text">专业</span>
         </label>
@@ -165,10 +172,10 @@ import {GlobalStore} from "../stores/Global";
 import {onBeforeMount, onMounted, ref} from "vue";
 import {Cropper} from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css';
-import {UserInfo} from "../api/interfaces/Schema";
+import {EmptyUserInfo, UserInfo, WorkGroupList} from "../api/interfaces/Schema";
 import {queryUser, updateAvatar, updateUser} from "../api/API";
 import {ElNotification} from "element-plus";
-import {isNotEmptyStr} from "../utils/StringUtil";
+import {checkUserSchema} from "../utils/StringUtil";
 
 const globalStore = GlobalStore();
 
@@ -182,13 +189,8 @@ const AvatarError = ref(undefined);
 const croppedAvatar = ref<ArrayBuffer>()
 const UploadSuccess = ref(true)
 const cropper = ref()
-
-let emptyInformation: UserInfo = {
-  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: ""
-}
-
 //存储用户信息数据
-let UserInformation = ref<UserInfo>(emptyInformation)
+let UserInformation = ref<UserInfo>(EmptyUserInfo)
 
 /**
  * 检查头像文件大小
@@ -284,52 +286,12 @@ const loadUserInformation = async () => {
 }
 
 
-const DefaultPlaceHolder = "待填写";
-const MAX_LENGTH = 32
+
 /**
  * 处理用户信息上传
  */
 const uploadUser = async () => {
-  if(!isNotEmptyStr(UserInformation.value.name)){
-    ElNotification({
-      title: "参数错误",
-      message: "名字不能为空",
-      type: "error"
-    });return;
-  }else if(UserInformation.value.name.length >=MAX_LENGTH){
-    ElNotification({
-      title: "参数错误",
-      message: "太长了，能不能小于32个字符",
-      type: "error"
-    });return;
-  }
-  if(!isNotEmptyStr(UserInformation.value.work_group)){
-    UserInformation.value.work_group = DefaultPlaceHolder
-  }else if(UserInformation.value.work_group.length >= MAX_LENGTH){
-    ElNotification({
-      title: "参数错误",
-      message: "太长了，能不能小于32个字符",
-      type: "error"
-    });return;
-  }
-  if(!isNotEmptyStr(UserInformation.value.grade)){
-    UserInformation.value.grade = DefaultPlaceHolder
-  }else if(UserInformation.value.grade.length >= 4){
-    ElNotification({
-      title: "参数错误",
-      message: "4个字以上的年级，你想干什么",
-      type: "error"
-    });return;
-  }
-  if(!isNotEmptyStr(UserInformation.value.major)){
-    UserInformation.value.major = DefaultPlaceHolder
-  }else if(UserInformation.value.major.length >= MAX_LENGTH) {
-    ElNotification({
-      title: "参数错误",
-      message: "太长了，能不能小于32个字符",
-      type: "error"
-    });return;
-  }
+ checkUserSchema(UserInformation.value);
   let res = await updateUser(UserInformation.value)
   if (!res.success) {
     ElNotification({
@@ -349,6 +311,7 @@ const uploadUser = async () => {
 //在渲染前加载用户信息
 onBeforeMount(async () => {
   await loadUserInformation()
+  loadGradeList()
 })
 
 onMounted(() => {
@@ -361,6 +324,15 @@ const handleMoveIn = () => {
 const handleMoveOut = () => {
   moveIn.value = false;
 };
+let GradeList = ref([])
+const loadGradeList = ()=>{
+  let date = new Date();
+  let utcFullYear = date.getUTCFullYear();
+  let cur = Number(utcFullYear.toString().substring(2,4));
+  for (let i = cur-3; i <=cur+3 ; i++) {
+    GradeList.value.push(i);
+  }
+}
 </script>
 
 <style scoped>

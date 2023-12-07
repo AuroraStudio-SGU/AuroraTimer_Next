@@ -53,6 +53,7 @@ import {getUrl} from "../utils/urlUtils";
 import * as API from "../api/API"
 import {getTimeDetail} from "../api/API"
 import {GlobalStore} from "../stores/Global";
+import {checkUserSchema} from "../utils/StringUtil";
 
 const plotlyContainer = ref(null);
 const isShowTable = ref(false);
@@ -165,7 +166,6 @@ const loadAnimation = async () => {
   });
   document.getElementsByClassName('main-svg')[0].style.backgroundColor = ""
 };
-
 const openFile = () => {
   window.electronAPI.openFile();
 

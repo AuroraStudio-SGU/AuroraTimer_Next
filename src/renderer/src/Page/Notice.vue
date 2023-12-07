@@ -9,7 +9,9 @@
           />
           <div>
             <h1 class="text-5xl font-bold">工作室公告</h1>
-            <div class="py-6" ref="noticeContext"></div>
+            <div class="py-6" ref="noticeContext">
+
+            </div>
             <button class="btn btn-primary">收到！</button>
           </div>
         </div>
@@ -148,7 +150,7 @@ onBeforeMount(async () => {
   /* width: 100%;
     height: 250px; */
   top: 0;
-  border-radius: 0%;
+  border-radius: 0;
   overflow: hidden;
   transition: 0.5s;
 }

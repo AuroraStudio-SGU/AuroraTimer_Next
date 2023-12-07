@@ -30,13 +30,13 @@ export const DefaultSetting:SettingFile={
   userInfo:{
     id: '-1',
     name: '如果你看到这个,说明配置文件炸了,请联系管理员',
-    WeekTime: 0,
+    currentWeekTime: 0,
     admin: false,
     token: 'why u thing there will have default token?',
     major: 'major',
     avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     grade:'21级',
-    work_group:'Web组',
+    workGroup:'Web组',
     afk:false,
   },
   progressBar:{

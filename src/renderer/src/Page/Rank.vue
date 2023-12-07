@@ -108,7 +108,7 @@
                   {{ UserInformation.name }}
                 </h3>
                 <h3 class="text-xl"> {{ UserInformation.grade }} {{ UserInformation.major }}</h3>
-                <h3 class="text-lg">{{ UserInformation.work_group }}</h3>
+                <h3 class="text-lg">{{ UserInformation.workGroup }}</h3>
               </div>
               <div class="flex gap-3 pt-2 pl-3"></div>
             </section>
@@ -129,7 +129,7 @@ import "../assets/css/common.css";
 import {ElNotification} from "element-plus";
 import {GlobalStore} from "../stores/Global";
 import {TimerStore} from "../stores/Timer";
-import {getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
+import {EmptyUserInfo, getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
 import {getRank, queryUser} from "../api/API";
 import {getGrade} from "../utils/StringUtil";
@@ -138,11 +138,6 @@ import {getGrade} from "../utils/StringUtil";
 interface Week {
   index: number;
   name: string;
-}
-
-let emptyInformation: UserInfo = {
-  afk: false,
-  WeekTime: 0, avatar: "", grade: "", id: "", admin: false, major: "", name: "", token: "", work_group: "",
 }
 const globalStore = GlobalStore();
 
@@ -156,7 +151,7 @@ let Loading = ref(true);
 let UserList = ref<UserTime[]>();
 let WeekIndex = ref<Week[]>([]);
 let lastXWeek = ref(0);
-let UserInformation = ref<UserInfo>(emptyInformation)
+let UserInformation = ref<UserInfo>(EmptyUserInfo)
 let WorkGroupList = ref(wgList)
 
 //处理年级过滤匹配

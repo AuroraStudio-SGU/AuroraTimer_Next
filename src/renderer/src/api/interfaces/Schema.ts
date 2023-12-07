@@ -3,18 +3,19 @@ export interface APIResponse<T> {
   msg:string;
   data:T;
 }
-export interface User { //only for login and register
-  id:string;
-  name:string;
-  password:string;
-  avatar:string;
-  admin:boolean;
-  afk:boolean;
-  reduceTime:number;
-  unfinishedCount:number;
-  major:string;
-  grade:string;
-  workGroup:string;
+export interface User { //most time should not use it
+  id: string,
+  name: string,
+  password:string,
+  admin: boolean,
+  token: string,
+  major: string,
+  grade: string,
+  workGroup: string,
+  avatar: string,
+  afk: boolean,
+  reduceTime:number,
+  priv:number,
 }
 export interface UserTime {
   id:string,
@@ -31,12 +32,12 @@ export interface UserTime {
 export interface UserInfo {
   id: string,
   name: string,
-  WeekTime: number,
+  currentWeekTime: number,
   admin: boolean,
   token:string,
   major:string,
   grade:string,
-  work_group:string,
+  workGroup:string,
   avatar:string,
   afk:boolean,
 }
@@ -87,3 +88,22 @@ export const getPriv = (priv:number)=>{
       return "无效权限";
   }
 }
+export const EmptyUserInfo:UserInfo = {
+  admin: false,
+  afk: false,
+  avatar: "",
+  currentWeekTime: 0,
+  grade: "",
+  id: "",
+  major: "",
+  name: "",
+  token: "",
+  workGroup: ""
+}
+
+export interface Term {
+  id:string
+  start:Date,
+  end:Date
+}
+

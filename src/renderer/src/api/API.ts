@@ -1,6 +1,7 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import {APIResponse, Notice, User, UserInfo} from "./interfaces/Schema";
+import {APIResponse, Notice, SchoolCalendar, User, UserInfo} from "./interfaces/Schema";
 import config from '../../../../package.json'
+import {formatDate} from "../utils/DateUtils";
 
 let instance: AxiosInstance;
 
@@ -181,7 +182,7 @@ export async function queryUser(id: string) {
  * tips: this cant not change admin state
  * @param user UserInfo
  */
-export async function updateUser(user: UserInfo) {
+export async function updateUser(user: UserInfo | User) {
   return doPost('/user/update', user)
 }
 
@@ -196,14 +197,22 @@ export async function getDefaultAvatarUrl() {
   return doGet('/getDefaultAvatar');
 }
 export async function deleteUser(id:string) {
-  return doGet('/admin/deleteUser/'+id);
+  return doGet('/manager/deleteUser/'+id);
 }
 export async function getTimeDetail(id:string) {
   return doGet('/timer/queryTimeDetail/'+id);
 }
-export async function getWorkGroupList(){
-  return doGet('/getWorkGroupList');
-}
 export async function getPriv(){
   return doGet('/user/getPriv')
+}
+export async function getTerm() {
+  return doGet('/getTerm')
+}
+export async function updateTerm(term:SchoolCalendar) {
+  let temp = {
+    id:term.id,
+    start:formatDate(term.start,"yyyy-MM-dd"),
+    end:formatDate(term.end,"yyyy-MM-dd")
+  }
+  return doPost('/admin/updateTerm',temp);
 }

@@ -40,7 +40,7 @@ try {
   //Timer 返回函数。
   timeStore.timer.onmessage = async (event) => {
     timeStore.TimePlusPlus();
-    let time = Number(globalStore.Setting.userInfo.WeekTime);
+    let time = Number(globalStore.Setting.userInfo.currentWeekTime);
     if (isNaN(time)) {
       time = 0;
     }
@@ -85,8 +85,8 @@ try {
       API.addTime(globalStore.Setting.userInfo.id).then((res) => {
         if (res.success) {
           if (typeof (res.data) == 'number') {
-            if (Math.abs(Number(globalStore.Setting.userInfo.WeekTime) - Number(res.data)) >= 60) {
-              globalStore.Setting.userInfo.WeekTime = Number(res.data)
+            if (Math.abs(Number(globalStore.Setting.userInfo.currentWeekTime) - Number(res.data)) >= 60) {
+              globalStore.Setting.userInfo.currentWeekTime = Number(res.data)
             }
           }
         }
@@ -168,7 +168,7 @@ onBeforeMount(() => {
   if (!(timeStore.timer instanceof Worker)) {
     timeStore.timer = new Worker(new URL('../utils/Timer.js', import.meta.url).href)
   }
-  let time = Number(globalStore.Setting.userInfo.WeekTime)
+  let time = Number(globalStore.Setting.userInfo.currentWeekTime)
   if (isNaN(time)) {
     time = 0;
   }

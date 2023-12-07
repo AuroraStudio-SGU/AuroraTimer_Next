@@ -195,7 +195,7 @@ const addChoiceList = (value) => {
   border-radius: 50%;
   left: 10%;
   bottom: 15%;
-  box-shadow: inset 8px -4px 0px 0px #fff000;
+  box-shadow: inset 8px -4px 0 0 #fff000;
   background: var(--background);
   transition: .5s;
 }

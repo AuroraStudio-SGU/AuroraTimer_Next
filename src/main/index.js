@@ -36,7 +36,7 @@ import logger from "electron-log";
 const startTime = new Date().getTime();
 
 autoUpdater.logger = logger
-logger.transports.file.maxSize = 1002430 // 10M
+logger.transports.file.maxSize = 1002430 // 日志最大长度10M
 logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
 logger.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
 const {
@@ -471,23 +471,12 @@ function tryToLogin() {
       .then((Response) => {
         let result = Response.data
         if (Response.success) {
-          let user = {
-            WeekTime: result.currentWeekTime,
-            avatar: result.avatar,
-            grade: result.grade,
-            id: result.id,
-            admin: result.admin,
-            major: result.major,
-            name: result.name,
-            token: result.token,
-            work_group: result.work_group
-          }
-          setting.userInfo = user;
-          console.log(result.token)
+          setting.userInfo = result;
+          logger.info("登录Token :"+result.token)
           SaveSetting(JSON.stringify(setting))
           pushSharedDataToMainWindow({
             type: "UserInfo",
-            data: user
+            data: result
           })
           login()
         } else {

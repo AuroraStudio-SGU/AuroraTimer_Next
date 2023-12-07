@@ -3,11 +3,12 @@
     <div class="white-box">
       <div class="Title">管理页面 当前职位:{{ priv.candidName }}</div>
       <div class="buttons">
-        <div class="button-items admin " v-show="priv.val>=100">
-        <!--公告设置触发元素-->
+        <div class="button-items admin" v-show="priv.val>=100">
+        <!--管理员设置元素-->
           <button class="btn" style="margin-right: 1rem" onclick="notice.showModal()">设置公告内容📢</button>
           <button class="btn" style="margin-right: 1rem" onclick="targetTime.showModal()">设置目标时长⏰</button>
           <button class="btn" style="margin-right: 1rem" onclick="reduceTime.showModal()">设置减时⏳︎</button>
+          <button class="btn" style="margin-right: 1rem" @click="handelOpenCalendar">学期情况︎</button>
         </div>
         <div class="button-items duty" v-show="priv.val==2 || priv.val>=100">
           <button class="btn" onclick="duty.showModal()">设置值日🧹</button>
@@ -57,14 +58,10 @@
         <div class="modal-box modal-select-size">
           <h3 class="font-bold text-lg">设置目标时长⏰</h3>
           <p class="py-4">设置打卡时长要求，以最新的数据为准</p>
-          <el-select v-model="targetTime" clearable placeholder="⏰⏰⏰⏰" :teleported="false">
-            <el-option
-              v-for="item in TargetTimeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
+          <select class="selector input input-bordered" v-model="targetTime">
+            <option selected disabled >⏰⏰⏰⏰</option>
+            <option v-for="(item,index) in TargetTimeOptions" :key="index" :value="item.value">{{item.label}}</option>
+          </select>
           <div class="modal-action">
             <button class="btn" @click="handleTargetUpload">保存并上传</button>
             <form method="dialog">
@@ -94,6 +91,24 @@
           </div>
         </div>
       </dialog>
+      <!--学期情况-->
+      <dialog id="Calendar" ref="Calendar" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box modal-select-size term-modal">
+          <h3 class="font-bold text-lg">学期情况</h3>
+          <el-date-picker
+            v-model="TermList"
+            type="daterange"
+            start-placeholder="学期开始日期"
+            end-placeholder="学期结束日期"
+          />
+          <div class="modal-action">
+            <button class="btn" @click="handleSaveTerm">保存并上传</button>
+            <form method="dialog">
+              <button class="btn">关闭</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   </div>
 </template>
@@ -102,15 +117,17 @@
 import '../assets/css/scrollbar.css'
 import {onBeforeMount, ref} from "vue";
 import {ElNotification} from "element-plus";
-import {setDuty, setReduceTime, setTargetTime, createNotice, getPriv} from '../api/API'
+import {setDuty, setReduceTime, setTargetTime, createNotice, getPriv, getTerm, updateTerm} from '../api/API'
 import {GlobalStore} from "../stores/Global";
 import TextEditor from "../components/TextEditor.vue";
 import {TimerStore} from "../stores/Timer";
-import {Notice, Priv} from "../api/interfaces/Schema";
+import {Notice, Priv, Term} from "../api/interfaces/Schema";
 import {useRouter} from "vue-router";
 
 
 const router = useRouter()
+//学期情况对话框对象
+const Calendar = ref()
 
 const InvalidPriv:Priv = {val:-1,candidName:"权限未找到"}
 const textEditor = ref(null)
@@ -288,6 +305,53 @@ const handleReduceTime = async () => {
     }
   }
 }
+let EmptyTerm:Term = {
+  end: new Date(), id: "", start: new Date()
+}
+let TermList = ref([])
+let SelectedTerm = ref<Term>(EmptyTerm)
+const handelOpenCalendar = async () =>{
+  //加载学期情况
+  let res = await getTerm();
+  if(!res.success){
+    ElNotification({
+      title: "加载失败!",
+      message: res.msg,
+      type: "error",
+    });
+    return;
+  }
+  TermList.value[0] = new Date(res.data.start)
+  TermList.value[1] =  new Date(res.data.end)
+  SelectedTerm.value.id = res.data.id;
+  SelectedTerm.value.start = new Date(res.data.start)
+  SelectedTerm.value.end = new Date(res.data.end)
+  //解决element-plus兼容问题
+  const el_pop = document.querySelector('div[id^="el-popper-container-"]');
+  const dialog = document.getElementById("Calendar");
+  if(el_pop){
+    dialog.appendChild(el_pop)
+  }
+  Calendar.value.showModal()
+}
+const handleSaveTerm = async () =>{
+  //TODO 日期检测
+  SelectedTerm.value.start = TermList.value[0];
+  SelectedTerm.value.end = TermList.value[1];
+  let res = await updateTerm(SelectedTerm);
+  if(!res.success){
+    ElNotification({
+      title: "加载失败!",
+      message: res.msg,
+      type: "error",
+    });
+  }else {
+    ElNotification({
+      title: "更新成功!",
+      type: "success",
+    });
+  }
+}
 
 const toUserManage = () => {
   router.push({name:'Users'})
@@ -325,5 +389,8 @@ const toUserManage = () => {
   align-items: center;
   justify-content: space-around;
 
+}
+.term-modal{
+  max-width: 48rem !important;
 }
 </style>

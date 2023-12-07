@@ -20,14 +20,14 @@ export const TimerStore = defineStore('timer', {
         },
         getTime(state) {
             const globalStore = GlobalStore()
-            return globalStore.Setting.userInfo.WeekTime
+            return globalStore.Setting.userInfo.currentWeekTime
         },
     },
     actions: {
         TimePlusPlus() {
             const globalStore = GlobalStore()
             this.time += 1;
-            globalStore.Setting.userInfo.WeekTime += 1;
+            globalStore.Setting.userInfo.currentWeekTime += 1;
         },
         clearTime() {
             this.time = 0;

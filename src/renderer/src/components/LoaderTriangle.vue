@@ -222,7 +222,7 @@ const globalStore = GlobalStore()
     ),
     linear-gradient(
         hsla(0, 0%, 55%, 0) 46.9%,
-        hsl(0, 0%, 65%) 47% 52.9%,
+        hsl(0, 0%, 65% ,47% )52.9%,
         hsla(0, 0%, 65%, 0) 53%
       )
       50% 50% / 99% 99% no-repeat;

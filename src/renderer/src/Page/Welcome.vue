@@ -289,7 +289,7 @@ onMounted(() => {
 .boat {
   position: absolute;
   width: 50px;
-  height: 0px;
+  height: 0;
   border-top: 7px solid #bb7074;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
@@ -376,14 +376,14 @@ onMounted(() => {
   bottom: 8px;
   right: -6px;
   border-right-width: 15px;
-  border-left-width: 0px;
+  border-left-width: 0;
   border-bottom: 30px solid #bb7074;
 }
 
 .boat:after {
   bottom: 8px;
   right: 11px;
-  border-right-width: 0px;
+  border-right-width: 0;
   border-left-width: 20px;
   border-bottom: 48px solid #bb7074;
 }
@@ -865,7 +865,7 @@ onMounted(() => {
 .mountain-back {
   width: 180px;
   height: 120px;
-  top: 0px;
+  top: 0;
 }
 
 .mountain-back-1 {
@@ -997,7 +997,7 @@ onMounted(() => {
 }
 
 .cloud-6 {
-  left: 0px;
+  left: 0;
   top: 100px;
   -webkit-animation-delay: 1s;
   animation-delay: 1s;
@@ -1240,7 +1240,7 @@ p {
   @apply m-3.5;
   @apply text-3xl font-semibold;
   position: relative;
-  font-family: Sanchez;
+  font-family: Sanchez,serif;
 }
 
 p {

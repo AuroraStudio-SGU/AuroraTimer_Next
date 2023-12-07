@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {DefaultSetting, SettingFile} from "../utils/Setting";
-import {getDuty, getRank, getTargetTime} from "../api/API";
+import {getDuty, getTargetTime} from "../api/API";
 import {isSameWeek} from "../utils/DateUtils";
 import {DutyList, UserInfo, UserTime} from "../api/interfaces/Schema";
 
@@ -66,7 +66,7 @@ export const GlobalStore = defineStore('main', {
             return state.Setting.skin
         },
         getTimerProgress(state) {
-            let percentage = Number((state.Setting.userInfo.WeekTime / 864).toFixed(2))
+            let percentage = Number((state.Setting.userInfo.currentWeekTime / 864).toFixed(2))
             return {
                 big: percentage > 100 ? 100 : percentage,
                 middle: percentage - 100 < 0 ? 0 : percentage - 100 > 100 ? 100 : percentage - 100,

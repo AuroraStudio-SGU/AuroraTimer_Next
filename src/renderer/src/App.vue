@@ -251,7 +251,6 @@ onBeforeMount(() => {
 }
 
 .some-change {
-  padding-right: 10px;
   display: flex;
   align-items: center;
   padding: 20px 35px 93px 35px;

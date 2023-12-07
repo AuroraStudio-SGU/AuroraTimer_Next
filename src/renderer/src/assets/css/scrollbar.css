@@ -7,7 +7,7 @@
 
 /*定义滚动条轨道 内阴影+圆角*/
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 0px hsl(var(--n) / var(--tw-bg-opacity));
+  box-shadow: inset 0 0 0 hsl(var(--n) / var(--tw-bg-opacity));
   border-radius: 10px;
   background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));
 }
