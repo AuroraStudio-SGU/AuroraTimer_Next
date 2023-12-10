@@ -1,5 +1,5 @@
 # AuroraTimer_Next
-![Static Badge](https://img.shields.io/badge/AuroraTimer-beta_0.0.10-blue?logo=electron&label=AuroraTimer&labelColor=%23FFFFFF&color=%234FC08D)
+![Static Badge](https://img.shields.io/badge/AuroraTimer-beta_0.0.12-blue?logo=electron&label=AuroraTimer&labelColor=%23FFFFFF&color=%234FC08D)
 
 ![Static Badge](https://img.shields.io/badge/electron-26.4.0-blue?logo=electron&label=electron&color=%2347848F) ![Static Badge](https://img.shields.io/badge/Vue-3.3.4-blue?logo=vuedotjs&label=Vue&color=%231AD1A5) ![Static Badge](https://img.shields.io/badge/daisyUI-3.9.3-blue?logo=daisyui&label=daisyUI&color=%235A0EF8) ![Static Badge](https://img.shields.io/badge/Vue-1.0.28-blue?logo=vite&label=electron-vite&color=%23646CFF)
 
@@ -12,9 +12,17 @@ Next Gen AuroraTimer,now work in progress!
 - [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 - ~~其实WebStorm也彳~~
 
-## Project Setup
+## Project Setup 项目配置
 
-Power by Yarn
+### Environment 环境需求
+
+> Node.js >=16 最好是18+
+>
+> yarn
+>
+> 一个好的“网络”环境
+
+使用Yarn进行依赖管理
 
 ### Install 初始化
 
@@ -31,6 +39,7 @@ $ yarn run dev
 ### Build 生产环境部署
 
 ```bash
+##不能跨平台编译哦!!!
 # For windows
 $ yarn run build:win
 
@@ -57,7 +66,7 @@ $ yarn run build:linux
 |-- tailwind.config.js
 ```
 src目录下:
-```shell
+```
 |-- assets 素材文件夹
 |-- main 主进程js
 |-- preload 预加载js
@@ -79,3 +88,47 @@ src目录下:
 |       |-- tailwindcss.css
 |       `-- utils 工具类
 ```
+### 页面图片
+
+主页面:
+
+![](docs/MainPage.png)
+
+计时表格：
+
+![RankPage.png](docs/RankPage.png)
+
+主题更换：
+
+![Skins.png](docs/Skins.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

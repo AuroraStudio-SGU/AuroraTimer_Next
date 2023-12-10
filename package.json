@@ -1,6 +1,6 @@
 {
   "name": "auroratimer",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "新·打卡计时器",
   "main": "./out/main/index.js",
   "author": "DAYGood_Time",
