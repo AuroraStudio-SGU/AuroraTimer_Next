@@ -39,13 +39,13 @@
         </div>
       </dialog>
       <!--公告设置页面-->
-      <dialog id="notice" class="modal">
+      <dialog id="notice" ref="notice"  class="modal">
         <div class="modal-box-notice modal-box relative overflow-hidden">
           <h3 class="font-bold text-lg">公告设置📢</h3>
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <div class="container">
+          <div class="container text-editor">
             <TextEditor data-twind-ignore ref="textEditor"></TextEditor>
           </div>
           <div class="modal-action">
@@ -362,7 +362,7 @@ const toUserManage = () => {
 /*这里和组件内的样式冲突了，所以手动设置*/
 .modal-box-notice {
   max-width: 40rem;
-  height: 37rem;
+  height: 40rem;
 }
 
 .container {
@@ -390,7 +390,10 @@ const toUserManage = () => {
   justify-content: space-around;
 
 }
-.term-modal{
+.term-modal {
   max-width: 48rem !important;
+}
+.modal-action{
+  margin-top: 0;
 }
 </style>

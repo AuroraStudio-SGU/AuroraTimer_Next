@@ -22,8 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import '@wangeditor/editor/dist/css/style.css';
 import '../assets/css/scrollbar.css'
+//用自己的魔改的样式
+import '../assets/EditorStyle.css'
 import {Editor, Toolbar} from "@wangeditor/editor-for-vue";
 import {onBeforeUnmount, onMounted, ref, shallowRef} from "vue";
 import {IEditorConfig, IToolbarConfig} from "@wangeditor/editor";
@@ -144,7 +145,6 @@ defineExpose({
 <style scoped>
 .editor {
   border: 1px solid #ccc;
-  overflow: hidden;
 }
 .TextArea {
   height: 19rem !important;
@@ -152,4 +152,13 @@ defineExpose({
   overflow-x: hidden;
   box-sizing: content-box;
 }
+/*
+//body h1{ font-size:2em !important; margin: .67em 0!important }
+//body h2{ font-size:1.5em!important; margin: .75em 0!important }
+//body h3{ font-size:1.17em!important; margin: .83em 0!important }
+//body h4, p,blockquote, ul,fieldset, form,ol, dl, dir,menu { margin: 1.12em 0!important}
+//body h5 { font-size:.83em!important; margin: 1.5em 0!important }
+//body h6{ font-size:.75em!important; margin: 1.67em 0!important }
+//body h1, h2, h3, h4,h5, h6, b,strong  { font-weight: bolder!important }
+ */
 </style>
