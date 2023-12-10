@@ -20,8 +20,11 @@
       <!--值日设置页面-->
       <dialog id="duty" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-          <h3 class="font-bold text-lg">值日设置🧹</h3>
+          <h3 class="font-bold text-2xl">值日设置🧹</h3>
           <p class="py-4">分别输入周三,周日需要值日的人员。如果忘记设置，则会显示"未安排"</p>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <label class="label">
             <span class="label-text">周三值日:</span>
           </label>
@@ -41,7 +44,7 @@
       <!--公告设置页面-->
       <dialog id="notice" ref="notice"  class="modal">
         <div class="modal-box-notice modal-box relative overflow-hidden">
-          <h3 class="font-bold text-lg">公告设置📢</h3>
+          <h3 class="font-bold text-2xl">公告设置📢</h3>
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
@@ -56,7 +59,10 @@
       <!--打卡时长设置页面-->
       <dialog id="targetTime" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box modal-select-size">
-          <h3 class="font-bold text-lg">设置目标时长⏰</h3>
+          <h3 class="font-bold text-2xl">设置目标时长⏰</h3>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <p class="py-4">设置打卡时长要求，以最新的数据为准</p>
           <select class="selector input input-bordered" v-model="targetTime">
             <option selected disabled >⏰⏰⏰⏰</option>
@@ -73,8 +79,11 @@
       <!--设置减时页面-->
       <dialog id="reduceTime" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-          <h3 class="font-bold text-lg">设置减时⏳</h3>
+          <h3 class="font-bold text-2xl">设置减时⏳</h3>
           <p class="py-4">输入需要减时人员的名字,以及减时的小时数。每周重置</p>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <label class="label">
             <span class="label-text">需要减时的人员</span>
           </label>
@@ -94,7 +103,10 @@
       <!--学期情况-->
       <dialog id="Calendar" ref="Calendar" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box modal-select-size term-modal">
-          <h3 class="font-bold text-lg">学期情况</h3>
+          <h3 class="font-bold text-2xl p-3">学期情况</h3>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <el-date-picker
             v-model="TermList"
             type="daterange"
@@ -115,7 +127,7 @@
 
 <script setup lang="ts">
 import '../assets/css/scrollbar.css'
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {ElNotification} from "element-plus";
 import {setDuty, setReduceTime, setTargetTime, createNotice, getPriv, getTerm, updateTerm} from '../api/API'
 import {GlobalStore} from "../stores/Global";
@@ -127,7 +139,7 @@ import {useRouter} from "vue-router";
 
 const router = useRouter()
 //学期情况对话框对象
-const Calendar = ref()
+const Calendar = ref<HTMLDialogElement>()
 
 const InvalidPriv:Priv = {val:-1,candidName:"权限未找到"}
 const textEditor = ref(null)
@@ -168,6 +180,16 @@ onBeforeMount(async () => {
       }
     }
   }
+})
+onMounted(()=>{
+  Calendar.value.addEventListener('close',()=>{
+    //把element-ui的弹窗放回body里面，否则其他组件无法正常使用
+    const dialog = document.getElementById("Calendar");
+    if(dialog){
+      let target_pop =  dialog.querySelector('div[id^="el-popper-container-"]');
+      document.body.appendChild(target_pop);
+    }
+  })
 })
 
 const uploadNotice = async () => {
@@ -327,13 +349,21 @@ const handelOpenCalendar = async () =>{
   SelectedTerm.value.start = new Date(res.data.start)
   SelectedTerm.value.end = new Date(res.data.end)
   //解决element-plus兼容问题
+  appendPopDateElement()
+
+  Calendar.value.showModal()
+}
+const appendPopDateElement = ()=>{
   const el_pop = document.querySelector('div[id^="el-popper-container-"]');
   const dialog = document.getElementById("Calendar");
   if(el_pop){
-    dialog.appendChild(el_pop)
+    let target_pop =  dialog.querySelector('div[id^="el-popper-container-"]');
+    if(!target_pop){
+      dialog.appendChild(el_pop)
+    }
   }
-  Calendar.value.showModal()
 }
+
 const handleSaveTerm = async () =>{
   //TODO 日期检测
   SelectedTerm.value.start = TermList.value[0];
@@ -361,7 +391,7 @@ const toUserManage = () => {
 <style scoped>
 /*这里和组件内的样式冲突了，所以手动设置*/
 .modal-box-notice {
-  max-width: 40rem;
+  max-width: 60rem;
   height: 40rem;
 }
 

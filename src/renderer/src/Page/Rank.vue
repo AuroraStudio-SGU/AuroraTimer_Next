@@ -43,9 +43,9 @@
           min-width="30"
         >
           <template #default="scope">
-            <el-tag disable-transitions>
+            <div class="badge badge-info gap-2">
               {{ getGrade(scope.row) }} 级
-            </el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -70,9 +70,9 @@
           min-width="30"
         >
           <template #default="scope">
-            <el-tag disable-transitions>
+            <div class="badge badge-accent">
               {{ scope.row.workGroup }}
-            </el-tag>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -80,12 +80,12 @@
           :filters="PrivFilters"
           label="权限"
           prop="priv"
-          min-width="30"
+          min-width="35"
         >
           <template #default="scope">
-            <el-tag disable-transitions>
+            <div class="badge badge-primary">
               {{ getPriv(scope.row.priv) }}
-            </el-tag>
+            </div>
           </template>
         </el-table-column>
       </el-table>

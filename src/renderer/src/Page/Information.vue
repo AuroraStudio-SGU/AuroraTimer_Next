@@ -61,7 +61,10 @@
   <!--设置头像页面-->
   <dialog id="avatarUpload" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">更改头像</h3>
+      <h3 class="font-bold text-2xl p-1">更改头像</h3>
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
       <label v-if="!NewAvatar" for="dropzone-file" class="dropzone">
         <div
             class="flex flex-col items-center justify-center px-3 pt-5 pb-6"
@@ -117,7 +120,10 @@
   <!--设置个人信息页面-->
   <dialog id="userInfo" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box user-info-box">
-      <h3 class="font-bold text-lg">个人信息</h3>
+      <h3 class="font-bold text-2xl">修改个人信息</h3>
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
       <div class="flex justify-stretch m-4">
         <label class="label">
           <span class="label-text">姓名</span>
@@ -156,7 +162,10 @@
   <!--确认退出登录-->
   <dialog id="confirm_logout" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">你确定要退出登录吗?</h3>
+      <h3 class="font-bold text-2xl">你确定要退出登录吗?</h3>
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
       <div class="modal-action">
         <form method="dialog" class="w-48 flex justify-around">
           <button class="btn" @click="handelLogout">是的</button>

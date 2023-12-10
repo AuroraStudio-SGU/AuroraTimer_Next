@@ -10,6 +10,7 @@ export function checkLength(s:string,require:number):boolean {
 }
 
 export function getGrade(user:UserTime|UserInfo|User):string {
+  if(!isNotEmptyStr(user.grade) && !isNotEmptyStr(user.id)) return ;
   try{
     if(isNotEmptyStr(user.grade) && user.grade != "待填写"){
       return user.grade.substring(0,2);
@@ -18,8 +19,9 @@ export function getGrade(user:UserTime|UserInfo|User):string {
     }
   }catch (e) {
     console.error(e)
+    console.error("出错用户对象")
+    console.error(user)
   }
-  console.log(user.grade)
 }
 const DefaultPlaceHolder = "请选择方向";
 const MAX_LENGTH = 32

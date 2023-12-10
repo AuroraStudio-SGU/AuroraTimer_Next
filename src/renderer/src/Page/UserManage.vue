@@ -277,7 +277,7 @@ const showInformation = async (user: User) => {
             @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="30" fixed @selection-change="handleSelectionChange"/>
-          <el-table-column label="姓名" prop="name" min-width="45" sortable>
+          <el-table-column label="姓名" prop="name" min-width="35" sortable>
             <template #default="scope">
               <div style="display: flex; align-items: center" @click="showInformation(scope.row)">
                 <img
@@ -305,9 +305,9 @@ const showInformation = async (user: User) => {
               min-width="30"
           >
             <template #default="scope">
-              <el-tag disable-transitions>
+              <div class="badge badge-info gap-2">
                 {{ getGrade(scope.row) }} 级
-              </el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -318,9 +318,9 @@ const showInformation = async (user: User) => {
               min-width="30"
           >
             <template #default="scope">
-              <el-tag disable-transitions>
+              <div class="badge badge-accent">
                 {{ scope.row.workGroup }}
-              </el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
@@ -328,15 +328,15 @@ const showInformation = async (user: User) => {
               :filters="PrivFilters"
               label="权限"
               prop="priv"
-              min-width="30"
+              min-width="35"
           >
             <template #default="scope">
-              <el-tag disable-transitions>
+              <div class="badge badge-primary">
                 {{ getPriv(scope.row.priv) }}
-              </el-tag>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作" min-width="80">
+          <el-table-column label="操作" min-width="70">
             <template #default="scope">
               <button class="btn btn-ghost btn-xs" @click="handleChangeInformation(scope.row)">修改信息</button>
               <button class="btn btn-ghost btn-xs" v-if="scope.row.afk==false" @click="setUserAfk(scope.row)">
@@ -353,7 +353,10 @@ const showInformation = async (user: User) => {
       <!--修改信息对话框-->
       <dialog id="information" ref="information" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box user-info-box">
-          <h3 class="font-bold text-lg">修改 {{ UserInformation.name }} 的用户信息</h3>
+          <h3 class="font-bold text-2xl">修改 {{ UserInformation.name }} 的用户信息</h3>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <div class="flex justify-stretch m-4">
             <label class="label">
               <span class="label-text">姓名</span>
@@ -392,7 +395,7 @@ const showInformation = async (user: User) => {
       <!--确认删除-->
       <dialog id="confirm_delete" ref="confirm_delete" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-          <h3 class="font-bold text-lg">请确认</h3>
+          <h3 class="font-bold text-2xl">请确认</h3>
           <p class="py-4">你真的要删除 [{{ UserInformation.name }}] 吗?</p>
           <div class="modal-action">
             <form method="dialog" class="">
@@ -405,8 +408,11 @@ const showInformation = async (user: User) => {
       <!--确认删除(List)-->
       <dialog id="confirm_delete_list" ref="confirm_delete_list" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-          <h2 class="font-bold text-lg">请确认</h2>
+          <h2 class="font-bold text-2xl">请确认</h2>
           <p class="py-4">你真的要删除以下成员吗?</p>
+          <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
           <div class="names" v-for="(user,index) in SelectedList" :key="index">
             <h3 class="text-lg" v-show="user.workGroup==operator.workGroup || operator.priv>=100" > {{ user.name }} </h3>
           </div>
@@ -484,7 +490,12 @@ const showInformation = async (user: User) => {
   //--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
    */
 }
-
+:deep(.cell) {
+  font-family: "Sanchez", "WenKai-B", serif;
+  font-weight: 700;
+  color: hsla(var(--bc) / var(--tw-text-opacity, 1));
+  padding: 0 6px;
+}
 :deep(.el-table__body-wrapper tr td.el-table-fixed-column--left) {
   background: hsl(var(--ac) / var(--tw-text-opacity));
 }
