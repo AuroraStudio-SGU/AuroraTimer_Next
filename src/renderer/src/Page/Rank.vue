@@ -37,7 +37,6 @@
         <el-table-column
           :filter-method="filterHandler"
           :filters="GradeFilters"
-          :formatter="GradeFormatter"
           label="年级"
           prop="grade"
           min-width="30"
@@ -156,7 +155,7 @@ let WorkGroupList = ref(wgList)
 
 //处理年级过滤匹配
 const filterHandler = (value: string, row: UserTime) => {
-  return row.id.substring(0, 2) === value;
+  return getGrade(row) === value;
 };
 //处理权限过滤匹配
 const PrivFilterHandler = (value: number, row: UserTime) => {
@@ -164,7 +163,6 @@ const PrivFilterHandler = (value: number, row: UserTime) => {
 }
 //处理方向过滤匹配
 const WorkGroupFilterHandler = (value: string, row: UserTime) => {
-  if(value==="全体成员") return true;
   return row.workGroup === value;
 }
 //首次加载
@@ -172,20 +170,12 @@ onBeforeMount(async () => {
   await loadWeekList();
   await loadRankList();
   loadFilters();
-  if(WorkGroupList.value.indexOf("全体成员")===-1){
-    WorkGroupList.value.push("全体成员")
-  }
   Loading.value = false;
 });
 
 onMounted(async () => {
   await nextTick();
 });
-
-
-const GradeFormatter = (row, colum) => {
-  return row.uid.substring(0, 2);
-};
 
 const TimeFormatter = (row, colum) => {
   return formatSecondTime(row[colum.property]);

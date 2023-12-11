@@ -56,7 +56,7 @@ export interface Priv{
   val:number,
   candidName:string
 }
-export const WorkGroupList = ["Web前端","Web后端","算法","设计","嵌入式","人工智能","数据分析","网络安全"];
+export const WorkGroupList = ["Web前端","Web后端","算法","设计","嵌入式","人工智能","数据分析","网络安全","待填写"];
 export const PrivList = [
   {val:0,name:"考核成员"},
   {val:1,name:"普通成员"},

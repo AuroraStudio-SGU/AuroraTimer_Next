@@ -49,8 +49,8 @@ const {
 } = require('electron-color-picker')
 
 
-const Windows_Main_Width = 1000
-const Windows_Main_Height = 670
+const Windows_Main_Width = 1080
+const Windows_Main_Height = 720
 const iconImg = nativeImage.createFromPath(icon)
 let UpdateServerURL;
 
@@ -181,7 +181,7 @@ async function createWindow() {
     }
   })
 
-  mainWindow.setMinimumSize(996, 635)
+  mainWindow.setMinimumSize(Windows_Main_Width, Windows_Main_Height)
 }
 
 function mainLogger(event, value) {

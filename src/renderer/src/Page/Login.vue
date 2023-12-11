@@ -18,7 +18,7 @@
                     <option v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
                 </select>
               <input type="text" placeholder="密码" v-model="password"/>
-              <input type="text" placeholder="确认密码" v-model="confirmPsw"/>
+              <input type="text" placeholder="确认密码" v-model="confirmPsw" @keydown.enter="register"/>
               <button class="btn btn-accent sumbit" @click="register">注册</button>
             </div>
           </div>
@@ -27,15 +27,15 @@
             <h1 class="font-bold">登录</h1>
             <div class="more-padding Form">
               <input placeholder="学号" type="text" v-model="id">
-              <input placeholder="密码" type="password" v-model="password">
+              <input placeholder="密码" type="password" v-model="password" @keydown.enter="login">
               <div class="Checkbox">
                 <label class="label cursor-pointer">
                   <span class="label-text">自动登录</span>
-                  <input type="checkbox" checked="checked" class="checkbox" v-model="AutoLogin"/>
+                  <input type="checkbox" checked="checked" class="checkbox" style="margin: 0 0.5rem" v-model="AutoLogin"/>
                 </label>
               </div>
               <div class="btn-list">
-                <button class="btn btn-accent" @click="login">登录</button>
+                <button class="btn btn-accent login-btn" @click="login">登录</button>
                 <a class="link link-hover" style="font-size: 13px" onclick="restPwd.showModal()">忘记密码了?</a>
               </div>
             </div>
@@ -247,7 +247,7 @@ const loadGradeList = ()=>{
 
 .btn-list {
   display: flex;
-  margin-top: 2rem;
+  margin-top: 1rem;
   align-items: center;
   justify-content: center;
  flex-direction: column;
@@ -486,5 +486,9 @@ input:focus::placeholder {
   outline: none;
   padding: 9px 9px 9px 5px;
   border-bottom: 1px solid rgba(246, 246, 246, 0.5);
+}
+.login-btn{
+  width: 6rem;
+  font-size: 1.125rem;
 }
 </style>

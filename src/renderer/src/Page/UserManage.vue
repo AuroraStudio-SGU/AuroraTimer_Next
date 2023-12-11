@@ -84,7 +84,6 @@ const PrivFilterHandler = (value: number, row: UserTime) => {
 }
 //处理方向过滤匹配
 const WorkGroupFilterHandler = (value: string, row: UserTime) => {
-  if(value==="全体成员") return true;
   return row.workGroup === value;
 }
 
@@ -110,11 +109,8 @@ const loadFilters = () => {
     PrivFilters.value.push(obj)
   })
 }
-const GradeFormatter = (row, colum) => {
-  return row.uid.substring(0, 2);
-}
 const filterHandler = (value: string, row: UserTime) => {
-  return row.id.substring(0, 2) === value;
+  return getGrade(row) === value;
 }
 let SelectedList = ref<User[]>([])
 const handleSelectionChange = (list: User[]) => {
@@ -299,7 +295,6 @@ const showInformation = async (user: User) => {
           <el-table-column
               :filter-method="filterHandler"
               :filters="GradeFilters"
-              :formatter="GradeFormatter"
               label="年级"
               prop="grade"
               min-width="30"
@@ -315,7 +310,7 @@ const showInformation = async (user: User) => {
               :filters="WorkGroupFilters"
               label="方向"
               prop="workGroup"
-              min-width="30"
+              min-width="35"
           >
             <template #default="scope">
               <div class="badge badge-accent">
