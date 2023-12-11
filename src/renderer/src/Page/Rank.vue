@@ -127,7 +127,6 @@ import {nextTick, onBeforeMount, onMounted, ref} from "vue";
 import "../assets/css/common.css";
 import {ElNotification} from "element-plus";
 import {GlobalStore} from "../stores/Global";
-import {TimerStore} from "../stores/Timer";
 import {EmptyUserInfo, getPriv, PrivList, UserInfo, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
 import {intToRoman} from "../utils/NumberUtil";
 import {getRank, queryUser} from "../api/API";

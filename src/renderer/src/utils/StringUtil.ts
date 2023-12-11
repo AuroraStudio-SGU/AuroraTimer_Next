@@ -1,4 +1,4 @@
-import {User, UserInfo, UserTime} from "../api/interfaces/Schema";
+import {PrivList, User, UserInfo, UserTime} from "../api/interfaces/Schema";
 import {ElNotification} from "element-plus";
 
 export function isNotEmptyStr(s: string) {
@@ -66,4 +66,11 @@ export function checkUserSchema(user:User | UserInfo) {
       type: "error"
     });return;
   }
+}
+
+export function getPrivName(priv:number){
+  console.log(priv)
+  let privEle = PrivList.find(i=>i.val===priv);
+  console.log(privEle)
+  return privEle.name;
 }
