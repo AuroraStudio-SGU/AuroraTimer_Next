@@ -102,8 +102,11 @@ export const EmptyUserInfo:UserInfo = {
 }
 
 export interface Term {
-  id:string
+  id:number
+  days:number,
+  name:string,
   start:Date,
-  end:Date
+  end:Date,
+  updateTime:Date
 }
 

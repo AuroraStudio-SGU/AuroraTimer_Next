@@ -107,14 +107,52 @@
           <form method="dialog">
             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
           </form>
-          <el-date-picker
-            v-model="TermList"
-            type="daterange"
-            start-placeholder="学期开始日期"
-            end-placeholder="学期结束日期"
-          />
+          <div class="term-table">
+            <table class="table">
+              <!-- head -->
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>持续时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, index) in TermList" :key="index">
+                  <td>{{ item.name }}</td>
+                  <td>
+                    <el-date-picker
+                      v-model="item.start"
+                      type="date"
+                      placeholder="Pick a day"
+                      size="small"
+                      style="width: 8rem;"
+                    /></td>
+                  <td>
+                    <el-date-picker
+                      v-model="item.end"
+                      type="date"
+                      placeholder="Pick a day"
+                      size="small"
+                      style="width: 8rem;"
+                    /></td>
+                  <td>{{ item.days }} 天</td>
+                  <td>{{ item.updateTime.toLocaleTimeString() }}</td>
+                  <th><button class="btn btn-xs" @click="handleSaveTerm(item)">更新</button></th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+<!--          <el-date-picker-->
+<!--            v-model="TermList"-->
+<!--            type="daterange"-->
+<!--            start-placeholder="学期开始日期"-->
+<!--            end-placeholder="学期结束日期"-->
+<!--          />-->
           <div class="modal-action">
-            <button class="btn" @click="handleSaveTerm">保存并上传</button>
             <form method="dialog">
               <button class="btn">关闭</button>
             </form>
@@ -127,7 +165,7 @@
 
 <script setup lang="ts">
 import '../assets/css/scrollbar.css'
-import {onBeforeMount, onMounted, ref} from "vue";
+import {onBeforeMount, onMounted, Ref, ref} from "vue";
 import {ElNotification} from "element-plus";
 import {setDuty, setReduceTime, setTargetTime, createNotice, getPriv, getTerm, updateTerm} from '../api/API'
 import {GlobalStore} from "../stores/Global";
@@ -328,10 +366,9 @@ const handleReduceTime = async () => {
   }
 }
 let EmptyTerm:Term = {
-  end: new Date(), id: "", start: new Date()
+  days: 0, end: new Date(), id: 0, name: "NULL", start: new Date(), updateTime: new Date()
 }
-let TermList = ref([])
-let SelectedTerm = ref<Term>(EmptyTerm)
+let TermList:Ref<Term[]> = ref([EmptyTerm]);
 const handelOpenCalendar = async () =>{
   //加载学期情况
   let res = await getTerm();
@@ -343,11 +380,14 @@ const handelOpenCalendar = async () =>{
     });
     return;
   }
-  TermList.value[0] = new Date(res.data.start)
-  TermList.value[1] =  new Date(res.data.end)
-  SelectedTerm.value.id = res.data.id;
-  SelectedTerm.value.start = new Date(res.data.start)
-  SelectedTerm.value.end = new Date(res.data.end)
+  for(let i=0;i<2;i++){
+    let term:Term = res.data[i];
+    term.start = new Date(res.data[i].start);
+    term.end = new Date(res.data[i].end);
+    term.updateTime = new Date(res.data[i].updateTime);
+    term.days = res.data[i].days;
+    TermList.value[i] = term;
+  }
   //解决element-plus兼容问题
   appendPopDateElement()
 
@@ -364,23 +404,21 @@ const appendPopDateElement = ()=>{
   }
 }
 
-const handleSaveTerm = async () =>{
-  //TODO 日期检测
-  SelectedTerm.value.start = TermList.value[0];
-  SelectedTerm.value.end = TermList.value[1];
-  let res = await updateTerm(SelectedTerm);
+const handleSaveTerm = async (term:Term) =>{
+  let res = await updateTerm(term);
   if(!res.success){
     ElNotification({
-      title: "加载失败!",
+      title: "保存失败!",
       message: res.msg,
       type: "error",
     });
-  }else {
-    ElNotification({
-      title: "更新成功!",
-      type: "success",
-    });
+    return;
   }
+  ElNotification({
+    title: "保存成功!",
+    message: "学期信息已保存",
+    type: "success",
+  });
 }
 
 const toUserManage = () => {
@@ -425,5 +463,8 @@ const toUserManage = () => {
 }
 .modal-action{
   margin-top: 0;
+}
+.term-time{
+  width: 5rem;
 }
 </style>

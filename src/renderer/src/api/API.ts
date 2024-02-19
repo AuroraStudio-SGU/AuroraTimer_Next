@@ -1,5 +1,5 @@
 import axios, {AxiosInstance, AxiosResponse} from "axios";
-import {APIResponse, Notice, SchoolCalendar, User, UserInfo} from "./interfaces/Schema";
+import {APIResponse, Notice, Term, User, UserInfo} from "./interfaces/Schema";
 import config from '../../../../package.json'
 import {formatDate} from "../utils/DateUtils";
 
@@ -206,13 +206,14 @@ export async function getPriv(){
   return doGet('/user/getPriv')
 }
 export async function getTerm() {
-  return doGet('/getTerm')
+  return doGet('/TermTime')
 }
-export async function updateTerm(term:SchoolCalendar) {
+export async function updateTerm(term:Term) {
   let temp = {
     id:term.id,
     start:formatDate(term.start,"yyyy-MM-dd"),
-    end:formatDate(term.end,"yyyy-MM-dd")
+    end:formatDate(term.end,"yyyy-MM-dd"),
+    name:term.name
   }
   return doPost('/admin/updateTerm',temp);
 }

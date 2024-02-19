@@ -9,7 +9,7 @@
           />
           <div>
             <h1 class="text-5xl font-bold">工作室公告</h1>
-            <div class="py-6" ref="noticeContext">
+            <div class="py-6" ref="noticeContext"> 
 
             </div>
             <button class="btn btn-primary">收到！</button>
