@@ -370,12 +370,17 @@ const svgLoading = `<svg viewBox="0 0 108 108">
 }
 
 :deep(.el-table) {
-  --el-table-border-color: hsl(var(--ac) / var(--tw-text-opacity));
+  --el-table-bg-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+  --el-table-tr-bg-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+  --el-table-header-bg-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+  --el-table-current-row-bg-color: var(--fallback-b3,oklch(var(--b3)/var(--tw-bg-opacity)));
+  --el-table-border-color: rgba(255,255,255,0);
+  /*
+    --el-table-border-color: hsl(var(--ac) / var(--tw-text-opacity));
   --el-table-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
   --el-table-tr-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));
   --el-table-row-hover-bg-color: hsl(var(--pc) / var(--tw-text-opacity));
   --el-table-header-bg-color: hsl(var(--b1) / var(--tw-bg-opacity));;
-  /*
   //--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
    */
 }
