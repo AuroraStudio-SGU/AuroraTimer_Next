@@ -5,36 +5,36 @@
         <div class="progress1">
           <div class="little">
             <el-progress
-                :hidden="115"
-                :percentage="globalStore.getTimerProgress.little"
-                :stroke-width="40"
-                :width="115"
-                class="littleCircle"
-                type="circle"
+              :hidden="115"
+              :percentage="globalStore.getTimerProgress.little"
+              :stroke-width="40"
+              :width="115"
+              class="littleCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="medium">
             <el-progress
-                :hidden="195"
-                :percentage="globalStore.getTimerProgress.middle"
-                :stroke-width="40"
-                :width="195"
-                class="mediumCircle"
-                type="circle"
+              :hidden="195"
+              :percentage="globalStore.getTimerProgress.middle"
+              :stroke-width="40"
+              :width="195"
+              class="mediumCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
           </div>
           <div class="big">
             <el-progress
-                :hidden="270"
-                :percentage="globalStore.getTimerProgress.big"
-                :stroke-width="40"
-                :width="270"
-                class="bigCircle"
-                type="circle"
+              :hidden="270"
+              :percentage="globalStore.getTimerProgress.big"
+              :stroke-width="40"
+              :width="270"
+              class="bigCircle"
+              type="circle"
             >
               <span class="percentage-label"></span>
             </el-progress>
@@ -45,14 +45,14 @@
             <defs>
               <linearGradient id="little-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                    :style="{stopColor:globalStore.Setting.progressBar.color.small.start}"
-                    offset="0%"
-                    stop-opacity="0.8"
+                  :style="{stopColor:globalStore.Setting.progressBar.color.small.start}"
+                  offset="0%"
+                  stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{stopColor: globalStore.Setting.progressBar.color.small.end}"
-                    offset="100%"
-                    stop-opacity="1"
+                  :style="{stopColor: globalStore.Setting.progressBar.color.small.end}"
+                  offset="100%"
+                  stop-opacity="1"
                 ></stop>
               </linearGradient>
             </defs>
@@ -61,15 +61,15 @@
             <defs>
               <linearGradient id="medium-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                    :style="{
+                  :style="{
                     stopColor:globalStore.Setting.progressBar.color.medium.start}"
-                    offset="0%"
-                    stop-opacity="0.8"
+                  offset="0%"
+                  stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{stopColor: globalStore.Setting.progressBar.color.medium.end}"
-                    offset="100%"
-                    stop-opacity="1"
+                  :style="{stopColor: globalStore.Setting.progressBar.color.medium.end}"
+                  offset="100%"
+                  stop-opacity="1"
                 ></stop>
               </linearGradient>
             </defs>
@@ -78,14 +78,14 @@
             <defs>
               <linearGradient id="big-w" x1="0%" x2="100%" y1="0%" y2="0%">
                 <stop
-                    :style="{stopColor: globalStore.Setting.progressBar.color.big.start}"
-                    offset="0%"
-                    stop-opacity="0.8"
+                  :style="{stopColor: globalStore.Setting.progressBar.color.big.start}"
+                  offset="0%"
+                  stop-opacity="0.8"
                 ></stop>
                 <stop
-                    :style="{stopColor: globalStore.Setting.progressBar.color.big.end}"
-                    offset="100%"
-                    stop-opacity="0.9"
+                  :style="{stopColor: globalStore.Setting.progressBar.color.big.end}"
+                  offset="100%"
+                  stop-opacity="0.9"
                 ></stop>
               </linearGradient>
             </defs>
@@ -123,6 +123,22 @@
       </button>
     </div>
   </div>
+  <!--值日设置页面-->
+  <dialog id="update" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+      <h3 class="font-bold text-2xl">版本提示</h3>
+      <p class="py-4">当前你的版本为{{ config.version }}},最低版本要求为{{ MiniVersion }}</p>
+      <p class="py-4">不更新不会影响你的计时功能，但是不保证其它任何功能可以正常使用</p>
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn">我知道了</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 </template>
 
 <script lang="ts" setup>
@@ -132,14 +148,17 @@ import {TimerStore} from "../stores/Timer";
 import Countdown from "../components/Countdown.vue";
 import {GlobalStore} from "../stores/Global";
 import {ElNotification} from "element-plus";
+import config from '../../../../package.json'
+import {getMiniVersion} from "../api/API";
 
 const globalStore = GlobalStore();
 const timerStore = TimerStore();
 const CountDown = ref(null);
-
-const startTimer = (restart:boolean) => {
+const update = ref(null) //更新面板
+const MiniVersion = ref();
+const startTimer = (restart: boolean) => {
   if (!timerStore.isStarted) {
-    if(CountDown.value.StartTimer() && restart){
+    if (CountDown.value.StartTimer() && restart) {
       ElNotification({
         title: '重新恢复计时',
         type: 'success'
@@ -149,14 +168,34 @@ const startTimer = (restart:boolean) => {
 };
 
 const DutyList = ref(
-    {
-      wed: '暂未公布',
-      sun: '暂未公布',
-      createTime: new Date(),
-    }
+  {
+    wed: '暂未公布',
+    sun: '暂未公布',
+    createTime: new Date(),
+  }
 )
 const TargetTime = ref(18)
-
+const compareVersions = (version1, version2) => {
+  const v1 = version1.split('.');
+  const v2 = version2.split('.');
+  for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
+    const num1 = parseInt(v1[i] || 0);
+    const num2 = parseInt(v2[i] || 0);
+    if (num1 < num2) {
+      return -1;
+    } else if (num1 > num2) {
+      return 1;
+    }
+  }
+  return 0;
+}
+const checkIsTooOld = async () => {
+  let version = config.version;
+  let miniVersion = await getMiniVersion();
+  if (!miniVersion) return false;//为空不判断
+  MiniVersion.value = miniVersion;
+  return compareVersions(version, miniVersion) < 0;
+}
 onBeforeMount(async () => {
   try {
     let dutyList = toRaw(await globalStore.getDutyList())
@@ -166,9 +205,13 @@ onBeforeMount(async () => {
     let res = await globalStore.getTargetTime()
     TargetTime.value = toRaw(res).targetTime
     startTimer(false);
+    if (await checkIsTooOld()) {
+      update.value.showModal()
+    }
   } catch (e) {
   }
 })
+
 
 </script>
 

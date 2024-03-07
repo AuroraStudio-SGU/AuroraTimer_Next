@@ -1,6 +1,12 @@
 <script setup lang="ts">
 //加载图标
 import {GlobalStore} from "../stores/Global";
+import {onBeforeMount, ref} from "vue";
+import {getPriv, PrivList, User, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
+import {ElNotification} from "element-plus";
+import {deleteBatchUser, deleteUser, queryAllUser, queryUser, updateUser} from "../api/API";
+import {getGrade, getPrivName} from "../utils/StringUtil";
+import {useRouter} from "vue-router";
 
 const svgLoading = `<svg viewBox="0 0 108 108">
 <circle cx="12.5" cy="12.5" r="12.5">
@@ -58,24 +64,29 @@ const svgLoading = `<svg viewBox="0 0 108 108">
          repeatCount="indefinite" />
     </circle>
 </svg>`
-import {onBeforeMount, ref} from "vue";
-import {getPriv, PrivList, User, UserTime, WorkGroupList as wgList} from "../api/interfaces/Schema";
-import {ElNotification} from "element-plus";
-import {deleteUser, queryAllUser, queryUser, updateUser} from "../api/API";
-import {getGrade, getPrivName} from "../utils/StringUtil";
-import {useRouter} from "vue-router";
-
 
 
 const router = useRouter()
 const globalStore = GlobalStore()
 
 let emptyInformation: User = {
-  afk: false, avatar: "", password: "", grade: "", id: "", admin: false, major: "", name: "", token: "", workGroup: "", priv: 0, reduceTime: 0
+  afk: false,
+  avatar: "",
+  password: "",
+  grade: "",
+  id: "",
+  admin: false,
+  major: "",
+  name: "",
+  token: "",
+  workGroup: "",
+  priv: 0,
+  reduceTime: 0
 }
 const fallback = () => {
   router.back()
 }
+//当前正在进行操作的用户
 const operator = ref<User>(emptyInformation)
 
 //处理权限过滤匹配
@@ -89,7 +100,7 @@ const WorkGroupFilterHandler = (value: string, row: UserTime) => {
 
 let WorkGroupFilters = ref([]);
 let PrivFilters = ref([]);
-let AcceptedPrivList =ref([])
+let AcceptedPrivList = ref([])
 //加载过滤器列表
 let WorkGroupList = ref(wgList)
 const loadFilters = () => {
@@ -102,14 +113,14 @@ const loadFilters = () => {
     WorkGroupFilters.value.push(obj)
   })
   //权限过滤器
-  PrivList.forEach((i)=>{
+  PrivList.forEach((i) => {
     let obj = {
       text: i.name,
       value: i.val,
     }
     PrivFilters.value.push(obj)
     //小于或等于才可以进行权限赋值
-    if(i.val<=operator.value.priv){
+    if (i.val <= operator.value.priv) {
       AcceptedPrivList.value.push(i)
     }
   })
@@ -121,7 +132,6 @@ let SelectedList = ref<User[]>([])
 const handleSelectionChange = (list: User[]) => {
   SelectedList.value = list;
 }
-
 
 
 let LoadingData = ref(true)
@@ -167,18 +177,32 @@ const loadUserList = async () => {
 onBeforeMount(async () => {
   await loadUserList()
   let res = await queryUser(globalStore.Setting.userInfo.id);
-  if(res.success){
+  if (res.success) {
     operator.value = res.data;
   }
   loadFilters();
 
 })
-const handleChangeInformation = (user: User) => {
-  UserInformation.value = user;
-  information.value.showModal()
+const PrivCheck = (targetUser: User) => {
+  //只有管理员或相同方向才能修改用户信息
+  if (operator.value.priv <= 100 && operator.value.workGroup != targetUser.workGroup && targetUser.priv != 0) {
+    ElNotification({
+      title: "权限不足",
+      message: "只有管理员或相同方向才能修改",
+      type: "error"
+    })
+    return false;
+  } else {
+    return true;
+  }
 }
-
-
+const handleChangeInformation = (user: User) => {
+  //只有管理员或相同方向才能修改用户信息
+  if (PrivCheck(user)) {
+    UserInformation.value = user;
+    information.value.showModal()
+  }
+}
 const applyUserInfo = async () => {
   let res = await updateUser(UserInformation.value);
   if (res.success) {
@@ -214,25 +238,44 @@ const setUserAfk = async (user: User) => {
 
 let isCrossWorkGroup = ref(false)
 const confirm_delete_list = ref(null);
-const handleMulitDel = () => {
-  SelectedList.value.forEach(u=>{
-    if(u.workGroup!=operator.value.workGroup && operator.value.priv<100){
+const handleBatchDel = () => {
+  SelectedList.value.forEach(u => {
+    if (u.workGroup != operator.value.workGroup && operator.value.priv < 100) {
       isCrossWorkGroup.value = true;
     }
   })
   confirm_delete_list.value.showModal()
 }
 const handelDelModal = (user: User) => {
-  UserInformation.value = user;
-  confirm_delete.value.showModal()
+  //只有管理员或相同方向才能修改用户信息
+  if (PrivCheck(user)) {
+    UserInformation.value = user;
+    confirm_delete.value.showModal()
+  }
 }
-const DeleteBatchUser = async ( users:User[])=>{
+const DeleteBatchUser = async (users: User[]) => {
   //没有选择则不处理
-  if(users.length==0) return;
+  if (users.length == 0) return;
+  let ids = []
   for (const u of users) {
-    if(u.workGroup==operator.value.workGroup || operator.value.priv>=100){
-      await deleteUser(u.id);
+    if (u.workGroup == operator.value.workGroup || operator.value.priv >= 100) {
+      ids.push(u.id)
     }
+  }
+  let res = await deleteBatchUser(ids);
+  if (res.success) {
+    ElNotification({
+      title: "删除成功",
+      type: "success"
+    })
+    await loadUserList()//重新加载list
+  } else {
+    ElNotification({
+      title: "删除失败",
+      message: res.msg,
+      type: "error"
+    })
+    confirm_delete_list.value.hideModal()
   }
 }
 const DeleteUser = async (id: string) => {
@@ -242,6 +285,7 @@ const DeleteUser = async (id: string) => {
       title: "删除成功",
       type: "success"
     })
+    await loadUserList()
   } else {
     ElNotification({
       title: "删除失败",
@@ -262,11 +306,11 @@ const showInformation = async (user: User) => {
     <div class="white-box-rank">
       <div class="header">
         <svg
-            class="icon m-2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-            width="32" height="32" @click="fallback">
+          class="icon m-2" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          width="32" height="32" @click="fallback">
           <path
-              d="M700.371228 394.525472 174.028569 394.525472l255.952416-227.506551c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.506619-42.367947-2.492774L76.425623 400.975371c-6.960529 5.496178-11.434423 14.003945-11.434423 23.561625 0 0.013303 0.001023 0.026606 0.001023 0.039909 0 0.01228-0.001023 0.025583-0.001023 0.037862 0 0.473791 0.01535 0.946558 0.037862 1.418302 0.001023 0.016373 0.001023 0.032746 0.001023 0.049119 0.39295 8.030907 3.992941 15.595186 10.034541 20.962427l315.040163 280.028764c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947l-256.128425-227.665163 526.518668 0c109.219517 0 198.075241 88.855724 198.075241 198.075241s-88.855724 198.075241-198.075241 198.075241L354.324888 850.696955c-16.57449 0-30.011524 13.437034-30.011524 30.011524s13.437034 30.011524 30.011524 30.011524l346.046341 0c142.31631 0 258.098289-115.783003 258.098289-258.098289S842.686515 394.525472 700.371228 394.525472z"
-              fill="#272636"></path>
+            d="M700.371228 394.525472 174.028569 394.525472l255.952416-227.506551c12.389168-11.011798 13.505595-29.980825 2.492774-42.369993-11.011798-12.386098-29.977755-13.506619-42.367947-2.492774L76.425623 400.975371c-6.960529 5.496178-11.434423 14.003945-11.434423 23.561625 0 0.013303 0.001023 0.026606 0.001023 0.039909 0 0.01228-0.001023 0.025583-0.001023 0.037862 0 0.473791 0.01535 0.946558 0.037862 1.418302 0.001023 0.016373 0.001023 0.032746 0.001023 0.049119 0.39295 8.030907 3.992941 15.595186 10.034541 20.962427l315.040163 280.028764c5.717212 5.083785 12.83533 7.580652 19.925818 7.580652 8.274454 0 16.514115-3.403516 22.442128-10.07445 11.011798-12.387122 9.896394-31.357172-2.492774-42.367947l-256.128425-227.665163 526.518668 0c109.219517 0 198.075241 88.855724 198.075241 198.075241s-88.855724 198.075241-198.075241 198.075241L354.324888 850.696955c-16.57449 0-30.011524 13.437034-30.011524 30.011524s13.437034 30.011524 30.011524 30.011524l346.046341 0c142.31631 0 258.098289-115.783003 258.098289-258.098289S842.686515 394.525472 700.371228 394.525472z"
+            fill="#272636"></path>
         </svg>
         <div class="Title">工作室人员设置</div>
       </div>
@@ -346,7 +390,7 @@ const showInformation = async (user: User) => {
         </el-table-column>
       </el-table>
       <div class="action-list m-2">
-        <button class="btn" @click="handleMulitDel">删除已选的成员</button>
+        <button class="btn" @click="handleBatchDel">删除已选的成员</button>
       </div>
     </div>
   </div>
@@ -366,8 +410,8 @@ const showInformation = async (user: User) => {
           <span class="label-text">年级</span>
         </label>
         <select class="selector input input-bordered" v-model="UserInformation.grade">
-          <option selected disabled >请选择年级</option>
-          <option v-for="(item,index) in GradeList" :key="index">{{item}}</option>
+          <option selected disabled>请选择年级</option>
+          <option v-for="(item,index) in GradeList" :key="index">{{ item }}</option>
         </select>
       </div>
       <div class="flex justify-stretch m-4">
@@ -375,9 +419,13 @@ const showInformation = async (user: User) => {
           <span class="label-text">方向</span>
         </label>
         <select class="selector input input-bordered" v-model="UserInformation.workGroup">
-          <option disabled >请选择方向</option>
-          <option selected v-show="UserInformation.workGroup==item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
-          <option v-show="UserInformation.workGroup!=item" v-for="(item,index) in WorkGroupList" :key="index">{{item}}</option>
+          <option disabled>请选择方向</option>
+          <option selected v-show="UserInformation.workGroup==item" v-for="(item,index) in WorkGroupList" :key="index">
+            {{ item }}
+          </option>
+          <option v-show="UserInformation.workGroup!=item" v-for="(item,index) in WorkGroupList" :key="index">
+            {{ item }}
+          </option>
         </select>
         <label class="label">
           <span class="label-text">专业</span>
@@ -387,8 +435,10 @@ const showInformation = async (user: User) => {
           <span class="label-text">权限</span>
         </label>
         <select class="selector input input-bordered" v-model="UserInformation.priv">
-          <option selected disabled >{{ getPrivName(UserInformation.priv) }}</option>
-          <option v-show="item.val!=UserInformation.priv" v-for="(item,index) in AcceptedPrivList" :key="index" :value="item.val">{{item.name}}</option>
+          <option selected disabled>{{ getPrivName(UserInformation.priv) }}</option>
+          <option v-show="item.val!=UserInformation.priv" v-for="(item,index) in AcceptedPrivList" :key="index"
+                  :value="item.val">{{ item.name }}
+          </option>
         </select>
       </div>
       <div class="modal-action">
@@ -421,12 +471,12 @@ const showInformation = async (user: User) => {
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
       </form>
       <div class="names" v-for="(user,index) in SelectedList" :key="index">
-        <h3 class="text-lg" v-show="user.workGroup==operator.workGroup || operator.priv>=100" > {{ user.name }} </h3>
+        <h3 class="text-lg" v-show="user.workGroup==operator.workGroup || operator.priv>=100"> {{ user.name }} </h3>
       </div>
       <div class="crossDel" v-show="isCrossWorkGroup">
         <h2 class="font-bold text-lg">此外,这些成员的方向与你不同，非管理员无法删除</h2>
         <div class="names" v-for="(user,index) in SelectedList" :key="index">
-          <h3 class="text-lg" v-if="user.workGroup!=operator.workGroup" > {{ user.name }} </h3>
+          <h3 class="text-lg" v-if="user.workGroup!=operator.workGroup"> {{ user.name }} </h3>
         </div>
       </div>
       <div class="modal-action">
@@ -457,7 +507,8 @@ const showInformation = async (user: User) => {
             </h3>
             <h3 class="text-xl">年级: {{ UserInformation.grade }} {{ UserInformation.major }}</h3>
             <h3 class="text-lg">方向: {{ UserInformation.workGroup }}</h3>
-            <h3 class="text-lg">减时情况: {{ (UserInformation.reduceTime / 3600).toFixed(2) }} 小时 是否退休: {{  UserInformation.afk? '已退休' : '还没退休'}}</h3>
+            <h3 class="text-lg">减时情况: {{ (UserInformation.reduceTime / 3600).toFixed(2) }} 小时 是否退休:
+              {{ UserInformation.afk ? '已退休' : '还没退休' }}</h3>
           </div>
           <div class="flex gap-3 pt-2 pl-3"></div>
         </section>
@@ -495,12 +546,14 @@ const showInformation = async (user: User) => {
   //--el-tag-bg-color: 年级标签 背景颜色; //--el-tag-text-color: 年级标签 文字颜色;
    */
 }
+
 :deep(.cell) {
   font-family: "Sanchez", "WenKai-B", serif;
   font-weight: 700;
   color: hsla(var(--bc) / var(--tw-text-opacity, 1));
   padding: 0 6px;
 }
+
 :deep(.el-table__body-wrapper tr td.el-table-fixed-column--left) {
   background: hsl(var(--ac) / var(--tw-text-opacity));
 }
@@ -509,18 +562,21 @@ const showInformation = async (user: User) => {
   margin-top: 10rem;
   position: static;
 }
+
 .glassmophism {
   background: rgba(255, 255, 255, .2);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
+
 .header {
   display: flex;
 }
+
 :deep(.el-scrollbar__bar.is-vertical) {
-  height: 0!important;
-  width: 0!important;
-  display: none!important;
+  height: 0 !important;
+  width: 0 !important;
+  display: none !important;
 }
 </style>
 

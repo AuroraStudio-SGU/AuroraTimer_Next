@@ -25,12 +25,11 @@ async function processResponse(RawResp: AxiosResponse): Promise<APIResponse<any>
   }
   if (RawResp.status != HTTP_OK) {
     apiResp.success = false;
-    apiResp.msg = "HTTP Code is not 200,current status is " + RawResp.status + "statusText is " + RawResp.statusText
+    apiResp.msg = "Http:" + RawResp.status + " statusText is " + RawResp.statusText
     return apiResp;
   }
   //TODO target interface
   let Res = RawResp.data
-
   if (Res.code != HTTP_OK) {
     apiResp.success = false;
     if(Array.isArray(Res.msg)){
@@ -50,39 +49,12 @@ async function processResponse(RawResp: AxiosResponse): Promise<APIResponse<any>
 }
 
 async function doGet(url: string): Promise<APIResponse<any>> {
-  let apiResp: APIResponse<any> = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  try {
-    let RawResp: AxiosResponse = await instance.get(url);
-    return await processResponse(RawResp);
-  } catch (e) {
-    apiResp.success = false;
-    apiResp.msg = e;
-    return apiResp;
-  }
-
+  return await processResponse(await instance.get(url));
 }
 
 async function doPost(url: string, Obj: object): Promise<APIResponse<any>> {
-  let apiResp: APIResponse<any> = {
-    success: true,
-    msg: null,
-    data: null
-  }
-  try {
-    let RawResp: AxiosResponse = await instance.post(url, Obj)
-    return processResponse(RawResp);
-  } catch (e) {
-    apiResp.success = false;
-    apiResp.msg = e;
-    return apiResp;
-  }
+  return await processResponse(await instance.post(url, Obj));
 }
-
-
 export async function getPing() {
   return doGet('/ping')
 }
@@ -112,7 +84,7 @@ export async function setDuty(wed: string, sun: string) {
     wed,
     sun,
   }
-  return doPost('/admin/setDuty', obj);
+  return doPost('/duty/setDuty', obj);
 }
 
 export async function getDuty() {
@@ -216,4 +188,21 @@ export async function updateTerm(term:Term) {
     name:term.name
   }
   return doPost('/admin/updateTerm',temp);
+}
+
+export async function deleteBatchUser(ids:Array<string>){
+    return await processResponse(await instance.request({
+      url:'manager/batchDelete',
+      method:'DELETE',
+      params:{
+        ids:ids.join(',')
+      }
+    }))
+}
+export async function getMiniVersion() {
+  let res:APIResponse<string> = await doGet('/getMiniVersion');
+  if(res.success){
+    return res.data;
+  }
+  return undefined;
 }

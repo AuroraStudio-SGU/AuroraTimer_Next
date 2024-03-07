@@ -114,7 +114,6 @@ async function createLoginWindow() {
 
 //登录操作，从登录窗口进入主窗口
 function login() {
-  logger.log("登录成功")
   let param = {
     startTime,
     processTime,
@@ -132,7 +131,6 @@ async function saveColorToClipboard() {
     logger.warn('[ERROR] getColor', error)
     return ''
   })
-  logger.log(`getColor: ${color}`)
   color && clipboard.writeText(color)
   return color;
 }
@@ -218,7 +216,7 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   app.setAppUserModelId('New·AuroraTimer')
   //设置开发扩展
-  if (enableDevTool) {
+  if (enableDevTool && !app.isPackaged) {
     const devToolPath = `D:\\DEV\\electron\\AuroraTimer_Next\\VuePlugins`
     session.defaultSession.loadExtension(devToolPath)
   }
@@ -350,8 +348,10 @@ app.whenReady().then(() => {
   }
   //加载API实例
   init(setting.netWork.host, setting.userInfo.token)
+  console.log("before-show")
   loginWindow.once('ready-to-show', () => {
       //登录判断,开始加载配置文件
+    console.log("ready-to-show")
       mainWindow.webContents.send('setting-update', JSON.stringify(setting))
       loginWindow.webContents.send('setting-update', JSON.stringify(setting))
       //是否以离线模式强制进入，当然也是为了方便开发测试
@@ -401,12 +401,11 @@ function focusWindow() {
 
 //检查更新函数
 function checkForUpdates() {
-  logger.info('Set up event listeners...')
   autoUpdater.on('checking-for-update', () => {
-    logger.info('Checking for update...')
+    logger.info('正在检查更新...')
   })
   autoUpdater.on('update-available', (info) => {
-    logger.info('Update available.')
+    logger.info('有可用的更新.')
     WebNotification({
       body: `发现有新版本${info.version},尝试下载`,
       icon: iconImg
@@ -425,7 +424,6 @@ function checkForUpdates() {
     logger.info(msg)
   })
   autoUpdater.on('update-downloaded', (info) => {
-    logger.info('Update downloaded.')
     // The update will automatically be installed the next time the
     // app launches. If you want to, you can force the installation
     // now:
@@ -434,7 +432,7 @@ function checkForUpdates() {
       buttons: ['重启更新', '等下再说'],
       title: '是否更新?',
       message: process.platform === 'win32' ? info.releaseNotes : info.releaseName,
-      detail: `新版本(${info.version})已经下载完成,重启既可更新新版本!你说你想知道更新了什么?,那么怎么不去仓库里面看看呢?`
+      detail: `新版本(${info.version})已经下载完成,重启既可更新新版本!你说你想知道更新了什么?那么怎么不去仓库里面看看呢?`
     }
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
       if (returnValue.response === 0) {
@@ -448,7 +446,6 @@ function checkForUpdates() {
   //autoUpdater.autoInstallOnAppQuit = true
   // No debugging! Check main.log for details.
   // Ready? Go!
-  logger.info('checkForUpdates() -- begin')
   try {
     //autoUpdater.setFeedURL('')
     autoUpdater.checkForUpdates()
@@ -456,7 +453,6 @@ function checkForUpdates() {
   } catch (error) {
     logger.error(error)
   }
-  logger.info('checkForUpdates() -- end')
 }
 
 //向主进程传输数据
@@ -481,16 +477,13 @@ function tryToLogin() {
           login()
         } else {
           logger.warn("自动登录失败,重新进入手动登录" + "失败原因:" + Response.msg);
-          loginWindow.show()
         }
       })
       .catch((error) => {
         logger.warn("自动登录失败,重新进入手动登录" + "失败原因:" + error);
-        loginWindow.show()
       })
-  } else {
-    loginWindow.show()
   }
+  loginWindow.show()
 }
 
 //登出操作
