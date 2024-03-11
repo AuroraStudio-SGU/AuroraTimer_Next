@@ -185,7 +185,7 @@ onBeforeMount(async () => {
 })
 const PrivCheck = (targetUser: User) => {
   //只有管理员或相同方向才能修改用户信息
-  if (operator.value.priv <= 100 && operator.value.workGroup != targetUser.workGroup && targetUser.priv != 0) {
+  if (operator.value.priv < 100 && operator.value.workGroup != targetUser.workGroup && targetUser.priv != 0) {
     ElNotification({
       title: "权限不足",
       message: "只有管理员或相同方向才能修改",
@@ -547,7 +547,7 @@ const showInformation = async (user: User) => {
 :deep(.cell) {
   font-family: "Sanchez", "WenKai-B", serif;
   font-weight: 700;
-  color: hsla(var(--bc) / var(--tw-text-opacity, 1));
+  color: var(--fallback-bc,oklch(var(--bc)/1));
   padding: 0 6px;
 }
 

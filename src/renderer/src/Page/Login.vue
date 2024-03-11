@@ -482,7 +482,7 @@ input:focus::placeholder {
 }
 .selector{
   width: 13.5rem;
-  background: hsl(var(--p) / var(--tw-bg-opacity));
+  background: var(--fallback-p,oklch(var(--p)/var(--tw-bg-opacity)));
   outline: none;
   padding: 9px 9px 9px 5px;
   border-bottom: 1px solid rgba(246, 246, 246, 0.5);

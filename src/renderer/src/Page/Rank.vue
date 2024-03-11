@@ -368,7 +368,6 @@ const svgLoading = `<svg viewBox="0 0 108 108">
   font-family: "WenKai-B"; /*字体名称*/
   src: url("../assets/LXGWWenKai-Bold.ttf"); /*字体源文件*/
 }
-
 :deep(.el-table) {
   --el-table-bg-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
   --el-table-tr-bg-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
@@ -388,7 +387,7 @@ const svgLoading = `<svg viewBox="0 0 108 108">
 :deep(.cell) {
   font-family: "Sanchez", "WenKai-B", serif;
   font-weight: 700;
-  color: hsla(var(--bc) / var(--tw-text-opacity, 1));
+  color: var(--fallback-bc,oklch(var(--bc)/1))
 }
 
 .header {
