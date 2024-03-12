@@ -59,11 +59,11 @@ $ yarn run build:linux
 |-- electron.vite.config.js electron-vite 配置文件
 |-- out electron-vite 编译目录
 |-- package.json npm项目配置
-|-- postcss.config.js
+|-- postcss.config.cjs
 |-- public 主进程资源文件
 |-- resources 主进程资源文件
 |-- src 源代码目录
-|-- tailwind.config.js
+|-- tailwind.config.cjs
 ```
 src目录下:
 ```

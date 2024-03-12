@@ -14,7 +14,7 @@ import {
 } from 'electron'
 // 4.75
 import {join} from 'path'
-import {autoUpdater} from "electron-updater"
+import autoUpdaterPkg from "electron-updater"
 
 import {is, optimizer} from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -34,19 +34,20 @@ import {DefaultSetting} from "../renderer/src/utils/Setting";
 import logger from "electron-log";
 
 const startTime = new Date().getTime();
+const {autoUpdater} = autoUpdaterPkg
 
 autoUpdater.logger = logger
 logger.transports.file.maxSize = 1002430 // 日志最大长度10M
 logger.transports.file.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
 logger.transports.console.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}][{level}]{scope} {text}'
-const {
+import {
   getColorHexRGB,
   // for more control and customized checks
   DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
   darwinGetColorHexRGB, // darwin only, throw error on other platform
   darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
   darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
-} = require('electron-color-picker')
+} from "electron-color-picker"
 
 
 const Windows_Main_Width = 1080

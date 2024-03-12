@@ -4,3 +4,7 @@ module.exports = {
     autoprefixer: {},
   },
 }
+// export const plugins = {
+//   tailwindcss: {},
+//   autoprefixer: {},
+// };

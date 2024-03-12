@@ -2,8 +2,6 @@ import {defineStore} from 'pinia'
 import {SecondToString} from "../utils/TimeUtil";
 import {GlobalStore} from "./Global";
 
-
-
 //基本上没什么用的store了()
 export const TimerStore = defineStore('timer', {
     // other options...

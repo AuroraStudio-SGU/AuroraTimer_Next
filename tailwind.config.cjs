@@ -20,6 +20,19 @@ const EarthTheme = {
       "--tab-radius": "0.5rem", // border radius of tabs
     }
   }
+
+// export const content = ['./src/renderer/index.html', './src/renderer/src/**/*.{vue,js,ts,jsx,tsx}'];
+// export const theme = {
+//   extend: {},
+// };
+// export const darkMode = 'media';
+// export const variants = {
+//   extend: {},
+// };
+// export const plugins = [import('daisyui')];
+// export const daisyui = {
+//   theme:[EarthTheme,...originThemes],
+// }
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/renderer/index.html', './src/renderer/src/**/*.{vue,js,ts,jsx,tsx}'],

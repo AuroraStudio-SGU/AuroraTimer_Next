@@ -28,7 +28,7 @@
     "daisyui": "^4.7.2",
     "electron-color-picker": "^0.2.0",
     "electron-log": "^4.4.8",
-    "electron-updater": "^6.1.8",
+    "electron-updater": "^6.2.1",
     "element-plus": "^2.6.0",
     "jquery": "3.7.0",
     "js-md5": "^0.8.3",
