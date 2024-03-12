@@ -9,8 +9,10 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
+    - name: setup Node.js
       uses: actions/setup-node@v1
+      with:
+        node-version: '18'
     - name: npm install, build
       run: |
         npm install
