@@ -1,6 +1,6 @@
 {
   "name": "auroratimer",
-  "version": "0.0.13",
+  "version": "1.0.0",
   "description": "新·打卡计时器",
   "main": "./out/main/index.js",
   "author": "DAYGood_Time",
@@ -29,7 +29,7 @@
     "electron-color-picker": "^0.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.2.1",
-    "element-plus": "^2.6.0",
+    "element-plus": "^2.6.1",
     "jquery": "3.7.0",
     "js-md5": "^0.8.3",
     "pinia": "^2.1.7",
